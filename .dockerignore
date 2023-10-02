@@ -1,0 +1,4 @@
+go_build_github_com_ushieru_pos
+Dockerfile
+pos.db
+Makefile

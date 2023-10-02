@@ -1,0 +1,857 @@
+definitions:
+  dto.CreateCategoryDTO:
+    properties:
+      name:
+        minLength: 3
+        type: string
+    required:
+    - name
+    type: object
+  dto.CreateProductDTO:
+    properties:
+      description:
+        minLength: 3
+        type: string
+      name:
+        minLength: 3
+        type: string
+      price:
+        minimum: 0
+        type: number
+    required:
+    - description
+    - name
+    - price
+    type: object
+  dto.CreateTableDTO:
+    properties:
+      name:
+        minLength: 1
+        type: string
+      pos_x:
+        minimum: 0
+        type: integer
+      pos_y:
+        minimum: 0
+        type: integer
+    required:
+    - name
+    - pos_x
+    - pos_y
+    type: object
+  dto.UpdateCategoryDTO:
+    properties:
+      name:
+        minLength: 3
+        type: string
+    required:
+    - name
+    type: object
+  dto.UpdateProductDTO:
+    properties:
+      description:
+        minLength: 3
+        type: string
+      name:
+        minLength: 3
+        type: string
+      price:
+        minimum: 0
+        type: number
+    required:
+    - description
+    - name
+    - price
+    type: object
+  models.Account:
+    properties:
+      account_type:
+        $ref: '#/definitions/models.AccountType'
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      update_at:
+        type: string
+      user_id:
+        type: integer
+      username:
+        minLength: 3
+        type: string
+    required:
+    - username
+    type: object
+  models.AccountType:
+    enum:
+    - admin
+    type: string
+    x-enum-varnames:
+    - Admin
+  models.Category:
+    properties:
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/models.Product'
+        type: array
+      update_at:
+        type: string
+    type: object
+  models.Product:
+    properties:
+      categories:
+        items:
+          $ref: '#/definitions/models.Category'
+        type: array
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+      update_at:
+        type: string
+    type: object
+  models.Table:
+    properties:
+      account:
+        $ref: '#/definitions/models.Account'
+      account_id:
+        type: integer
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      pos_x:
+        type: integer
+      pos_y:
+        type: integer
+      ticket:
+        $ref: '#/definitions/models.Ticket'
+      ticket_id:
+        type: integer
+      update_at:
+        type: string
+    type: object
+  models.Ticket:
+    properties:
+      account:
+        $ref: '#/definitions/models.Account'
+      account_id:
+        type: integer
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      id:
+        type: integer
+      ticket_products:
+        items:
+          $ref: '#/definitions/models.TicketProduct'
+        type: array
+      ticket_status:
+        $ref: '#/definitions/models.TicketStatus'
+      total:
+        type: number
+      update_at:
+        type: string
+    type: object
+  models.TicketProduct:
+    properties:
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      id:
+        type: integer
+      product:
+        $ref: '#/definitions/models.Product'
+      quantity:
+        type: integer
+      ticket_id:
+        type: integer
+      update_at:
+        type: string
+    type: object
+  models.TicketStatus:
+    enum:
+    - open
+    type: string
+    x-enum-varnames:
+    - TicketOpen
+  models.User:
+    properties:
+      account:
+        $ref: '#/definitions/models.Account'
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      update_at:
+        type: string
+    type: object
+  models_errors.ErrorResponse:
+    properties:
+      description:
+        type: string
+      details:
+        type: string
+      error:
+        type: string
+    type: object
+  routes.Login:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  routes.LoginResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Point Of Sale - Total Tools
+  title: Point Of Sale API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      parameters:
+      - description: credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/routes.Login'
+      produces:
+      - application/json
+      responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/routes.LoginResponse'
+      tags:
+      - Auth
+  /categories:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Category DTO
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCategoryDTO'
+      produces:
+      - application/json
+      responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Category'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+  /categories/{id}:
+    delete:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+    get:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Category'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+    put:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Category DTO
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCategoryDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+  /info:
+    get:
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: IPv4
+          schema:
+            type: string
+      tags:
+      - Info
+  /payments/tickets/{ticketId}:
+    post:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: ticketId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Ticket'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Payments
+  /ping:
+    get:
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: pong
+          schema:
+            type: string
+      tags:
+      - Ping
+  /products:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Product DTO
+        in: body
+        name: ProductDTO
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateProductDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
+  /products/{id}:
+    delete:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
+    get:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Product DTO
+        in: body
+        name: ProductDTO
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateProductDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
+  /products/{productId}/categories/{categoryId}:
+    delete:
+      parameters:
+      - description: Product ID
+        in: path
+        name: productId
+        required: true
+        type: integer
+      - description: Category ID
+        in: path
+        name: categoryId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product Category
+    post:
+      parameters:
+      - description: Product ID
+        in: path
+        name: productId
+        required: true
+        type: integer
+      - description: Category ID
+        in: path
+        name: categoryId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product Category
+  /products/categories/{idCategory}:
+    get:
+      parameters:
+      - description: Category ID
+        in: path
+        name: idCategory
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
+  /tables:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Table'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Table
+    post:
+      parameters:
+      - description: Create Table DTO
+        in: body
+        name: createTableDto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateTableDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Table'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Table
+  /tables/{id}:
+    get:
+      parameters:
+      - description: Table ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Table'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Table
+    put:
+      parameters:
+      - description: Table id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Table DTO
+        in: body
+        name: createTableDto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateTableDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Table'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Table
+  /tables/{id}/ticket:
+    post:
+      parameters:
+      - description: Table ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Table'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Table
+  /tickets:
+    get:
+      parameters:
+      - description: Only your tickets
+        in: query
+        name: mine
+        type: boolean
+      - description: Only open tickets
+        in: query
+        name: onlyOpen
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Ticket'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Ticket
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Ticket'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Ticket
+  /tickets/{id}:
+    delete:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Ticket'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Ticket
+    get:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Ticket'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Ticket
+  /tickets/{ticketId}/products/{productId}:
+    delete:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: ticketId
+        required: true
+        type: integer
+      - description: Product ID
+        in: path
+        name: productId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Ticket'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Ticket
+    post:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: ticketId
+        required: true
+        type: integer
+      - description: Product ID
+        in: path
+        name: productId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Ticket'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Ticket
+  /users:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+  /users/{id}:
+    delete:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
