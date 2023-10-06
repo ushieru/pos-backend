@@ -88,7 +88,6 @@ func getProductByCategory(c *fiber.Ctx) error {
 // @Failure 0 {object} models_errors.ErrorResponse
 func postProduct(c *fiber.Ctx) error {
 	createProductDTO := new(dto.CreateProductDTO)
-	fmt.Println(string(c.Body()))
 	if err := c.BodyParser(createProductDTO); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(
 			models_errors.NewErrorResponse(
