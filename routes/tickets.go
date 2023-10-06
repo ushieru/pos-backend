@@ -243,6 +243,12 @@ func deleteTicket(c *fiber.Ctx) error {
 				"",
 			))
 	}
+	var table models.Table
+	database.DBConnection.First(&table, "ticket_id = ?", id)
+	if table.ID != 0 {
+		database.DBConnection.Model(&table).Association("Account").Clear()
+		database.DBConnection.Model(&table).Association("Ticket").Clear()
+	}
 	ticket.TicketStatus = models.TicketClose
 	database.DBConnection.Save(&ticket)
 	database.DBConnection.Delete(&ticket)
