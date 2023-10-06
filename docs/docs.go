@@ -179,6 +179,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK"
                     }
@@ -206,6 +212,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK"
                     }
@@ -221,6 +233,12 @@ const docTemplate = `{
                     "Info"
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "IPv4",
                         "schema": {
@@ -253,6 +271,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -271,6 +295,12 @@ const docTemplate = `{
                     "Ping"
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "pong",
                         "schema": {
@@ -294,6 +324,12 @@ const docTemplate = `{
                     "Product"
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -332,6 +368,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -364,6 +406,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -399,6 +447,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -441,6 +495,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -468,6 +528,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK"
                     }
@@ -504,6 +570,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -544,6 +616,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -570,6 +648,12 @@ const docTemplate = `{
                     "Table"
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -605,6 +689,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -640,6 +730,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -682,6 +778,51 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Table"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Table"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Table ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -717,6 +858,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -757,6 +904,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -781,6 +934,12 @@ const docTemplate = `{
                     "Ticket"
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -813,6 +972,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -843,6 +1008,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -882,6 +1053,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -919,6 +1096,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -942,6 +1125,12 @@ const docTemplate = `{
                     "User"
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -977,6 +1166,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -1004,6 +1199,12 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK"
                     }

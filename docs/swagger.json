@@ -172,6 +172,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK"
                     }
@@ -199,6 +205,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK"
                     }
@@ -214,6 +226,12 @@
                     "Info"
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "IPv4",
                         "schema": {
@@ -246,6 +264,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -264,6 +288,12 @@
                     "Ping"
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "pong",
                         "schema": {
@@ -287,6 +317,12 @@
                     "Product"
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -325,6 +361,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -357,6 +399,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -392,6 +440,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -434,6 +488,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -461,6 +521,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK"
                     }
@@ -497,6 +563,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -537,6 +609,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -563,6 +641,12 @@
                     "Table"
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -598,6 +682,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -633,6 +723,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -675,6 +771,51 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Table"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Table"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Table ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -710,6 +851,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -750,6 +897,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -774,6 +927,12 @@
                     "Ticket"
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -806,6 +965,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -836,6 +1001,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -875,6 +1046,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -912,6 +1089,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -935,6 +1118,12 @@
                     "User"
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -970,6 +1159,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -997,6 +1192,12 @@
                     }
                 ],
                 "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
                     "200": {
                         "description": "OK"
                     }

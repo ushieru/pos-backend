@@ -323,6 +323,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
       security:
@@ -363,6 +367,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
       security:
@@ -374,6 +382,10 @@ paths:
       produces:
       - text/plain
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: IPv4
           schema:
@@ -391,6 +403,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -404,6 +420,10 @@ paths:
       produces:
       - text/plain
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: pong
           schema:
@@ -415,6 +435,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -438,6 +462,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -455,6 +483,10 @@ paths:
         required: true
         type: integer
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
       security:
@@ -471,6 +503,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -497,6 +533,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -521,6 +561,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -546,6 +590,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -567,6 +615,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -582,6 +634,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -603,6 +659,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -614,6 +674,30 @@ paths:
       tags:
       - Table
   /tables/{id}:
+    delete:
+      parameters:
+      - description: Table ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Table'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Table
     get:
       parameters:
       - description: Table ID
@@ -624,6 +708,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -650,6 +738,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -671,6 +763,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -695,6 +791,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -709,6 +809,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -728,6 +832,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -746,6 +854,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -770,6 +882,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -793,6 +909,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -806,6 +926,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:
@@ -825,6 +949,10 @@ paths:
         required: true
         type: integer
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
       security:
@@ -841,6 +969,10 @@ paths:
       produces:
       - application/json
       responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
         "200":
           description: OK
           schema:

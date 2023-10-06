@@ -18,6 +18,7 @@ func SetupTableRoutes(app *fiber.App) {
 	products.Post("/", createTable)
 	products.Post("/:id/ticket", createTableTicket)
 	products.Put("/:id", updateTable)
+	products.Delete("/:id", deleteTable)
 }
 
 // @Router /tables [GET]
@@ -170,4 +171,33 @@ func createTableTicket(c *fiber.Ctx) error {
 	database.DBConnection.Save(&table)
 	database.DBConnection.Preload("Account").Preload("Ticket").Preload("Ticket.Account").First(&table, id)
 	return c.JSON(table)
+}
+
+// @Router /tables/{id} [DELETE]
+// @Security ApiKeyAuth
+// @Param id path int true "Table ID"
+// @Tags Table
+// @Produce json
+// @Success 200 {array} models.Table
+// @Failure 0 {object} models_errors.ErrorResponse
+func deleteTable(c *fiber.Ctx) error {
+	id := c.Params("id")
+	table := new(models.Table)
+	database.DBConnection.First(&table, id)
+	if table.ID == 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(models_errors.NewErrorResponse(
+			"Table not found",
+			fmt.Sprintf("Mesa con id: %s no encontrada", id),
+			"",
+		))
+	}
+	if table.TicketID != 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(models_errors.NewErrorResponse(
+			"Table is not empty",
+			"La mesa aun tiene un ticket abierto",
+			"",
+		))
+	}
+	database.DBConnection.Unscoped().Delete(&table)
+	return c.SendStatus(fiber.StatusOK)
 }
