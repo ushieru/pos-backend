@@ -28,7 +28,7 @@ func SetupTableRoutes(app *fiber.App) {
 // @Failure 0 {object} models_errors.ErrorResponse
 func getTables(c *fiber.Ctx) error {
 	var tables []models.Table
-	database.DBConnection.Find(&tables)
+	database.DBConnection.Preload("Account").Preload("Ticket").Preload("Ticket.Account").Find(&tables)
 	return c.JSON(tables)
 }
 
@@ -168,5 +168,6 @@ func createTableTicket(c *fiber.Ctx) error {
 	table.AccountID = session.Account.UserID
 	table.TicketID = ticket.ID
 	database.DBConnection.Save(&table)
+	database.DBConnection.Preload("Account").Preload("Ticket").Preload("Ticket.Account").First(&table, id)
 	return c.JSON(table)
 }
