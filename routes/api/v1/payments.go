@@ -1,4 +1,4 @@
-package routes
+package api_v1
 
 import (
 	"fmt"
@@ -6,15 +6,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/ushieru/pos/database"
 	"github.com/ushieru/pos/models"
-	"github.com/ushieru/pos/models/errors"
+	models_errors "github.com/ushieru/pos/models/errors"
 )
 
-func SetupPaymentsRoutes(app *fiber.App) {
+func setupPaymentsRoutes(app fiber.Router) {
 	tickets := app.Group("/payments")
 	tickets.Post("/tickets/:ticketId", payTicket)
 }
 
-// @Router /payments/tickets/{ticketId} [POST]
+// @Router /api/v1/payments/tickets/{ticketId} [POST]
 // @Security ApiKeyAuth
 // @Param ticketId path int true "Ticket ID"
 // @Tags Payments

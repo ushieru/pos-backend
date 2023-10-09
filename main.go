@@ -1,14 +1,15 @@
 package main
 
 import (
-	jwtware "github.com/gofiber/contrib/jwt"
+	"log"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/swagger"
 	"github.com/ushieru/pos/database"
-	"github.com/ushieru/pos/middlewares"
 	"github.com/ushieru/pos/routes"
-	"log"
+	"github.com/ushieru/pos/routes/api"
+	api_v1 "github.com/ushieru/pos/routes/api/v1"
 
 	_ "github.com/ushieru/pos/docs"
 )
@@ -35,17 +36,8 @@ func setupRoutes(app *fiber.App) {
 		return c.SendString("Welcome to Point Of Sale")
 	})
 	app.Get("/swagger/*", swagger.HandlerDefault)
-	app.Get("/ping", routes.GetPingRequest)
-	app.Get("/info", routes.GetInfoRequest)
-	routes.SetupAuthRoutes(app)
-	app.Use(jwtware.New(jwtware.Config{
-		SigningKey: jwtware.SigningKey{Key: []byte("super secret word")},
-	}), middlewares.AuthMiddleware())
-	routes.SetupUserRoutes(app)
-	routes.SetupCategoriesRoutes(app)
-	routes.SetupProductsRoutes(app)
-	routes.SetupTicketsRoutes(app)
-	routes.SetupTableRoutes(app)
-	routes.SetupPaymentsRoutes(app)
+	app.Get("/ping", api.GetPingRequest)
+	api_v1.SetupApiV1(app)
+	
 	app.Use(routes.RouteNotFound)
 }

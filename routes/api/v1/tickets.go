@@ -1,4 +1,4 @@
-package routes
+package api_v1
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	models_errors "github.com/ushieru/pos/models/errors"
 )
 
-func SetupTicketsRoutes(app *fiber.App) {
+func setupTicketsRoutes(app fiber.Router) {
 	tickets := app.Group("/tickets")
 	tickets.Get("/", getTicket)
 	tickets.Get("/:id", getTicketById)
@@ -19,7 +19,7 @@ func SetupTicketsRoutes(app *fiber.App) {
 	tickets.Delete("/:id", deleteTicket)
 }
 
-// @Router /tickets [GET]
+// @Router /api/v1/tickets [GET]
 // @Security ApiKeyAuth
 // @Param mine query boolean false "Only your tickets"
 // @Param onlyOpen query boolean false "Only open tickets"
@@ -52,7 +52,7 @@ func getTicket(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
-// @Router /tickets/{id} [GET]
+// @Router /api/v1/tickets/{id} [GET]
 // @Security ApiKeyAuth
 // @Param id path int true "Ticket ID"
 // @Tags Ticket
@@ -74,7 +74,7 @@ func getTicketById(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
-// @Router /tickets [POST]
+// @Router /api/v1/tickets [POST]
 // @Security ApiKeyAuth
 // @Tags Ticket
 // @Produce json
@@ -90,7 +90,7 @@ func postTicket(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
-// @Router /tickets/{ticketId}/products/{productId} [POST]
+// @Router /api/v1/tickets/{ticketId}/products/{productId} [POST]
 // @Security ApiKeyAuth
 // @Param ticketId path int true "Ticket ID"
 // @Param productId path int true "Product ID"
@@ -153,7 +153,7 @@ func addProductToTicket(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
-// @Router /tickets/{ticketId}/products/{productId} [DELETE]
+// @Router /api/v1/tickets/{ticketId}/products/{productId} [DELETE]
 // @Security ApiKeyAuth
 // @Param ticketId path int true "Ticket ID"
 // @Param productId path int true "Product ID"
@@ -215,7 +215,7 @@ func deleteProductToTicket(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
-// @Router /tickets/{id} [DELETE]
+// @Router /api/v1/tickets/{id} [DELETE]
 // @Security ApiKeyAuth
 // @Param id path int true "Ticket ID"
 // @Tags Ticket

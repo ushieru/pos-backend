@@ -1,4 +1,21 @@
 definitions:
+  api_v1.Login:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  api_v1.LoginResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
   dto.CreateCategoryDTO:
     properties:
       name:
@@ -226,23 +243,6 @@ definitions:
       error:
         type: string
     type: object
-  routes.Login:
-    properties:
-      password:
-        type: string
-      username:
-        type: string
-    required:
-    - password
-    - username
-    type: object
-  routes.LoginResponse:
-    properties:
-      token:
-        type: string
-      user:
-        $ref: '#/definitions/models.User'
-    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -250,7 +250,7 @@ info:
   title: Point Of Sale API
   version: "1.0"
 paths:
-  /auth/login:
+  /api/v1/auth/login:
     post:
       parameters:
       - description: credentials
@@ -258,7 +258,7 @@ paths:
         name: credentials
         required: true
         schema:
-          $ref: '#/definitions/routes.Login'
+          $ref: '#/definitions/api_v1.Login'
       produces:
       - application/json
       responses:
@@ -269,10 +269,10 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/routes.LoginResponse'
+            $ref: '#/definitions/api_v1.LoginResponse'
       tags:
       - Auth
-  /categories:
+  /api/v1/categories:
     get:
       produces:
       - application/json
@@ -312,7 +312,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Category
-  /categories/{id}:
+  /api/v1/categories/{id}:
     delete:
       parameters:
       - description: Category ID
@@ -377,7 +377,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Category
-  /info:
+  /api/v1/info:
     get:
       produces:
       - text/plain
@@ -392,7 +392,7 @@ paths:
             type: string
       tags:
       - Info
-  /payments/tickets/{ticketId}:
+  /api/v1/payments/tickets/{ticketId}:
     post:
       parameters:
       - description: Ticket ID
@@ -415,22 +415,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Payments
-  /ping:
-    get:
-      produces:
-      - text/plain
-      responses:
-        "0":
-          description: ""
-          schema:
-            $ref: '#/definitions/models_errors.ErrorResponse'
-        "200":
-          description: pong
-          schema:
-            type: string
-      tags:
-      - Ping
-  /products:
+  /api/v1/products:
     get:
       produces:
       - application/json
@@ -474,7 +459,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Product
-  /products/{id}:
+  /api/v1/products/{id}:
     delete:
       parameters:
       - description: Product ID
@@ -545,7 +530,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Product
-  /products/{productId}/categories/{categoryId}:
+  /api/v1/products/{productId}/categories/{categoryId}:
     delete:
       parameters:
       - description: Product ID
@@ -604,7 +589,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Product Category
-  /products/categories/{idCategory}:
+  /api/v1/products/categories/{idCategory}:
     get:
       parameters:
       - description: Category ID
@@ -629,7 +614,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Product
-  /tables:
+  /api/v1/tables:
     get:
       produces:
       - application/json
@@ -673,7 +658,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Table
-  /tables/{id}:
+  /api/v1/tables/{id}:
     delete:
       parameters:
       - description: Table ID
@@ -752,7 +737,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Table
-  /tables/{id}/ticket:
+  /api/v1/tables/{id}/ticket:
     post:
       parameters:
       - description: Table ID
@@ -777,7 +762,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Table
-  /tickets:
+  /api/v1/tickets:
     get:
       parameters:
       - description: Only your tickets
@@ -821,7 +806,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Ticket
-  /tickets/{id}:
+  /api/v1/tickets/{id}:
     delete:
       parameters:
       - description: Ticket ID
@@ -866,7 +851,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Ticket
-  /tickets/{ticketId}/products/{productId}:
+  /api/v1/tickets/{ticketId}/products/{productId}:
     delete:
       parameters:
       - description: Ticket ID
@@ -921,7 +906,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Ticket
-  /users:
+  /api/v1/users:
     get:
       produces:
       - application/json
@@ -940,7 +925,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - User
-  /users/{id}:
+  /api/v1/users/{id}:
     delete:
       parameters:
       - description: User ID
@@ -981,6 +966,21 @@ paths:
       - ApiKeyAuth: []
       tags:
       - User
+  /ping:
+    get:
+      produces:
+      - text/plain
+      responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/models_errors.ErrorResponse'
+        "200":
+          description: pong
+          schema:
+            type: string
+      tags:
+      - Ping
 securityDefinitions:
   ApiKeyAuth:
     in: header

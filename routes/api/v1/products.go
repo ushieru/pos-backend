@@ -1,4 +1,4 @@
-package routes
+package api_v1
 
 import (
 	"fmt"
@@ -7,11 +7,11 @@ import (
 	"github.com/ushieru/pos/database"
 	"github.com/ushieru/pos/models"
 	dto "github.com/ushieru/pos/models/dto"
-	"github.com/ushieru/pos/models/errors"
+	models_errors "github.com/ushieru/pos/models/errors"
 	"github.com/ushieru/pos/utils"
 )
 
-func SetupProductsRoutes(app *fiber.App) {
+func setupProductsRoutes(app fiber.Router) {
 	products := app.Group("/products")
 	products.Get("/", getProduct)
 	products.Get("/:id", getProductById)
@@ -23,7 +23,7 @@ func SetupProductsRoutes(app *fiber.App) {
 	products.Delete("/:id", deleteProduct)
 }
 
-// @Router /products [GET]
+// @Router /api/v1/products [GET]
 // @Security ApiKeyAuth
 // @Tags Product
 // @Produce json
@@ -35,7 +35,7 @@ func getProduct(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
-// @Router /products/{id} [GET]
+// @Router /api/v1/products/{id} [GET]
 // @Security ApiKeyAuth
 // @Param id path int true "Product ID"
 // @Tags Product
@@ -56,7 +56,7 @@ func getProductById(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
-// @Router /products/categories/{idCategory} [GET]
+// @Router /api/v1/products/categories/{idCategory} [GET]
 // @Security ApiKeyAuth
 // @Param idCategory path int true "Category ID"
 // @Tags Product
@@ -78,7 +78,7 @@ func getProductByCategory(c *fiber.Ctx) error {
 	return c.JSON(category.Products)
 }
 
-// @Router /products [POST]
+// @Router /api/v1/products [POST]
 // @Security ApiKeyAuth
 // @Param ProductDTO body dto.CreateProductDTO true "Product DTO"
 // @Tags Product
@@ -110,7 +110,7 @@ func postProduct(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
-// @Router /products/{id} [PUT]
+// @Router /api/v1/products/{id} [PUT]
 // @Security ApiKeyAuth
 // @Param id path int true "Product ID"
 // @Param ProductDTO body dto.UpdateProductDTO true "Product DTO"
@@ -158,7 +158,7 @@ func putProduct(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
-// @Router /products/{id} [DELETE]
+// @Router /api/v1/products/{id} [DELETE]
 // @Security ApiKeyAuth
 // @Param id path int true "Product ID"
 // @Tags Product

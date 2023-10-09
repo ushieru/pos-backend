@@ -1,4 +1,4 @@
-package routes
+package api_v1
 
 import (
 	"net"
@@ -6,12 +6,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// @Router /info [GET]
+// @Router /api/v1/info [GET]
 // @Tags Info
 // @Produce plain
 // @Success 200 {string} string "IPv4"
 // @Failure 0 {object} models_errors.ErrorResponse
-func GetInfoRequest(c *fiber.Ctx) error {
+func getInfoRequest(c *fiber.Ctx) error {
 	conn, err := net.Dial("udp", "8.8.8.8:80")
 	if err != nil {
 		return c.SendStatus(fiber.StatusInternalServerError)

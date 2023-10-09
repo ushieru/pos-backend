@@ -1,4 +1,4 @@
-package routes
+package api_v1
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"github.com/ushieru/pos/models/errors"
 )
 
-// @Router /products/{productId}/categories/{categoryId} [POST]
+// @Router /api/v1/products/{productId}/categories/{categoryId} [POST]
 // @Security ApiKeyAuth
 // @Param productId path int true "Product ID"
 // @Param categoryId path int true "Category ID"
@@ -45,7 +45,7 @@ func postCategoryProduct(c *fiber.Ctx) error {
 	return c.SendStatus(fiber.StatusOK)
 }
 
-// @Router /products/{productId}/categories/{categoryId} [DELETE]
+// @Router /api/v1/products/{productId}/categories/{categoryId} [DELETE]
 // @Security ApiKeyAuth
 // @Param productId path int true "Product ID"
 // @Param categoryId path int true "Category ID"

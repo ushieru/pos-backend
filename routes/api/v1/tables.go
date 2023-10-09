@@ -1,4 +1,4 @@
-package routes
+package api_v1
 
 import (
 	"fmt"
@@ -7,11 +7,11 @@ import (
 	"github.com/ushieru/pos/database"
 	"github.com/ushieru/pos/models"
 	"github.com/ushieru/pos/models/dto"
-	"github.com/ushieru/pos/models/errors"
+	models_errors "github.com/ushieru/pos/models/errors"
 	"github.com/ushieru/pos/utils"
 )
 
-func SetupTableRoutes(app *fiber.App) {
+func setupTableRoutes(app fiber.Router) {
 	products := app.Group("/tables")
 	products.Get("/", getTables)
 	products.Get("/:id", getTableById)
@@ -21,7 +21,7 @@ func SetupTableRoutes(app *fiber.App) {
 	products.Delete("/:id", deleteTable)
 }
 
-// @Router /tables [GET]
+// @Router /api/v1/tables [GET]
 // @Security ApiKeyAuth
 // @Tags Table
 // @Produce json
@@ -33,7 +33,7 @@ func getTables(c *fiber.Ctx) error {
 	return c.JSON(tables)
 }
 
-// @Router /tables/{id} [GET]
+// @Router /api/v1/tables/{id} [GET]
 // @Security ApiKeyAuth
 // @Param id path int true "Table ID"
 // @Tags Table
@@ -54,7 +54,7 @@ func getTableById(c *fiber.Ctx) error {
 	return c.JSON(table)
 }
 
-// @Router /tables [POST]
+// @Router /api/v1/tables [POST]
 // @Security ApiKeyAuth
 // @Param createTableDto body dto.CreateTableDTO true "Create Table DTO"
 // @Tags Table
@@ -93,7 +93,7 @@ func createTable(c *fiber.Ctx) error {
 	return c.JSON(table)
 }
 
-// @Router /tables/{id} [PUT]
+// @Router /api/v1/tables/{id} [PUT]
 // @Security ApiKeyAuth
 // @Param id path int true "Table id"
 // @Param createTableDto body dto.CreateTableDTO true "Update Table DTO"
@@ -142,7 +142,7 @@ func updateTable(c *fiber.Ctx) error {
 	return c.JSON(table)
 }
 
-// @Router /tables/{id}/ticket [POST]
+// @Router /api/v1/tables/{id}/ticket [POST]
 // @Security ApiKeyAuth
 // @Param id path int true "Table ID"
 // @Tags Table
@@ -173,7 +173,7 @@ func createTableTicket(c *fiber.Ctx) error {
 	return c.JSON(table)
 }
 
-// @Router /tables/{id} [DELETE]
+// @Router /api/v1/tables/{id} [DELETE]
 // @Security ApiKeyAuth
 // @Param id path int true "Table ID"
 // @Tags Table

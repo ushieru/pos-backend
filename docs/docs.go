@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/login": {
+        "/api/v1/auth/login": {
             "post": {
                 "produces": [
                     "application/json"
@@ -30,7 +30,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/routes.Login"
+                            "$ref": "#/definitions/api_v1.Login"
                         }
                     }
                 ],
@@ -44,13 +44,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/routes.LoginResponse"
+                            "$ref": "#/definitions/api_v1.LoginResponse"
                         }
                     }
                 }
             }
         },
-        "/categories": {
+        "/api/v1/categories": {
             "get": {
                 "security": [
                     {
@@ -117,7 +117,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/categories/{id}": {
+        "/api/v1/categories/{id}": {
             "get": {
                 "security": [
                     {
@@ -224,7 +224,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/info": {
+        "/api/v1/info": {
             "get": {
                 "produces": [
                     "text/plain"
@@ -248,7 +248,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/payments/tickets/{ticketId}": {
+        "/api/v1/payments/tickets/{ticketId}": {
             "post": {
                 "security": [
                     {
@@ -286,31 +286,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ping": {
-            "get": {
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "Ping"
-                ],
-                "responses": {
-                    "0": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/models_errors.ErrorResponse"
-                        }
-                    },
-                    "200": {
-                        "description": "pong",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/products": {
+        "/api/v1/products": {
             "get": {
                 "security": [
                     {
@@ -383,7 +359,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/products/categories/{idCategory}": {
+        "/api/v1/products/categories/{idCategory}": {
             "get": {
                 "security": [
                     {
@@ -424,7 +400,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/products/{id}": {
+        "/api/v1/products/{id}": {
             "get": {
                 "security": [
                     {
@@ -540,7 +516,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/products/{productId}/categories/{categoryId}": {
+        "/api/v1/products/{productId}/categories/{categoryId}": {
             "post": {
                 "security": [
                     {
@@ -634,7 +610,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tables": {
+        "/api/v1/tables": {
             "get": {
                 "security": [
                     {
@@ -707,7 +683,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tables/{id}": {
+        "/api/v1/tables/{id}": {
             "get": {
                 "security": [
                     {
@@ -835,7 +811,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tables/{id}/ticket": {
+        "/api/v1/tables/{id}/ticket": {
             "post": {
                 "security": [
                     {
@@ -876,7 +852,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tickets": {
+        "/api/v1/tickets": {
             "get": {
                 "security": [
                     {
@@ -949,7 +925,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tickets/{id}": {
+        "/api/v1/tickets/{id}": {
             "get": {
                 "security": [
                     {
@@ -1023,7 +999,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tickets/{ticketId}/products/{productId}": {
+        "/api/v1/tickets/{ticketId}/products/{productId}": {
             "post": {
                 "security": [
                     {
@@ -1111,7 +1087,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users": {
+        "/api/v1/users": {
             "get": {
                 "security": [
                     {
@@ -1143,7 +1119,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}": {
+        "/api/v1/users/{id}": {
             "get": {
                 "security": [
                     {
@@ -1210,9 +1186,59 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/ping": {
+            "get": {
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "Ping"
+                ],
+                "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models_errors.ErrorResponse"
+                        }
+                    },
+                    "200": {
+                        "description": "pong",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "api_v1.Login": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "api_v1.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/models.User"
+                }
+            }
+        },
         "dto.CreateCategoryDTO": {
             "type": "object",
             "required": [
@@ -1548,32 +1574,6 @@ const docTemplate = `{
                 },
                 "error": {
                     "type": "string"
-                }
-            }
-        },
-        "routes.Login": {
-            "type": "object",
-            "required": [
-                "password",
-                "username"
-            ],
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "routes.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string"
-                },
-                "user": {
-                    "$ref": "#/definitions/models.User"
                 }
             }
         }

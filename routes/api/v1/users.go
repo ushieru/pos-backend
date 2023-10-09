@@ -1,4 +1,4 @@
-package routes
+package api_v1
 
 import (
 	"fmt"
@@ -10,8 +10,8 @@ import (
 	"github.com/ushieru/pos/utils"
 )
 
-func SetupUserRoutes(app *fiber.App) {
-	users := app.Group("/users")
+func setupUserRoutes(app fiber.Router) {
+	users := app.Group("/api/v1/users")
 	users.Get("/", getUser)
 	users.Get("/:id", getUserById)
 	users.Post("/", postUser)
@@ -19,7 +19,7 @@ func SetupUserRoutes(app *fiber.App) {
 	users.Delete("/:id", deleteUser)
 }
 
-// @Router /users [GET]
+// @Router /api/v1/users [GET]
 // @Security ApiKeyAuth
 // @Tags User
 // @Produce json
@@ -31,7 +31,7 @@ func getUser(c *fiber.Ctx) error {
 	return c.JSON(users)
 }
 
-// @Router /users/{id} [GET]
+// @Router /api/v1/users/{id} [GET]
 // @Security ApiKeyAuth
 // @Param id path int true "User ID"
 // @Tags User
@@ -104,7 +104,7 @@ func putUser(c *fiber.Ctx) error {
 	return c.JSON(user)
 }
 
-// @Router /users/{id} [DELETE]
+// @Router /api/v1/users/{id} [DELETE]
 // @Security ApiKeyAuth
 // @Param id path int true "User ID"
 // @Tags User

@@ -1,4 +1,4 @@
-package routes
+package api_v1
 
 import (
 	"fmt"
@@ -7,11 +7,11 @@ import (
 	"github.com/ushieru/pos/database"
 	"github.com/ushieru/pos/models"
 	"github.com/ushieru/pos/models/dto"
-	"github.com/ushieru/pos/models/errors"
+	models_errors "github.com/ushieru/pos/models/errors"
 	"github.com/ushieru/pos/utils"
 )
 
-func SetupCategoriesRoutes(app *fiber.App) {
+func setupCategoriesRoutes(app fiber.Router) {
 	categories := app.Group("/categories")
 	categories.Get("/", getCategory)
 	categories.Get("/:id", getCategoryById)
@@ -21,7 +21,7 @@ func SetupCategoriesRoutes(app *fiber.App) {
 	categories.Delete("/:id", deleteCategory)
 }
 
-// @Router /categories [GET]
+// @Router /api/v1/categories [GET]
 // @Security ApiKeyAuth
 // @Tags Category
 // @Produce json
@@ -32,7 +32,7 @@ func getCategory(c *fiber.Ctx) error {
 	return c.JSON(category)
 }
 
-// @Router /categories/{id} [GET]
+// @Router /api/v1/categories/{id} [GET]
 // @Security ApiKeyAuth
 // @Param id path int true "Category ID"
 // @Tags Category
@@ -50,7 +50,7 @@ func getCategoryById(c *fiber.Ctx) error {
 	return c.JSON(category)
 }
 
-// @Router /categories [POST]
+// @Router /api/v1/categories [POST]
 // @Security ApiKeyAuth
 // @Param category body dto.CreateCategoryDTO true "Category DTO"
 // @Tags Category
@@ -80,7 +80,7 @@ func postCategory(c *fiber.Ctx) error {
 	return c.JSON(category)
 }
 
-// @Router /categories/{id} [PUT]
+// @Router /api/v1/categories/{id} [PUT]
 // @Security ApiKeyAuth
 // @Param id path int true "Category ID"
 // @Param category body dto.UpdateCategoryDTO true "Category DTO"
@@ -119,7 +119,7 @@ func putCategory(c *fiber.Ctx) error {
 	return c.JSON(category)
 }
 
-// @Router /categories/{id} [DELETE]
+// @Router /api/v1/categories/{id} [DELETE]
 // @Security ApiKeyAuth
 // @Param id path int true "Category ID"
 // @Tags Category

@@ -1,4 +1,4 @@
-package routes
+package api_v1
 
 import (
 	"time"
@@ -12,7 +12,7 @@ import (
 	"github.com/ushieru/pos/utils"
 )
 
-func SetupAuthRoutes(app *fiber.App) {
+func setupAuthRoutes(app fiber.Router) {
 	session := app.Group("/auth")
 	session.Post("/login", login)
 }
@@ -27,7 +27,7 @@ type LoginResponse struct {
 	User  models.User `json:"user"`
 }
 
-// @Router /auth/login [POST]
+// @Router /api/v1/auth/login [POST]
 // @Param credentials body Login true "credentials"
 // @Tags Auth
 // @Accepts json
