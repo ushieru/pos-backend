@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"gorm.io/gorm/logger"
 
-	"gorm.io/driver/sqlite"
+	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 )
 
