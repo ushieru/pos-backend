@@ -11,7 +11,7 @@ import (
 )
 
 func setupUserRoutes(app fiber.Router) {
-	users := app.Group("/api/v1/users")
+	users := app.Group("/users")
 	users.Get("/", getUser)
 	users.Get("/:id", getUserById)
 	users.Post("/", postUser)
