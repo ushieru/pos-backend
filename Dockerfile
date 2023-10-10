@@ -5,7 +5,8 @@ COPY . .
 RUN go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux go build -o point_of_sale
 FROM docker.io/library/alpine:latest AS build-release-stage
-WORKDIR /
-COPY --from=build-stage /app/point_of_sale /point_of_sale
+WORKDIR /app
+COPY --from=build-stage /app/point_of_sale point_of_sale
+COPY --from=build-stage /app/public public
 EXPOSE 8080
-ENTRYPOINT ["/point_of_sale"]
+ENTRYPOINT ["/app/point_of_sale"]
