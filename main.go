@@ -32,9 +32,7 @@ func main() {
 func setupRoutes(app *fiber.App) {
 	app.Use(cors.New())
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Welcome to Point Of Sale")
-	})
+	app.Static("/", "./public") 
 	app.Get("/swagger/*", swagger.HandlerDefault)
 	app.Get("/ping", api.GetPingRequest)
 	api_v1.SetupApiV1(app)
