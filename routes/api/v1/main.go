@@ -13,10 +13,10 @@ func SetupApiV1(app *fiber.App) {
 	apiV1.Use(jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{Key: []byte("super secret word")},
 	}), middlewares.AuthMiddleware())
-	setupUserRoutes(app)
-	setupCategoriesRoutes(app)
-	setupProductsRoutes(app)
-	setupTicketsRoutes(app)
-	setupTableRoutes(app)
-	setupPaymentsRoutes(app)
+	setupUserRoutes(apiV1)
+	setupCategoriesRoutes(apiV1)
+	setupProductsRoutes(apiV1)
+	setupTicketsRoutes(apiV1)
+	setupTableRoutes(apiV1)
+	setupPaymentsRoutes(apiV1)
 }
