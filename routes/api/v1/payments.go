@@ -47,6 +47,12 @@ func payTicket(c *fiber.Ctx) error {
 			"",
 		))
 	}
+	var table models.Table
+	database.DBConnection.First(&table, "ticket_id = ?", ticketId)
+	if table.ID != 0 {
+		database.DBConnection.Model(&table).Association("Account").Clear()
+		database.DBConnection.Model(&table).Association("Ticket").Clear()
+	}
 	ticket.TicketStatus = models.TicketClose
 	database.DBConnection.Save(&ticket)
 	return c.JSON(ticket)
