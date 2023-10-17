@@ -29,7 +29,12 @@ func setupTableRoutes(app fiber.Router) {
 // @Failure 0 {object} models_errors.ErrorResponse
 func getTables(c *fiber.Ctx) error {
 	var tables []models.Table
-	database.DBConnection.Preload("Account").Preload("Ticket").Preload("Ticket.Account").Find(&tables)
+	database.DBConnection.
+		Preload("Account").
+		Preload("Ticket").
+		Preload("Ticket.Account").
+		Preload("Ticket.TicketProducts").
+		Find(&tables)
 	return c.JSON(tables)
 }
 
