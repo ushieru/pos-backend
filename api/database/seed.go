@@ -1,7 +1,6 @@
 package database
 
 import (
-	"fmt"
 	"github.com/ushieru/pos/api/models"
 	"github.com/ushieru/pos/api/utils"
 )
@@ -54,7 +53,6 @@ func createUsersIfNotExists() {
 			AccountType: models.Waiter,
 		},
 	})
-	fmt.Println("[Database Seed] create admin")
 }
 
 func createCategoriesIfNotExists() {
@@ -67,7 +65,6 @@ func createCategoriesIfNotExists() {
 	for _, category := range categories {
 		DBConnection.Create(&models.Category{Name: category})
 	}
-	fmt.Println("[Database Seed] create categories")
 }
 
 func createProductsIfNotExists() {
@@ -106,5 +103,4 @@ func createProductsIfNotExists() {
 	for _, product := range products {
 		DBConnection.Create(&product).Association("Categories").Append(&category3)
 	}
-	fmt.Println("[Database Seed] create products")
 }
