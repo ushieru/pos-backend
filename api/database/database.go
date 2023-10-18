@@ -21,7 +21,6 @@ func InitDatabase() {
 		fmt.Println(err)
 		panic("[Database Connection] failed to connect")
 	}
-	fmt.Println("[Database Connection] done")
 	Migrations()
 	Seed()
 }

@@ -2,7 +2,7 @@ package utils
 
 import (
 	"github.com/go-playground/validator/v10"
-	"github.com/ushieru/pos/models/errors"
+	"github.com/ushieru/pos/api/models/errors"
 )
 
 var validate = validator.New()

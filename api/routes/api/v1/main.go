@@ -3,7 +3,7 @@ package api_v1
 import (
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
-	"github.com/ushieru/pos/middlewares"
+	"github.com/ushieru/pos/api/middlewares"
 )
 
 func SetupApiV1(app *fiber.App) {

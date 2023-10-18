@@ -1,5 +1,5 @@
 swag:
-	swag init
+	swag init -d api -o api/swagger
 exe-all:
 	make exe-linux && make exe-windows && make exe-silicon
 exe-linux:

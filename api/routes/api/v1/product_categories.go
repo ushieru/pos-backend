@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/ushieru/pos/database"
-	"github.com/ushieru/pos/models"
-	"github.com/ushieru/pos/models/errors"
+	"github.com/ushieru/pos/api/database"
+	"github.com/ushieru/pos/api/models"
+	"github.com/ushieru/pos/api/models/errors"
 )
 
 // @Router /api/v1/products/{productId}/categories/{categoryId} [POST]

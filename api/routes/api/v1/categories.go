@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/ushieru/pos/database"
-	"github.com/ushieru/pos/models"
-	"github.com/ushieru/pos/models/dto"
-	models_errors "github.com/ushieru/pos/models/errors"
-	"github.com/ushieru/pos/utils"
+	"github.com/ushieru/pos/api/database"
+	"github.com/ushieru/pos/api/models"
+	"github.com/ushieru/pos/api/models/dto"
+	models_errors "github.com/ushieru/pos/api/models/errors"
+	"github.com/ushieru/pos/api/utils"
 )
 
 func setupCategoriesRoutes(app fiber.Router) {

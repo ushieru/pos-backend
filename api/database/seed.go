@@ -2,15 +2,14 @@ package database
 
 import (
 	"fmt"
-	"github.com/ushieru/pos/models"
-	"github.com/ushieru/pos/utils"
+	"github.com/ushieru/pos/api/models"
+	"github.com/ushieru/pos/api/utils"
 )
 
 func Seed() {
 	createUsersIfNotExists()
 	createCategoriesIfNotExists()
 	createProductsIfNotExists()
-	fmt.Println("[Database Seed] done")
 }
 
 func createUsersIfNotExists() {

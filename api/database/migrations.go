@@ -1,9 +1,7 @@
 package database
 
 import (
-	"fmt"
-
-	"github.com/ushieru/pos/models"
+	"github.com/ushieru/pos/api/models"
 )
 
 func Migrations() {
@@ -28,6 +26,4 @@ func Migrations() {
 	if err := DBConnection.AutoMigrate(&models.Table{}); err != nil {
 		panic("[Database Migrations] Error in Ticket migration")
 	}
-
-	fmt.Println("[Database Migrations] done")
 }

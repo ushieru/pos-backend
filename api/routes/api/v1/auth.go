@@ -6,10 +6,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 
-	"github.com/ushieru/pos/database"
-	"github.com/ushieru/pos/models"
-	"github.com/ushieru/pos/models/errors"
-	"github.com/ushieru/pos/utils"
+	"github.com/ushieru/pos/api/database"
+	"github.com/ushieru/pos/api/models"
+	"github.com/ushieru/pos/api/models/errors"
+	"github.com/ushieru/pos/api/utils"
 )
 
 func setupAuthRoutes(app fiber.Router) {
