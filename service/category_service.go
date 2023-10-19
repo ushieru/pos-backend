@@ -41,10 +41,8 @@ func (c *CategoryService) Update(id uint, dto *dto.UpsertCategoryRequest) (*doma
 		return nil, err
 	}
 	category := &domain.Category{
-		Model: domain.Model{
-			ID: id,
-		},
-		Name: dto.Name,
+		Model: domain.Model{ID: id},
+		Name:  dto.Name,
 	}
 	return c.repository.Update(category)
 }
