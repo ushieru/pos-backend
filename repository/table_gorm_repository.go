@@ -40,8 +40,8 @@ func (r *TableGormRepository) Update(t *domain.Table) (*domain.Table, *domain.Ap
 		return nil, err
 	}
 	tableFind := new(domain.Table)
-	r.database.First(tableFind, "pos_x = ? AND pos_y = ?", t.PosX, t.PosY)
-	if tableFind.ID != 0 {
+	r.database.First(tableFind, "Pos_X = ? AND Pos_Y = ?", t.PosX, t.PosY)
+	if tableFind.ID != 0 &&  tableFind.ID != t.ID{
 		return nil, domain.NewConflictError("Posicion ocupada")
 	}
 	table.Name = t.Name

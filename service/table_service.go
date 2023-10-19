@@ -38,11 +38,12 @@ func (s *TableService) Update(id uint, dto *dto.UpdateTableRequest) (*domain.Tab
 		return nil, err
 	}
 	table := &domain.Table{
-		Name: dto.Name,
-		PosX: dto.PosX,
-		PosY: dto.PosY,
+		Model: domain.Model{ID: id},
+		Name:  dto.Name,
+		PosX:  dto.PosX,
+		PosY:  dto.PosY,
 	}
-	return s.repository.Save(table)
+	return s.repository.Update(table)
 }
 
 func (s *TableService) Delete(id uint) (*domain.Table, *domain.AppError) {
