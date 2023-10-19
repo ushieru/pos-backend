@@ -2,9 +2,10 @@ package handler
 
 import (
 	"encoding/base64"
+	"strings"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/ushieru/pos/service"
-	"strings"
 )
 
 type AuthHandler struct {
@@ -21,7 +22,7 @@ func (h *AuthHandler) SetupRoutes(app *fiber.App) {
 // @Accepts json
 // @Produce json
 // @Success 200 {object} dto.AuthUserResponse
-// @Failure 0 {object} domain.AppError
+// @Failure default {object} domain.AppError
 func (h *AuthHandler) auth(c *fiber.Ctx) error {
 	headers := c.GetReqHeaders()
 	authHeader := headers["Authorization"]
