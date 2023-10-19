@@ -1,24 +1,22 @@
-package test
+package repository
 
 import (
 	"testing"
 
-	"github.com/glebarez/sqlite"
 	"github.com/ushieru/pos/dto"
-	"github.com/ushieru/pos/repository"
 	"github.com/ushieru/pos/service"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 func TestEmptyListCategory(t *testing.T) {
-	cs, clean := Bootstrap()
+	db, clean := getInMemoryDB()
+	s := getCategoryGormRepository(db)
 	t.Cleanup(func() {
 		clean()
 	})
 	want := 0
 
-	categories, err := cs.List()
+	categories, err := s.List()
 	categoriesLength := len(categories)
 
 	if err != nil {
@@ -30,7 +28,8 @@ func TestEmptyListCategory(t *testing.T) {
 }
 
 func TestCreateCategory(t *testing.T) {
-	cs, clean := Bootstrap()
+	db, clean := getInMemoryDB()
+	s := getCategoryGormRepository(db)
 	t.Cleanup(func() {
 		clean()
 	})
@@ -40,7 +39,7 @@ func TestCreateCategory(t *testing.T) {
 		Name: "Category Test",
 	}
 
-	category, err := cs.Save(createCategoryDTO)
+	category, err := s.Save(createCategoryDTO)
 
 	if err != nil {
 		t.Fatalf(err.Message)
@@ -51,13 +50,14 @@ func TestCreateCategory(t *testing.T) {
 }
 
 func TestUpdateCategoryFail(t *testing.T) {
-	cs, clean := Bootstrap()
+	db, clean := getInMemoryDB()
+	s := getCategoryGormRepository(db)
 	t.Cleanup(func() {
 		clean()
 	})
 	want := "Categoria no encontrada"
 
-	_, err := cs.Update(1, &dto.UpsertCategoryRequest{
+	_, err := s.Update(1, &dto.UpsertCategoryRequest{
 		Name: "category test",
 	})
 
@@ -70,13 +70,14 @@ func TestUpdateCategoryFail(t *testing.T) {
 }
 
 func TestDeleteCategoryFail(t *testing.T) {
-	cs, clean := Bootstrap()
+	db, clean := getInMemoryDB()
+	s := getCategoryGormRepository(db)
 	t.Cleanup(func() {
 		clean()
 	})
 	want := "Categoria no encontrada"
 
-	_, err := cs.Delete(0)
+	_, err := s.Delete(0)
 
 	if err == nil {
 		t.Fatalf("Error is empty")
@@ -86,12 +87,8 @@ func TestDeleteCategoryFail(t *testing.T) {
 	}
 }
 
-func Bootstrap() (*service.CategoryService, func() error) {
-	database, _ := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
-	})
-	categoryRepository := repository.NewCategoryGormRepository(database)
-	categoryService := service.NewCategoryService(categoryRepository)
-	db, _ := database.DB()
-	return categoryService, db.Close
+
+func getCategoryGormRepository(db *gorm.DB) *service.CategoryService {
+	r := NewCategoryGormRepository(db)
+	return service.NewCategoryService(r)
 }
