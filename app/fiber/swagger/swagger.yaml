@@ -31,6 +31,44 @@ definitions:
       messsage:
         type: string
     type: object
+  domain.Category:
+    properties:
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/domain.Product'
+        type: array
+      update_at:
+        type: string
+    type: object
+  domain.Product:
+    properties:
+      categories:
+        items:
+          $ref: '#/definitions/domain.Category'
+        type: array
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+      update_at:
+        type: string
+    type: object
   domain.User:
     properties:
       account:
@@ -54,6 +92,11 @@ definitions:
         type: string
       user:
         $ref: '#/definitions/domain.User'
+    type: object
+  dto.UpsertCategoryRequest:
+    properties:
+      name:
+        type: string
     type: object
 host: localhost:8080
 info:
@@ -79,6 +122,128 @@ paths:
       - BasicAuth: []
       tags:
       - Auth
+  /categories:
+    get:
+      produces:
+      - application/json
+      responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Category'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+    post:
+      parameters:
+      - description: Category UpsertCategoryRequest
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpsertCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Category'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+  /categories/{id}:
+    delete:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Category'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+    get:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Category'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+    put:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Category UpsertCategoryRequest
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpsertCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Category'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+  /ping:
+    get:
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Ping
 securityDefinitions:
   ApiKeyAuth:
     in: header

@@ -43,6 +43,207 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/categories": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Category"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "parameters": [
+                    {
+                        "description": "Category UpsertCategoryRequest",
+                        "name": "dto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpsertCategoryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Category"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Category"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Category UpsertCategoryRequest",
+                        "name": "dto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpsertCategoryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Category"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Category"
+                        }
+                    }
+                }
+            }
+        },
+        "/ping": {
+            "get": {
+                "tags": [
+                    "Ping"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -95,6 +296,64 @@ const docTemplate = `{
                 }
             }
         },
+        "domain.Category": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "type": "string"
+                },
+                "delete_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Product"
+                    }
+                },
+                "update_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Product": {
+            "type": "object",
+            "properties": {
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Category"
+                    }
+                },
+                "create_at": {
+                    "type": "string"
+                },
+                "delete_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "update_at": {
+                    "type": "string"
+                }
+            }
+        },
         "domain.User": {
             "type": "object",
             "properties": {
@@ -129,6 +388,14 @@ const docTemplate = `{
                 },
                 "user": {
                     "$ref": "#/definitions/domain.User"
+                }
+            }
+        },
+        "dto.UpsertCategoryRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
                 }
             }
         }
