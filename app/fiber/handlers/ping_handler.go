@@ -10,6 +10,9 @@ func (h *PingHandler) SetupRoutes(app *fiber.App) {
 	app.Get("/ping", h.ping)
 }
 
+// @Router /ping [GET]
+// @Tags Ping
+// @Success 200
 func (h *PingHandler) ping(c *fiber.Ctx) error {
 	return c.SendString("\x0A")
 }
