@@ -19,6 +19,13 @@ func (h *TableHandler) SetupRoutes(app *fiber.App) {
 	tables.Delete("/:id", h.deleteTable)
 }
 
+// @Router /tables [GET]
+// @Security ApiKeyAuth
+// @Tags Tables
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Table
+// @Failure default {object} domain.AppError
 func (h *TableHandler) listTables(c *fiber.Ctx) error {
 	tables, err := h.service.List()
 	if err != nil {
@@ -27,6 +34,14 @@ func (h *TableHandler) listTables(c *fiber.Ctx) error {
 	return c.JSON(tables)
 }
 
+// @Router /tables/{id} [GET]
+// @Security ApiKeyAuth
+// @Param id path int true "Table ID"
+// @Tags Tables
+// @Accepts json
+// @Produce json
+// @Success 200 {object} domain.Table
+// @Failure default {object} domain.AppError
 func (h *TableHandler) findTable(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	table, err := h.service.Find(uint(id))
@@ -36,6 +51,14 @@ func (h *TableHandler) findTable(c *fiber.Ctx) error {
 	return c.JSON(table)
 }
 
+// @Router /tables [POST]
+// @Security ApiKeyAuth
+// @Param dto body dto.CreateTableRequest true "Table CreateTableRequest"
+// @Tags Tables
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Table
+// @Failure default {object} domain.AppError
 func (h *TableHandler) saveTable(c *fiber.Ctx) error {
 	dto := new(dto.CreateTableRequest)
 	if err := c.BodyParser(dto); err != nil {
@@ -48,6 +71,15 @@ func (h *TableHandler) saveTable(c *fiber.Ctx) error {
 	return c.JSON(table)
 }
 
+// @Router /tables/{id} [PUT]
+// @Security ApiKeyAuth
+// @Param id path int true "Table ID"
+// @Param dto body dto.UpdateTableRequest true "Table UpdateTableRequest"
+// @Tags Tables
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Table
+// @Failure default {object} domain.AppError
 func (h *TableHandler) updateTable(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	dto := new(dto.UpdateTableRequest)
@@ -61,6 +93,14 @@ func (h *TableHandler) updateTable(c *fiber.Ctx) error {
 	return c.JSON(table)
 }
 
+// @Router /tables/{id} [DELETE]
+// @Security ApiKeyAuth
+// @Param id path int true "Table ID"
+// @Tags Tables
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Table
+// @Failure default {object} domain.AppError
 func (h *TableHandler) deleteTable(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	table, err := h.service.Delete(uint(id))
