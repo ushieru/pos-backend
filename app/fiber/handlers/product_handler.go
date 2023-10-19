@@ -20,6 +20,13 @@ func (h *ProductHandler) SetupRoutes(app *fiber.App) {
 	products.Delete("/:id", h.deleteProduct)
 }
 
+// @Router /products [GET]
+// @Security ApiKeyAuth
+// @Tags Product
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Product
+// @Failure default {object} domain.AppError
 func (h *ProductHandler) listProducts(c *fiber.Ctx) error {
 	products, err := h.service.List()
 	if err != nil {
@@ -28,6 +35,14 @@ func (h *ProductHandler) listProducts(c *fiber.Ctx) error {
 	return c.JSON(products)
 }
 
+// @Router /products/{id} [GET]
+// @Security ApiKeyAuth
+// @Param id path int true "Product ID"
+// @Tags Product
+// @Accepts json
+// @Produce json
+// @Success 200 {object} domain.Product
+// @Failure default {object} domain.AppError
 func (h *ProductHandler) findProduct(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	product, err := h.service.Find(uint(id))
@@ -37,6 +52,14 @@ func (h *ProductHandler) findProduct(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
+// @Router /products [POST]
+// @Security ApiKeyAuth
+// @Param dto body dto.UpsertProductRequest true "Product UpsertProductRequest"
+// @Tags Product
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Product
+// @Failure default {object} domain.AppError
 func (h *ProductHandler) saveProduct(c *fiber.Ctx) error {
 	dto := new(dto.UpsertProductRequest)
 	if err := c.BodyParser(dto); err != nil {
@@ -49,6 +72,15 @@ func (h *ProductHandler) saveProduct(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
+// @Router /products/{id} [PUT]
+// @Security ApiKeyAuth
+// @Param id path int true "Product ID"
+// @Param dto body dto.UpsertProductRequest true "Product UpsertProductRequest"
+// @Tags Product
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Product
+// @Failure default {object} domain.AppError
 func (h *ProductHandler) updateProduct(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	dto := new(dto.UpsertProductRequest)
@@ -62,6 +94,14 @@ func (h *ProductHandler) updateProduct(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
+// @Router /products/{id} [DELETE]
+// @Security ApiKeyAuth
+// @Param id path int true "Product ID"
+// @Tags Product
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Product
+// @Failure default {object} domain.AppError
 func (h *ProductHandler) deleteProduct(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	product, err := h.service.Delete(uint(id))
@@ -71,6 +111,15 @@ func (h *ProductHandler) deleteProduct(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
+// @Router /products/{id}/categories/{categoryId} [POST]
+// @Security ApiKeyAuth
+// @Param id path int true "Product ID"
+// @Param categoryId path int true "Category ID"
+// @Tags Product
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Product
+// @Failure default {object} domain.AppError
 func (h *ProductHandler) addCategory(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	categoryId, _ := c.ParamsInt("categoryId")
