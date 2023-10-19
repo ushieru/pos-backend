@@ -1,0 +1,89 @@
+definitions:
+  domain.Account:
+    properties:
+      account_type:
+        $ref: '#/definitions/domain.AccountType'
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      update_at:
+        type: string
+      user_id:
+        type: integer
+      username:
+        type: string
+    type: object
+  domain.AccountType:
+    enum:
+    - admin
+    type: string
+    x-enum-varnames:
+    - Admin
+  domain.AppError:
+    properties:
+      code:
+        type: integer
+      messsage:
+        type: string
+    type: object
+  domain.User:
+    properties:
+      account:
+        $ref: '#/definitions/domain.Account'
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      update_at:
+        type: string
+    type: object
+  dto.AuthUserResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/domain.User'
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Point Of Sale - Total Tools
+  title: Point Of Sale API
+  version: "1.0"
+paths:
+  /auth:
+    post:
+      produces:
+      - application/json
+      responses:
+        "0":
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AuthUserResponse'
+      security:
+      - BasicAuth: []
+      tags:
+      - Auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+  BasicAuth:
+    type: basic
+swagger: "2.0"

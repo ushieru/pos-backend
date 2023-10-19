@@ -1,5 +1,5 @@
 swag:
-	swag init -d api -o api/swagger
+	swag init -g app/fiber/main.go -o app/fiber/swagger
 exe-all:
 	make exe-linux && make exe-windows && make exe-silicon
 exe-linux:
