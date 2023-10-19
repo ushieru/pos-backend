@@ -19,6 +19,13 @@ func (h *CategoryHandler) SetupRoutes(app *fiber.App) {
 	categories.Delete("/:id", h.deleteCategory)
 }
 
+// @Router /categories [GET]
+// @Security ApiKeyAuth
+// @Tags Category
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Category
+// @Failure 0 {object} domain.AppError
 func (h *CategoryHandler) listCategories(c *fiber.Ctx) error {
 	categories, err := h.service.List()
 	if err != nil {
@@ -27,6 +34,14 @@ func (h *CategoryHandler) listCategories(c *fiber.Ctx) error {
 	return c.JSON(categories)
 }
 
+// @Router /categories/{id} [GET]
+// @Security ApiKeyAuth
+// @Param id path int true "Category ID"
+// @Tags Category
+// @Accepts json
+// @Produce json
+// @Success 200 {object} domain.Category
+// @Failure 0 {object} domain.AppError
 func (h *CategoryHandler) findCategory(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	categories, err := h.service.Find(uint(id))
@@ -36,6 +51,14 @@ func (h *CategoryHandler) findCategory(c *fiber.Ctx) error {
 	return c.JSON(categories)
 }
 
+// @Router /categories [POST]
+// @Security ApiKeyAuth
+// @Param dto body dto.UpsertCategoryRequest true "Category UpsertCategoryRequest"
+// @Tags Category
+// @Accepts json
+// @Produce json
+// @Success 200 {object} domain.Category
+// @Failure 0 {object} domain.AppError
 func (h *CategoryHandler) saveCategory(c *fiber.Ctx) error {
 	dto := new(dto.UpsertCategoryRequest)
 	if err := c.BodyParser(dto); err != nil {
@@ -48,6 +71,15 @@ func (h *CategoryHandler) saveCategory(c *fiber.Ctx) error {
 	return c.JSON(category)
 }
 
+// @Router /categories/{id} [PUT]
+// @Security ApiKeyAuth
+// @Param id path int true "Category ID"
+// @Param dto body dto.UpsertCategoryRequest true "Category UpsertCategoryRequest"
+// @Tags Category
+// @Accepts json
+// @Produce json
+// @Success 200 {object} domain.Category
+// @Failure 0 {object} domain.AppError
 func (h *CategoryHandler) updateCategory(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	dto := new(dto.UpsertCategoryRequest)
@@ -61,6 +93,14 @@ func (h *CategoryHandler) updateCategory(c *fiber.Ctx) error {
 	return c.JSON(category)
 }
 
+// @Router /categories/{id} [DELETE]
+// @Security ApiKeyAuth
+// @Param id path int true "Category ID"
+// @Tags Category
+// @Accepts json
+// @Produce json
+// @Success 200 {object} domain.Category
+// @Failure 0 {object} domain.AppError
 func (h *CategoryHandler) deleteCategory(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	category, err := h.service.Delete(uint(id))
