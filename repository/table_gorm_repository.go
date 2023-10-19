@@ -19,7 +19,38 @@ func (r *TableGormRepository) List() ([]domain.Table, *domain.AppError) {
 }
 
 func (r *TableGormRepository) Save(table *domain.Table) (*domain.Table, *domain.AppError) {
-	return nil, domain.NewUnexpectedError("[TableGormRepository] (Save) - Metodo no implementado")
+	tables, err := r.List()
+	if err != nil {
+		return nil, err
+	}
+	var tables2dSlice = make([][]domain.Table, 5)
+	for i := range tables2dSlice {
+		tables2dSlice[i] = make([]domain.Table, 10)
+	}
+	for _, _table := range tables {
+		tables2dSlice[table.PosY][table.PosX] = _table
+	}
+	var posXAvailable, posYAvailable uint
+	findPos := false
+	for y, rt := range tables2dSlice {
+		for x, t := range rt {
+			if t.ID == 0 {
+				posXAvailable, posYAvailable = uint(x+1), uint(y+1)
+				findPos = true
+				break
+			}
+		}
+		if findPos {
+			break
+		}
+	}
+	table.PosX = posXAvailable
+	table.PosY = posYAvailable
+	result := r.database.Save(table)
+	if result.RowsAffected == 0 {
+		return nil, domain.NewUnexpectedError("Error al crear Mesa")
+	}
+	return table, nil
 }
 
 func (r *TableGormRepository) Find(id uint) (*domain.Table, *domain.AppError) {
