@@ -37,6 +37,9 @@ func (r *ProductGormRepository) Update(p *domain.Product) (*domain.Product, *dom
 	if err != nil {
 		return nil, err
 	}
+	product.Name = p.Name
+	product.Description = p.Description
+	product.Price = p.Price
 	r.database.Save(product)
 	return product, nil
 }

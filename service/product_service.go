@@ -43,6 +43,7 @@ func (s *ProductService) Update(id uint, dto *dto.UpsertProductRequest) (*domain
 		return nil, err
 	}
 	product := &domain.Product{
+		Model:       domain.Model{ID: id},
 		Name:        dto.Name,
 		Description: dto.Description,
 		Price:       dto.Price,
@@ -57,7 +58,6 @@ func (s *ProductService) Delete(id uint) (*domain.Product, *domain.AppError) {
 func (s *ProductService) AddCategory(productId, categoryId uint) (*domain.Product, *domain.AppError) {
 	return s.repository.AddCategory(productId, categoryId)
 }
-
 
 func NewProductService(repository domain.IProductRepository) *ProductService {
 	return &ProductService{repository}
