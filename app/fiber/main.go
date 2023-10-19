@@ -37,8 +37,22 @@ func NewFiberApp(config *FiberAppConfig) *FiberApp {
 }
 
 func (f *FiberApp) Run() error {
+	var databaseLogger logger.Interface
+	switch f.config.DatabaseLogger {
+	case "silent":
+		databaseLogger = logger.Default.LogMode(logger.Silent)
+		break
+	case "info":
+		databaseLogger = logger.Default.LogMode(logger.Info)
+		break
+	case "error":
+		databaseLogger = logger.Default.LogMode(logger.Error)
+		break
+	default:
+		databaseLogger = logger.Default.LogMode(logger.Silent)
+	}
 	database, err := gorm.Open(sqlite.Open(f.config.DatabaseName),
-		&gorm.Config{Logger: logger.Default.LogMode(logger.Silent)},
+		&gorm.Config{Logger: databaseLogger},
 	)
 	if err != nil {
 		panic("[Database Connection] failed to connect")
@@ -82,7 +96,7 @@ func (f *FiberApp) Run() error {
 }
 
 func NewDefaultFiberAppConfig() *FiberAppConfig {
-	return &FiberAppConfig{"pos.db", 8080, "supersecretword"}
+	return &FiberAppConfig{DatabaseName: "pos.db", Port: 8080, Secret: "supersecretword"}
 }
 
 type FiberApp struct {
@@ -91,7 +105,8 @@ type FiberApp struct {
 }
 
 type FiberAppConfig struct {
-	DatabaseName string
-	Port         int
-	Secret       string
+	DatabaseName   string
+	Port           int
+	Secret         string
+	DatabaseLogger string
 }
