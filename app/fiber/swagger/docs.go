@@ -29,16 +29,16 @@ const docTemplate = `{
                     "Auth"
                 ],
                 "responses": {
-                    "0": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/domain.AppError"
-                        }
-                    },
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.AuthUserResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
                         }
                     }
                 }
@@ -58,12 +58,6 @@ const docTemplate = `{
                     "Category"
                 ],
                 "responses": {
-                    "0": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/domain.AppError"
-                        }
-                    },
                     "200": {
                         "description": "OK",
                         "schema": {
@@ -71,6 +65,12 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/domain.Category"
                             }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
                         }
                     }
                 }
@@ -99,16 +99,16 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "0": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/domain.AppError"
-                        }
-                    },
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/domain.Category"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
                         }
                     }
                 }
@@ -137,16 +137,16 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "0": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/domain.AppError"
-                        }
-                    },
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/domain.Category"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
                         }
                     }
                 }
@@ -182,16 +182,16 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "0": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/domain.AppError"
-                        }
-                    },
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/domain.Category"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
                         }
                     }
                 }
@@ -218,16 +218,16 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "0": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/domain.AppError"
-                        }
-                    },
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/domain.Category"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
                         }
                     }
                 }
@@ -241,6 +241,450 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK"
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Product"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "parameters": [
+                    {
+                        "description": "Product UpsertProductRequest",
+                        "name": "dto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpsertProductRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Product"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Product"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Product UpsertProductRequest",
+                        "name": "dto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpsertProductRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Product"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Product"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}/categories/{categoryId}": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "categoryId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Product"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/tables": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tables"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Table"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tables"
+                ],
+                "parameters": [
+                    {
+                        "description": "Table CreateTableRequest",
+                        "name": "dto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateTableRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Table"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/tables/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tables"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Table ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Table"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tables"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Table ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Table UpdateTableRequest",
+                        "name": "dto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateTableRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Table"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tables"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Table ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Table"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
                     }
                 }
             }
@@ -354,6 +798,114 @@ const docTemplate = `{
                 }
             }
         },
+        "domain.Table": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "$ref": "#/definitions/domain.Account"
+                },
+                "account_id": {
+                    "type": "integer"
+                },
+                "create_at": {
+                    "type": "string"
+                },
+                "delete_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pos_x": {
+                    "type": "integer"
+                },
+                "pos_y": {
+                    "type": "integer"
+                },
+                "ticket": {
+                    "$ref": "#/definitions/domain.Ticket"
+                },
+                "ticket_id": {
+                    "type": "integer"
+                },
+                "update_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Ticket": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "$ref": "#/definitions/domain.Account"
+                },
+                "account_id": {
+                    "type": "integer"
+                },
+                "create_at": {
+                    "type": "string"
+                },
+                "delete_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "ticket_products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.TicketProduct"
+                    }
+                },
+                "ticket_status": {
+                    "$ref": "#/definitions/domain.TicketStatus"
+                },
+                "total": {
+                    "type": "number"
+                },
+                "update_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.TicketProduct": {
+            "type": "object",
+            "properties": {
+                "create_at": {
+                    "type": "string"
+                },
+                "delete_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "product": {
+                    "$ref": "#/definitions/domain.Product"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "ticket_id": {
+                    "type": "integer"
+                },
+                "update_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.TicketStatus": {
+            "type": "string",
+            "enum": [
+                "open"
+            ],
+            "x-enum-varnames": [
+                "TicketOpen"
+            ]
+        },
         "domain.User": {
             "type": "object",
             "properties": {
@@ -391,11 +943,47 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.CreateTableRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UpdateTableRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "pos_x": {
+                    "type": "integer"
+                },
+                "pos_y": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.UpsertCategoryRequest": {
             "type": "object",
             "properties": {
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "dto.UpsertProductRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
                 }
             }
         }
