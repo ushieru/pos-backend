@@ -12,7 +12,7 @@ type UserGormRepository struct {
 
 func (r *UserGormRepository) seed() {
 	user := new(domain.User)
-	r.database.First(&user)
+	r.database.First(user)
 	if user.ID != 0 {
 		return
 	}
