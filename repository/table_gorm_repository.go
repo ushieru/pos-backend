@@ -72,7 +72,7 @@ func (r *TableGormRepository) Update(t *domain.Table) (*domain.Table, *domain.Ap
 	}
 	tableFind := new(domain.Table)
 	r.database.First(tableFind, "Pos_X = ? AND Pos_Y = ?", t.PosX, t.PosY)
-	if tableFind.ID != 0 &&  tableFind.ID != t.ID{
+	if tableFind.ID != 0 && tableFind.ID != t.ID {
 		return nil, domain.NewConflictError("Posicion ocupada")
 	}
 	table.Name = t.Name
@@ -88,6 +88,22 @@ func (r *TableGormRepository) Delete(id uint) (*domain.Table, *domain.AppError) 
 		return nil, err
 	}
 	r.database.Delete(table)
+	return table, nil
+}
+
+func (r *TableGormRepository) CreateTicket(t *domain.Table, a *domain.Account) (*domain.Table, *domain.AppError) {
+	table, err := r.Find(t.ID)
+	if err != nil {
+		return nil, err
+	}
+	ticket := &domain.Ticket{
+		Account:      *a,
+		TicketStatus: domain.TicketOpen,
+	}
+	r.database.Save(ticket)
+	table.AccountID = a.ID
+	table.TicketID = ticket.ID
+	r.database.Save(table)
 	return table, nil
 }
 

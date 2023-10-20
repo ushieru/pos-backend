@@ -11,6 +11,7 @@ type ITableService interface {
 	Save(dto *dto.CreateTableRequest) (*domain.Table, *domain.AppError)
 	Update(id uint, dto *dto.UpdateTableRequest) (*domain.Table, *domain.AppError)
 	Delete(id uint) (*domain.Table, *domain.AppError)
+	CreateTicket(tableId uint, account *domain.Account) (*domain.Table, *domain.AppError)
 }
 
 type TableService struct {
@@ -48,6 +49,12 @@ func (s *TableService) Update(id uint, dto *dto.UpdateTableRequest) (*domain.Tab
 
 func (s *TableService) Delete(id uint) (*domain.Table, *domain.AppError) {
 	return s.repository.Delete(id)
+}
+func (s *TableService) CreateTicket(tableId uint, account *domain.Account) (*domain.Table, *domain.AppError) {
+	table := &domain.Table{
+		Model: domain.Model{ID: tableId},
+	}
+	return s.repository.CreateTicket(table, account)
 }
 
 func NewTableService(repository domain.ITableRepository) *TableService {

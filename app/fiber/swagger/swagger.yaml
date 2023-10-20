@@ -610,6 +610,31 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Tables
+  /tables/{id}/tickets:
+    post:
+      parameters:
+      - description: Table ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Table'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tables
 securityDefinitions:
   ApiKeyAuth:
     in: header

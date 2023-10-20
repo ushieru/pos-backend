@@ -17,4 +17,5 @@ type ITableRepository interface {
 	Find(id uint) (*Table, *AppError)
 	Update(*Table) (*Table, *AppError)
 	Delete(id uint) (*Table, *AppError)
+	CreateTicket(*Table, *Account) (*Table, *AppError)
 }
