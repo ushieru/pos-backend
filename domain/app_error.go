@@ -34,3 +34,10 @@ func NewConflictError(message string) *AppError {
 		Code:    http.StatusConflict,
 	}
 }
+
+func NewUnauthorizedError(message string) *AppError {
+	return &AppError{
+		Message: message,
+		Code:    http.StatusUnauthorized,
+	}
+}
