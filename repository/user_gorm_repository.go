@@ -56,7 +56,7 @@ func (r *UserGormRepository) seed() {
 
 func (r *UserGormRepository) List() ([]domain.User, *domain.AppError) {
 	var user []domain.User
-	r.database.Find(&user)
+	r.database.Preload("Account").Find(&user)
 	return user, nil
 }
 
@@ -70,7 +70,7 @@ func (r *UserGormRepository) Save(user *domain.User) (*domain.User, *domain.AppE
 
 func (r *UserGormRepository) Find(id uint) (*domain.User, *domain.AppError) {
 	user := new(domain.User)
-	r.database.First(user, id)
+	r.database.Preload("Account").First(user, id)
 	if user.ID == 0 {
 		return nil, domain.NewNotFoundError("Usuario no encontrado")
 	}
