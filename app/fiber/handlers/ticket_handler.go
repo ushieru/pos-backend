@@ -16,6 +16,8 @@ func (h *TicketHandler) SetupRoutes(app *fiber.App) {
 	tickets.Get("/:id", h.findTicket)
 	tickets.Post("/", h.saveTicket)
 	tickets.Delete("/:id", h.deleteTicket)
+	tickets.Post("/:id/products/:productId", h.addProduct)
+	tickets.Delete("/:id/products/:productId", h.deleteProduct)
 }
 
 func (h *TicketHandler) listTickets(c *fiber.Ctx) error {
@@ -47,6 +49,28 @@ func (h *TicketHandler) saveTicket(c *fiber.Ctx) error {
 func (h *TicketHandler) deleteTicket(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	ticket, err := h.service.Delete(uint(id))
+	if err != nil {
+		return fiber.NewError(err.Code, err.Message)
+	}
+	return c.JSON(ticket)
+}
+
+func (h *TicketHandler) addProduct(c *fiber.Ctx) error {
+	user := c.Locals("session").(*domain.User)
+	id, _ := c.ParamsInt("id")
+	productId, _ := c.ParamsInt("productId")
+	ticket, err := h.service.AddProduct(uint(id), uint(productId), &user.Account)
+	if err != nil {
+		return fiber.NewError(err.Code, err.Message)
+	}
+	return c.JSON(ticket)
+}
+
+func (h *TicketHandler) deleteProduct(c *fiber.Ctx) error {
+	user := c.Locals("session").(*domain.User)
+	id, _ := c.ParamsInt("id")
+	productId, _ := c.ParamsInt("productId")
+	ticket, err := h.service.DeleteProduct(uint(id), uint(productId), &user.Account)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}

@@ -2,11 +2,13 @@ package repository
 
 import (
 	"github.com/ushieru/pos/domain"
+	"github.com/ushieru/pos/service"
 	"gorm.io/gorm"
 )
 
 type TicketGormRepository struct {
 	database *gorm.DB
+	ps       *service.ProductService
 }
 
 func (r *TicketGormRepository) List() ([]domain.Ticket, *domain.AppError) {
@@ -50,7 +52,85 @@ func (r *TicketGormRepository) Delete(id uint) (*domain.Ticket, *domain.AppError
 	return ticket, nil
 }
 
-func NewTicketGormRepository(database *gorm.DB) *TicketGormRepository {
+func (r *TicketGormRepository) AddProduct(ticketId, productId uint, a *domain.Account) (*domain.Ticket, *domain.AppError) {
+	ticket, err := r.Find(ticketId)
+	if err != nil {
+		return nil, err
+	}
+	if ticket.AccountID != a.ID {
+		return nil, domain.NewUnauthorizedError("Este ticket no es tuyo")
+	}
+	if ticket.TicketStatus != domain.TicketOpen {
+		return nil, domain.NewConflictError("Este ticket no esta abierto")
+	}
+	product, pError := r.ps.Find(productId)
+	if pError != nil {
+		return nil, err
+	}
+	tp := new(domain.TicketProduct)
+	r.database.First(tp, "id = ? AND ticket_id = ?", productId, ticketId)
+	if tp.ID == 0 {
+		ticketProduct := new(domain.TicketProduct)
+		ticketProduct.Quantity = 1
+		ticketProduct.Product = *product
+		r.database.Model(ticket).Association("TicketProducts").Append(ticketProduct)
+	}
+	if tp.ID != 0 {
+		tp.Quantity = tp.Quantity + 1
+		r.database.Save(tp)
+	}
+	updatedTicket, UpdatedTicketErr := r.Find(ticketId)
+	if UpdatedTicketErr != nil {
+		return nil, UpdatedTicketErr
+	}
+	total := 0.0
+	for _, productTicket := range updatedTicket.TicketProducts {
+		total += productTicket.Product.Price * float64(productTicket.Quantity)
+	}
+	updatedTicket.Total = total
+	r.database.Save(updatedTicket)
+	return ticket, nil
+}
+
+func (r *TicketGormRepository) DeleteProduct(ticketId, productId uint, a *domain.Account) (*domain.Ticket, *domain.AppError) {
+	ticket, err := r.Find(ticketId)
+	if err != nil {
+		return nil, err
+	}
+	if ticket.AccountID != a.ID {
+		return nil, domain.NewUnauthorizedError("Este ticket no es tuyo")
+	}
+	if ticket.TicketStatus != domain.TicketOpen {
+		return nil, domain.NewConflictError("Este ticket no esta abierto")
+	}
+	product, pError := r.ps.Find(productId)
+	if pError != nil || product.ID == 0 {
+		return nil, err
+	}
+	tp := new(domain.TicketProduct)
+	r.database.First(tp, "id = ? AND ticket_id = ?", productId, ticketId)
+	if tp.Quantity == 1 {
+		r.database.Model(ticket).Association("TicketProducts").Delete(tp)
+	}
+	if tp.Quantity > 1 {
+		tp.Quantity = tp.Quantity - 1
+		r.database.Save(tp)
+	}
+	updatedTicket, UpdatedTicketErr := r.Find(ticketId)
+	if UpdatedTicketErr != nil {
+		return nil, UpdatedTicketErr
+	}
+	total := 0.0
+	for _, productTicket := range updatedTicket.TicketProducts {
+		total += productTicket.Product.Price * float64(productTicket.Quantity)
+	}
+	updatedTicket.Total = total
+	r.database.Save(updatedTicket)
+	return ticket, nil
+}
+
+func NewTicketGormRepository(database *gorm.DB, ps *service.ProductService) *TicketGormRepository {
 	database.AutoMigrate(&domain.Ticket{})
-	return &TicketGormRepository{database}
+	database.AutoMigrate(&domain.TicketProduct{})
+	return &TicketGormRepository{database, ps}
 }
