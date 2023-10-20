@@ -169,6 +169,19 @@ definitions:
       name:
         type: string
     type: object
+  dto.CreateUserRequest:
+    properties:
+      account_type:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
   dto.UpdateTableRequest:
     properties:
       name:
@@ -177,6 +190,21 @@ definitions:
         type: integer
       pos_y:
         type: integer
+    type: object
+  dto.UpdateUserRequest:
+    properties:
+      account_type:
+        type: string
+      email:
+        type: string
+      is_active:
+        type: boolean
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
     type: object
   dto.UpsertCategoryRequest:
     properties:
@@ -803,6 +831,127 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Tickets
+  /users:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.User'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+    post:
+      parameters:
+      - description: User CreateUserRequest
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.User'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+  /users/{id}:
+    delete:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.User'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+    put:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User UpdateUserRequest
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.User'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
 securityDefinitions:
   ApiKeyAuth:
     in: header
