@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/ushieru/pos/domain"
 	"github.com/ushieru/pos/dto"
 	"github.com/ushieru/pos/service"
 )
@@ -41,7 +42,8 @@ func (h *UserHandler) saveUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(dto); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Bad Request")
 	}
-	user, err := h.service.Save(dto)
+	user := c.Locals("session").(*domain.User)
+	user, err := h.service.Save(dto, &user.Account)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -54,7 +56,8 @@ func (h *UserHandler) updateUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(dto); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Bad Request")
 	}
-	user, err := h.service.Update(uint(id), dto)
+	user := c.Locals("session").(*domain.User)
+	user, err := h.service.Update(uint(id), dto, &user.Account)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -63,7 +66,8 @@ func (h *UserHandler) updateUser(c *fiber.Ctx) error {
 
 func (h *UserHandler) deleteUser(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
-	user, err := h.service.Delete(uint(id))
+	user := c.Locals("session").(*domain.User)
+	user, err := h.service.Delete(uint(id), &user.Account)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}

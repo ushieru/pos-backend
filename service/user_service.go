@@ -13,9 +13,9 @@ type IUserService interface {
 	List() ([]domain.User, *domain.AppError)
 	Find(id uint) (*domain.User, *domain.AppError)
 	AuthWithCredentials(username, password, secret string) (*dto.AuthUserResponse, *domain.AppError)
-	Save(dto *dto.CreateUserRequest) (*domain.User, *domain.AppError)
-	Update(id uint, dto *dto.UpdateUserRequest) (*domain.User, *domain.AppError)
-	Delete(id uint) (*domain.User, *domain.AppError)
+	Save(dto *dto.CreateUserRequest, a *domain.Account) (*domain.User, *domain.AppError)
+	Update(id uint, dto *dto.UpdateUserRequest, a *domain.Account) (*domain.User, *domain.AppError)
+	Delete(id uint, a *domain.Account) (*domain.User, *domain.AppError)
 }
 
 type UserService struct {
@@ -54,7 +54,10 @@ func (c *UserService) AuthWithCredentials(username, password, secret string) (*d
 	return authUserResponse, nil
 }
 
-func (c *UserService) Save(dto *dto.CreateUserRequest) (*domain.User, *domain.AppError) {
+func (c *UserService) Save(dto *dto.CreateUserRequest, a *domain.Account) (*domain.User, *domain.AppError) {
+	if a.AccountType != domain.Admin {
+		return nil, domain.NewUnauthorizedError("No tienes autorizacion para esta acion")
+	}
 	if err := dto.Validate(); err != nil {
 		return nil, err
 	}
@@ -73,7 +76,10 @@ func (c *UserService) Save(dto *dto.CreateUserRequest) (*domain.User, *domain.Ap
 	return c.repository.Save(user)
 }
 
-func (c *UserService) Update(id uint, dto *dto.UpdateUserRequest) (*domain.User, *domain.AppError) {
+func (c *UserService) Update(id uint, dto *dto.UpdateUserRequest, a *domain.Account) (*domain.User, *domain.AppError) {
+	if a.AccountType != domain.Admin {
+		return nil, domain.NewUnauthorizedError("No tienes autorizacion para esta acion")
+	}
 	if err := dto.Validate(); err != nil {
 		return nil, err
 	}
@@ -92,7 +98,10 @@ func (c *UserService) Update(id uint, dto *dto.UpdateUserRequest) (*domain.User,
 	return c.repository.Update(user)
 }
 
-func (c *UserService) Delete(id uint) (*domain.User, *domain.AppError) {
+func (c *UserService) Delete(id uint, a *domain.Account) (*domain.User, *domain.AppError) {
+	if a.AccountType != domain.Admin {
+		return nil, domain.NewUnauthorizedError("No tienes autorizacion para esta acion")
+	}
 	return c.repository.Delete(id)
 }
 
