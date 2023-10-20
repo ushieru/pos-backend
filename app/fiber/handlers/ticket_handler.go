@@ -18,6 +18,7 @@ func (h *TicketHandler) SetupRoutes(app *fiber.App) {
 	tickets.Delete("/:id", h.deleteTicket)
 	tickets.Post("/:id/products/:productId", h.addProduct)
 	tickets.Delete("/:id/products/:productId", h.deleteProduct)
+	tickets.Put("/:id/pay", h.payTicket)
 }
 
 // @Router /tickets [GET]
@@ -119,6 +120,24 @@ func (h *TicketHandler) deleteProduct(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	productId, _ := c.ParamsInt("productId")
 	ticket, err := h.service.DeleteProduct(uint(id), uint(productId), &user.Account)
+	if err != nil {
+		return fiber.NewError(err.Code, err.Message)
+	}
+	return c.JSON(ticket)
+}
+
+// @Router /tickets/{id}/pay [PUT]
+// @Security ApiKeyAuth
+// @Param id path int true "Ticket ID"
+// @Tags Tickets
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Ticket
+// @Failure default {object} domain.AppError
+func (h *TicketHandler) payTicket(c *fiber.Ctx) error {
+	user := c.Locals("session").(*domain.User)
+	id, _ := c.ParamsInt("id")
+	ticket, err := h.service.PayTicket(uint(id), &user.Account)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}

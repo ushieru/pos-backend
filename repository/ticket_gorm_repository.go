@@ -35,7 +35,7 @@ func (r *TicketGormRepository) Find(id uint) (*domain.Ticket, *domain.AppError) 
 		Preload("TicketProducts").
 		First(ticket, id)
 	if ticket.ID == 0 {
-		return nil, domain.NewNotFoundError("Usuario no encontrado")
+		return nil, domain.NewNotFoundError("Ticket no encontrado")
 	}
 	return ticket, nil
 }
@@ -133,6 +133,22 @@ func (r *TicketGormRepository) DeleteProduct(ticketId, productId uint, a *domain
 	updatedTicket.Total = total
 	r.database.Save(updatedTicket)
 	return updatedTicket, nil
+}
+
+func (r *TicketGormRepository) PayTicket(id uint, a *domain.Account) (*domain.Ticket, *domain.AppError) {
+	if a.AccountType != domain.Cashier {
+		return nil, domain.NewUnauthorizedError("No tienes autorizacion para cobrar")
+	}
+	ticket, err := r.Find(id)
+	if err != nil {
+		return nil, err
+	}
+	if len(ticket.TicketProducts) == 0 {
+		return nil, domain.NewConflictError("Ticket vacio")
+	}
+	ticket.TicketStatus = domain.TicketPaid
+	r.database.Save(ticket)
+	return ticket, nil
 }
 
 func NewTicketGormRepository(database *gorm.DB, ps *service.ProductService) *TicketGormRepository {

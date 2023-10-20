@@ -24,4 +24,5 @@ type ITicketRepository interface {
 	Delete(id uint) (*Ticket, *AppError)
 	AddProduct(ticketId, productId uint, a *Account) (*Ticket, *AppError)
 	DeleteProduct(ticketId, productId uint, a *Account) (*Ticket, *AppError)
+	PayTicket(id uint, a *Account) (*Ticket, *AppError)
 }
