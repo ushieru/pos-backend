@@ -20,6 +20,13 @@ func (h *TicketHandler) SetupRoutes(app *fiber.App) {
 	tickets.Delete("/:id/products/:productId", h.deleteProduct)
 }
 
+// @Router /tickets [GET]
+// @Security ApiKeyAuth
+// @Tags Tickets
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Ticket
+// @Failure default {object} domain.AppError
 func (h *TicketHandler) listTickets(c *fiber.Ctx) error {
 	tickets, err := h.service.List()
 	if err != nil {
@@ -28,6 +35,14 @@ func (h *TicketHandler) listTickets(c *fiber.Ctx) error {
 	return c.JSON(tickets)
 }
 
+// @Router /tickets/{id} [GET]
+// @Security ApiKeyAuth
+// @Param id path int true "Ticket ID"
+// @Tags Tickets
+// @Accepts json
+// @Produce json
+// @Success 200 {object} domain.Ticket
+// @Failure default {object} domain.AppError
 func (h *TicketHandler) findTicket(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	ticket, err := h.service.Find(uint(id))
@@ -37,6 +52,13 @@ func (h *TicketHandler) findTicket(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
+// @Router /tickets [POST]
+// @Security ApiKeyAuth
+// @Tags Tickets
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Ticket
+// @Failure default {object} domain.AppError
 func (h *TicketHandler) saveTicket(c *fiber.Ctx) error {
 	user := c.Locals("session").(*domain.User)
 	ticket, err := h.service.Save(&user.Account)
@@ -46,6 +68,14 @@ func (h *TicketHandler) saveTicket(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
+// @Router /tickets/{id} [DELETE]
+// @Security ApiKeyAuth
+// @Param id path int true "Ticket ID"
+// @Tags Tickets
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Ticket
+// @Failure default {object} domain.AppError
 func (h *TicketHandler) deleteTicket(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	ticket, err := h.service.Delete(uint(id))
@@ -55,6 +85,15 @@ func (h *TicketHandler) deleteTicket(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
+// @Router /tickets/{id}/products/{productId} [POST]
+// @Security ApiKeyAuth
+// @Param id path int true "Ticket ID"
+// @Param productId path int true "Product ID"
+// @Tags Tickets
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Ticket
+// @Failure default {object} domain.AppError
 func (h *TicketHandler) addProduct(c *fiber.Ctx) error {
 	user := c.Locals("session").(*domain.User)
 	id, _ := c.ParamsInt("id")
@@ -66,6 +105,15 @@ func (h *TicketHandler) addProduct(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
+// @Router /tickets/{id}/products/{productId} [DELETE]
+// @Security ApiKeyAuth
+// @Param id path int true "Ticket ID"
+// @Param productId path int true "Product ID"
+// @Tags Tickets
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Ticket
+// @Failure default {object} domain.AppError
 func (h *TicketHandler) deleteProduct(c *fiber.Ctx) error {
 	user := c.Locals("session").(*domain.User)
 	id, _ := c.ParamsInt("id")
