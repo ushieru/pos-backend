@@ -75,6 +75,9 @@ func (f *FiberApp) Run() error {
 	tableRepository := repository.NewTableGormRepository(database)
 	tableService := service.NewTableService(tableRepository)
 	tableHandler := handler.NewTableHandler(tableService)
+	ticketRepository := repository.NewTicketGormRepository(database, productService)
+	ticketService := service.NewTicketService(ticketRepository)
+	ticketHandler := handler.NewTicketHandler(ticketService)
 
 	f.app.Use(cors.New())
 	f.app.Use(func(c *fiber.Ctx) error {
@@ -91,6 +94,7 @@ func (f *FiberApp) Run() error {
 	categoryHandler.SetupRoutes(f.app)
 	productHandler.SetupRoutes(f.app)
 	tableHandler.SetupRoutes(f.app)
+	ticketHandler.SetupRoutes(f.app)
 	notFoundHandler.SetupRoutes(f.app)
 	return f.app.Listen(fmt.Sprintf(":%d", f.config.Port))
 }
