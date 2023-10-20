@@ -95,7 +95,7 @@ func (r *TicketGormRepository) AddProduct(ticketId, productId uint, a *domain.Ac
 	}
 	updatedTicket.Total = total
 	r.database.Save(updatedTicket)
-	return ticket, nil
+	return updatedTicket, nil
 }
 
 func (r *TicketGormRepository) DeleteProduct(ticketId, productId uint, a *domain.Account) (*domain.Ticket, *domain.AppError) {
@@ -132,7 +132,7 @@ func (r *TicketGormRepository) DeleteProduct(ticketId, productId uint, a *domain
 	}
 	updatedTicket.Total = total
 	r.database.Save(updatedTicket)
-	return ticket, nil
+	return updatedTicket, nil
 }
 
 func NewTicketGormRepository(database *gorm.DB, ps *service.ProductService) *TicketGormRepository {
