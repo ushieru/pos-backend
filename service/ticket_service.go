@@ -9,6 +9,8 @@ type ITicketService interface {
 	Find(id uint) (*domain.Ticket, *domain.AppError)
 	Save(account *domain.Account) (*domain.Ticket, *domain.AppError)
 	Delete(id uint) (*domain.Ticket, *domain.AppError)
+	AddProduct(ticketId, productId uint, a *domain.Account) (*domain.Ticket, *domain.AppError)
+	DeleteProduct(ticketId, productId uint, a *domain.Account) (*domain.Ticket, *domain.AppError)
 }
 
 type TicketService struct {
@@ -33,6 +35,14 @@ func (s *TicketService) Save(account *domain.Account) (*domain.Ticket, *domain.A
 
 func (s *TicketService) Delete(id uint) (*domain.Ticket, *domain.AppError) {
 	return s.repository.Delete(id)
+}
+
+func (s *TicketService) AddProduct(ticketId, productId uint, a *domain.Account) (*domain.Ticket, *domain.AppError) {
+	return s.repository.AddProduct(ticketId, productId, a)
+}
+
+func (s *TicketService) DeleteProduct(ticketId, productId uint, a *domain.Account) (*domain.Ticket, *domain.AppError) {
+	return s.repository.DeleteProduct(ticketId, productId, a)
 }
 
 func NewTicketService(repository domain.ITicketRepository) *TicketService {
