@@ -56,7 +56,7 @@ func (c *UserService) AuthWithCredentials(username, password, secret string) (*d
 
 func (c *UserService) Save(dto *dto.CreateUserRequest, a *domain.Account) (*domain.User, *domain.AppError) {
 	if a.AccountType != domain.Admin {
-		return nil, domain.NewUnauthorizedError("No tienes autorizacion para esta acion")
+		return nil, domain.NewUnauthorizedError("No tienes autorizacion para esta accion")
 	}
 	if err := dto.Validate(); err != nil {
 		return nil, err
@@ -78,7 +78,7 @@ func (c *UserService) Save(dto *dto.CreateUserRequest, a *domain.Account) (*doma
 
 func (c *UserService) Update(id uint, dto *dto.UpdateUserRequest, a *domain.Account) (*domain.User, *domain.AppError) {
 	if a.AccountType != domain.Admin {
-		return nil, domain.NewUnauthorizedError("No tienes autorizacion para esta acion")
+		return nil, domain.NewUnauthorizedError("No tienes autorizacion para esta accion")
 	}
 	if err := dto.Validate(); err != nil {
 		return nil, err
@@ -100,7 +100,7 @@ func (c *UserService) Update(id uint, dto *dto.UpdateUserRequest, a *domain.Acco
 
 func (c *UserService) Delete(id uint, a *domain.Account) (*domain.User, *domain.AppError) {
 	if a.AccountType != domain.Admin {
-		return nil, domain.NewUnauthorizedError("No tienes autorizacion para esta acion")
+		return nil, domain.NewUnauthorizedError("No tienes autorizacion para esta accion")
 	}
 	return c.repository.Delete(id)
 }
