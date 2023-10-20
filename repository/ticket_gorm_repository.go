@@ -48,6 +48,12 @@ func (r *TicketGormRepository) Delete(id uint) (*domain.Ticket, *domain.AppError
 	if len(ticket.TicketProducts) != 0 {
 		return nil, domain.NewConflictError("Ticket no esta vacio")
 	}
+	table := new(domain.Table)
+	r.database.First(table, "ticket_id = ?", id)
+	if table.ID != 0 {
+		r.database.Model(&table).Association("Account").Clear()
+		r.database.Model(&table).Association("Ticket").Clear()
+	}
 	r.database.Delete(ticket)
 	return ticket, nil
 }
