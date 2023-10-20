@@ -22,4 +22,6 @@ type ITicketRepository interface {
 	Save(*Ticket) (*Ticket, *AppError)
 	Find(id uint) (*Ticket, *AppError)
 	Delete(id uint) (*Ticket, *AppError)
+	AddProduct(ticketId, productId uint, a *Account) (*Ticket, *AppError)
+	DeleteProduct(ticketId, productId uint, a *Account) (*Ticket, *AppError)
 }
