@@ -4,7 +4,7 @@ import "net/http"
 
 type AppError struct {
 	Code    int    `json:"code"`
-	Message string `json:"messsage"`
+	Message string `json:"message"`
 }
 
 func NewNotFoundError(message string) *AppError {
