@@ -15,4 +15,5 @@ type IProductRepository interface {
 	Update(*Product) (*Product, *AppError)
 	Delete(id uint) (*Product, *AppError)
 	AddCategory(productId, categoryId uint) (*Product, *AppError)
+	DeleteCategory(productId, categoryId uint) (*Product, *AppError)
 }

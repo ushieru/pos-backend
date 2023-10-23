@@ -12,6 +12,7 @@ type IProductService interface {
 	Update(id uint, dto *dto.UpsertProductRequest) (*domain.Product, *domain.AppError)
 	Delete(id uint) (*domain.Product, *domain.AppError)
 	AddCategory(productId, categoryId uint) (*domain.Product, *domain.AppError)
+	DeleteCategory(productId, categoryId uint) (*domain.Product, *domain.AppError)
 }
 
 type ProductService struct {
@@ -57,6 +58,10 @@ func (s *ProductService) Delete(id uint) (*domain.Product, *domain.AppError) {
 
 func (s *ProductService) AddCategory(productId, categoryId uint) (*domain.Product, *domain.AppError) {
 	return s.repository.AddCategory(productId, categoryId)
+}
+
+func (s *ProductService) DeleteCategory(productId, categoryId uint) (*domain.Product, *domain.AppError) {
+	return s.repository.DeleteCategory(productId, categoryId)
 }
 
 func NewProductService(repository domain.IProductRepository) *ProductService {

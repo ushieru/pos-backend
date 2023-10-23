@@ -69,6 +69,22 @@ func (r *ProductGormRepository) AddCategory(productId, categoryId uint) (*domain
 	return product, nil
 }
 
+func (r *ProductGormRepository) DeleteCategory(productId, categoryId uint) (*domain.Product, *domain.AppError) {
+	product, err := r.Find(productId)
+	if err != nil {
+		return nil, err
+	}
+	category := new(domain.Category)
+	r.database.First(category, categoryId)
+	if category.ID == 0 {
+		return nil, domain.NewNotFoundError("Categoria no encontrada")
+	}
+	if err := r.database.Model(product).Association("Categories").Delete(category); err != nil {
+		return nil, domain.NewUnexpectedError("No fue posible eliminar la categoria del producto")
+	}
+	return product, nil
+}
+
 func NewProductGormRepository(database *gorm.DB) *ProductGormRepository {
 	database.AutoMigrate(&domain.Product{})
 	return &ProductGormRepository{database}

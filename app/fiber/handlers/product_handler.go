@@ -11,16 +11,17 @@ type ProductHandler struct {
 }
 
 func (h *ProductHandler) SetupRoutes(app *fiber.App) {
-	products := app.Group("/products")
+	products := app.Group("/api/products")
 	products.Get("/", h.listProducts)
 	products.Get("/:id", h.findProduct)
 	products.Post("/", h.saveProduct)
 	products.Post("/:id/categories/:categoryId", h.addCategory)
+	products.Delete("/:id/categories/:categoryId", h.deleteCategory)
 	products.Put("/:id", h.updateProduct)
 	products.Delete("/:id", h.deleteProduct)
 }
 
-// @Router /products [GET]
+// @Router /api/products [GET]
 // @Security ApiKeyAuth
 // @Tags Product
 // @Accepts json
@@ -35,7 +36,7 @@ func (h *ProductHandler) listProducts(c *fiber.Ctx) error {
 	return c.JSON(products)
 }
 
-// @Router /products/{id} [GET]
+// @Router /api/products/{id} [GET]
 // @Security ApiKeyAuth
 // @Param id path int true "Product ID"
 // @Tags Product
@@ -52,7 +53,7 @@ func (h *ProductHandler) findProduct(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
-// @Router /products [POST]
+// @Router /api/products [POST]
 // @Security ApiKeyAuth
 // @Param dto body dto.UpsertProductRequest true "Product UpsertProductRequest"
 // @Tags Product
@@ -72,7 +73,7 @@ func (h *ProductHandler) saveProduct(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
-// @Router /products/{id} [PUT]
+// @Router /api/products/{id} [PUT]
 // @Security ApiKeyAuth
 // @Param id path int true "Product ID"
 // @Param dto body dto.UpsertProductRequest true "Product UpsertProductRequest"
@@ -94,7 +95,7 @@ func (h *ProductHandler) updateProduct(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
-// @Router /products/{id} [DELETE]
+// @Router /api/products/{id} [DELETE]
 // @Security ApiKeyAuth
 // @Param id path int true "Product ID"
 // @Tags Product
@@ -111,7 +112,7 @@ func (h *ProductHandler) deleteProduct(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
-// @Router /products/{id}/categories/{categoryId} [POST]
+// @Router /api/products/{id}/categories/{categoryId} [POST]
 // @Security ApiKeyAuth
 // @Param id path int true "Product ID"
 // @Param categoryId path int true "Category ID"
@@ -124,6 +125,25 @@ func (h *ProductHandler) addCategory(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
 	categoryId, _ := c.ParamsInt("categoryId")
 	product, err := h.service.AddCategory(uint(id), uint(categoryId))
+	if err != nil {
+		return fiber.NewError(err.Code, err.Message)
+	}
+	return c.JSON(product)
+}
+
+// @Router /api/products/{id}/categories/{categoryId} [DELETE]
+// @Security ApiKeyAuth
+// @Param id path int true "Product ID"
+// @Param categoryId path int true "Category ID"
+// @Tags Product
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Product
+// @Failure default {object} domain.AppError
+func (h *ProductHandler) deleteCategory(c *fiber.Ctx) error {
+	id, _ := c.ParamsInt("id")
+	categoryId, _ := c.ParamsInt("categoryId")
+	product, err := h.service.DeleteCategory(uint(id), uint(categoryId))
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
