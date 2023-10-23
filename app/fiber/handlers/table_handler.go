@@ -12,7 +12,7 @@ type TableHandler struct {
 }
 
 func (h *TableHandler) SetupRoutes(app *fiber.App) {
-	tables := app.Group("/tables")
+	tables := app.Group("/api/tables")
 	tables.Get("/", h.listTables)
 	tables.Get("/:id", h.findTable)
 	tables.Post("/", h.saveTable)
@@ -21,7 +21,7 @@ func (h *TableHandler) SetupRoutes(app *fiber.App) {
 	tables.Delete("/:id", h.deleteTable)
 }
 
-// @Router /tables [GET]
+// @Router /api/tables [GET]
 // @Security ApiKeyAuth
 // @Tags Tables
 // @Accepts json
@@ -36,7 +36,7 @@ func (h *TableHandler) listTables(c *fiber.Ctx) error {
 	return c.JSON(tables)
 }
 
-// @Router /tables/{id} [GET]
+// @Router /api/tables/{id} [GET]
 // @Security ApiKeyAuth
 // @Param id path int true "Table ID"
 // @Tags Tables
@@ -53,7 +53,7 @@ func (h *TableHandler) findTable(c *fiber.Ctx) error {
 	return c.JSON(table)
 }
 
-// @Router /tables [POST]
+// @Router /api/tables [POST]
 // @Security ApiKeyAuth
 // @Param dto body dto.CreateTableRequest true "Table CreateTableRequest"
 // @Tags Tables
@@ -73,7 +73,7 @@ func (h *TableHandler) saveTable(c *fiber.Ctx) error {
 	return c.JSON(table)
 }
 
-// @Router /tables/{id} [PUT]
+// @Router /api/tables/{id} [PUT]
 // @Security ApiKeyAuth
 // @Param id path int true "Table ID"
 // @Param dto body dto.UpdateTableRequest true "Table UpdateTableRequest"
@@ -95,7 +95,7 @@ func (h *TableHandler) updateTable(c *fiber.Ctx) error {
 	return c.JSON(table)
 }
 
-// @Router /tables/{id} [DELETE]
+// @Router /api/tables/{id} [DELETE]
 // @Security ApiKeyAuth
 // @Param id path int true "Table ID"
 // @Tags Tables
@@ -112,7 +112,7 @@ func (h *TableHandler) deleteTable(c *fiber.Ctx) error {
 	return c.JSON(table)
 }
 
-// @Router /tables/{id}/tickets [POST]
+// @Router /api/tables/{id}/tickets [POST]
 // @Security ApiKeyAuth
 // @Param id path int true "Table ID"
 // @Tags Tables

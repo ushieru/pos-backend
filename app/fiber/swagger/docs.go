@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth": {
+        "/api/auth": {
             "post": {
                 "security": [
                     {
@@ -44,7 +44,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/categories": {
+        "/api/categories": {
             "get": {
                 "security": [
                     {
@@ -114,7 +114,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/categories/{id}": {
+        "/api/categories/{id}": {
             "get": {
                 "security": [
                     {
@@ -233,19 +233,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ping": {
-            "get": {
-                "tags": [
-                    "Ping"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/products": {
+        "/api/products": {
             "get": {
                 "security": [
                     {
@@ -318,7 +306,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/products/{id}": {
+        "/api/products/{id}": {
             "get": {
                 "security": [
                     {
@@ -443,8 +431,54 @@ const docTemplate = `{
                 }
             }
         },
-        "/products/{id}/categories/{categoryId}": {
+        "/api/products/{id}/categories/{categoryId}": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "categoryId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Product"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            },
+            "delete": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -491,7 +525,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tables": {
+        "/api/tables": {
             "get": {
                 "security": [
                     {
@@ -564,7 +598,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tables/{id}": {
+        "/api/tables/{id}": {
             "get": {
                 "security": [
                     {
@@ -689,7 +723,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tables/{id}/tickets": {
+        "/api/tables/{id}/tickets": {
             "post": {
                 "security": [
                     {
@@ -730,7 +764,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tickets": {
+        "/api/tickets": {
             "get": {
                 "security": [
                     {
@@ -792,7 +826,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tickets/{id}": {
+        "/api/tickets/{id}": {
             "get": {
                 "security": [
                     {
@@ -869,7 +903,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tickets/{id}/pay": {
+        "/api/tickets/{id}/pay": {
             "put": {
                 "security": [
                     {
@@ -910,7 +944,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tickets/{id}/products/{productId}": {
+        "/api/tickets/{id}/products/{productId}": {
             "post": {
                 "security": [
                     {
@@ -1004,7 +1038,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users": {
+        "/api/users": {
             "get": {
                 "security": [
                     {
@@ -1077,7 +1111,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}": {
+        "/api/users/{id}": {
             "get": {
                 "security": [
                     {
@@ -1201,6 +1235,18 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/ping": {
+            "get": {
+                "tags": [
+                    "Ping"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -1248,7 +1294,7 @@ const docTemplate = `{
                 "code": {
                     "type": "integer"
                 },
-                "messsage": {
+                "message": {
                     "type": "string"
                 }
             }

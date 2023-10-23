@@ -28,7 +28,7 @@ definitions:
     properties:
       code:
         type: integer
-      messsage:
+      message:
         type: string
     type: object
   domain.Category:
@@ -227,7 +227,7 @@ info:
   title: Point Of Sale API
   version: "1.0"
 paths:
-  /auth:
+  /api/auth:
     post:
       produces:
       - application/json
@@ -244,7 +244,7 @@ paths:
       - BasicAuth: []
       tags:
       - Auth
-  /categories:
+  /api/categories:
     get:
       produces:
       - application/json
@@ -286,7 +286,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Category
-  /categories/{id}:
+  /api/categories/{id}:
     delete:
       parameters:
       - description: Category ID
@@ -359,14 +359,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Category
-  /ping:
-    get:
-      responses:
-        "200":
-          description: OK
-      tags:
-      - Ping
-  /products:
+  /api/products:
     get:
       produces:
       - application/json
@@ -410,7 +403,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Product
-  /products/{id}:
+  /api/products/{id}:
     delete:
       parameters:
       - description: Product ID
@@ -487,7 +480,36 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Product
-  /products/{id}/categories/{categoryId}:
+  /api/products/{id}/categories/{categoryId}:
+    delete:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Category ID
+        in: path
+        name: categoryId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Product'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
     post:
       parameters:
       - description: Product ID
@@ -517,7 +539,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Product
-  /tables:
+  /api/tables:
     get:
       produces:
       - application/json
@@ -561,7 +583,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Tables
-  /tables/{id}:
+  /api/tables/{id}:
     delete:
       parameters:
       - description: Table ID
@@ -638,7 +660,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Tables
-  /tables/{id}/tickets:
+  /api/tables/{id}/tickets:
     post:
       parameters:
       - description: Table ID
@@ -663,7 +685,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Tables
-  /tickets:
+  /api/tickets:
     get:
       produces:
       - application/json
@@ -700,7 +722,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Tickets
-  /tickets/{id}:
+  /api/tickets/{id}:
     delete:
       parameters:
       - description: Ticket ID
@@ -747,7 +769,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Tickets
-  /tickets/{id}/pay:
+  /api/tickets/{id}/pay:
     put:
       parameters:
       - description: Ticket ID
@@ -772,7 +794,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Tickets
-  /tickets/{id}/products/{productId}:
+  /api/tickets/{id}/products/{productId}:
     delete:
       parameters:
       - description: Ticket ID
@@ -831,7 +853,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Tickets
-  /users:
+  /api/users:
     get:
       produces:
       - application/json
@@ -875,7 +897,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - User
-  /users/{id}:
+  /api/users/{id}:
     delete:
       parameters:
       - description: User ID
@@ -952,6 +974,13 @@ paths:
       - ApiKeyAuth: []
       tags:
       - User
+  /ping:
+    get:
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Ping
 securityDefinitions:
   ApiKeyAuth:
     in: header

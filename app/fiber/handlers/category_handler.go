@@ -11,7 +11,7 @@ type CategoryHandler struct {
 }
 
 func (h *CategoryHandler) SetupRoutes(app *fiber.App) {
-	categories := app.Group("/categories")
+	categories := app.Group("/api/categories")
 	categories.Get("/", h.listCategories)
 	categories.Get("/:id", h.findCategory)
 	categories.Post("/", h.saveCategory)
@@ -19,7 +19,7 @@ func (h *CategoryHandler) SetupRoutes(app *fiber.App) {
 	categories.Delete("/:id", h.deleteCategory)
 }
 
-// @Router /categories [GET]
+// @Router /api/categories [GET]
 // @Security ApiKeyAuth
 // @Tags Category
 // @Accepts json
@@ -34,7 +34,7 @@ func (h *CategoryHandler) listCategories(c *fiber.Ctx) error {
 	return c.JSON(categories)
 }
 
-// @Router /categories/{id} [GET]
+// @Router /api/categories/{id} [GET]
 // @Security ApiKeyAuth
 // @Param id path int true "Category ID"
 // @Tags Category
@@ -51,7 +51,7 @@ func (h *CategoryHandler) findCategory(c *fiber.Ctx) error {
 	return c.JSON(categories)
 }
 
-// @Router /categories [POST]
+// @Router /api/categories [POST]
 // @Security ApiKeyAuth
 // @Param dto body dto.UpsertCategoryRequest true "Category UpsertCategoryRequest"
 // @Tags Category
@@ -71,7 +71,7 @@ func (h *CategoryHandler) saveCategory(c *fiber.Ctx) error {
 	return c.JSON(category)
 }
 
-// @Router /categories/{id} [PUT]
+// @Router /api/categories/{id} [PUT]
 // @Security ApiKeyAuth
 // @Param id path int true "Category ID"
 // @Param dto body dto.UpsertCategoryRequest true "Category UpsertCategoryRequest"
@@ -93,7 +93,7 @@ func (h *CategoryHandler) updateCategory(c *fiber.Ctx) error {
 	return c.JSON(category)
 }
 
-// @Router /categories/{id} [DELETE]
+// @Router /api/categories/{id} [DELETE]
 // @Security ApiKeyAuth
 // @Param id path int true "Category ID"
 // @Tags Category

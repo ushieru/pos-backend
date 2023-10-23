@@ -8,7 +8,7 @@
     },
     "host": "localhost:8080",
     "paths": {
-        "/auth": {
+        "/api/auth": {
             "post": {
                 "security": [
                     {
@@ -37,7 +37,7 @@
                 }
             }
         },
-        "/categories": {
+        "/api/categories": {
             "get": {
                 "security": [
                     {
@@ -107,7 +107,7 @@
                 }
             }
         },
-        "/categories/{id}": {
+        "/api/categories/{id}": {
             "get": {
                 "security": [
                     {
@@ -226,19 +226,7 @@
                 }
             }
         },
-        "/ping": {
-            "get": {
-                "tags": [
-                    "Ping"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/products": {
+        "/api/products": {
             "get": {
                 "security": [
                     {
@@ -311,7 +299,7 @@
                 }
             }
         },
-        "/products/{id}": {
+        "/api/products/{id}": {
             "get": {
                 "security": [
                     {
@@ -436,8 +424,54 @@
                 }
             }
         },
-        "/products/{id}/categories/{categoryId}": {
+        "/api/products/{id}/categories/{categoryId}": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "categoryId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Product"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            },
+            "delete": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -484,7 +518,7 @@
                 }
             }
         },
-        "/tables": {
+        "/api/tables": {
             "get": {
                 "security": [
                     {
@@ -557,7 +591,7 @@
                 }
             }
         },
-        "/tables/{id}": {
+        "/api/tables/{id}": {
             "get": {
                 "security": [
                     {
@@ -682,7 +716,7 @@
                 }
             }
         },
-        "/tables/{id}/tickets": {
+        "/api/tables/{id}/tickets": {
             "post": {
                 "security": [
                     {
@@ -723,7 +757,7 @@
                 }
             }
         },
-        "/tickets": {
+        "/api/tickets": {
             "get": {
                 "security": [
                     {
@@ -785,7 +819,7 @@
                 }
             }
         },
-        "/tickets/{id}": {
+        "/api/tickets/{id}": {
             "get": {
                 "security": [
                     {
@@ -862,7 +896,7 @@
                 }
             }
         },
-        "/tickets/{id}/pay": {
+        "/api/tickets/{id}/pay": {
             "put": {
                 "security": [
                     {
@@ -903,7 +937,7 @@
                 }
             }
         },
-        "/tickets/{id}/products/{productId}": {
+        "/api/tickets/{id}/products/{productId}": {
             "post": {
                 "security": [
                     {
@@ -997,7 +1031,7 @@
                 }
             }
         },
-        "/users": {
+        "/api/users": {
             "get": {
                 "security": [
                     {
@@ -1070,7 +1104,7 @@
                 }
             }
         },
-        "/users/{id}": {
+        "/api/users/{id}": {
             "get": {
                 "security": [
                     {
@@ -1194,6 +1228,18 @@
                     }
                 }
             }
+        },
+        "/ping": {
+            "get": {
+                "tags": [
+                    "Ping"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -1241,7 +1287,7 @@
                 "code": {
                     "type": "integer"
                 },
-                "messsage": {
+                "message": {
                     "type": "string"
                 }
             }

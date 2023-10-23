@@ -11,7 +11,7 @@ type TicketHandler struct {
 }
 
 func (h *TicketHandler) SetupRoutes(app *fiber.App) {
-	tickets := app.Group("/tickets")
+	tickets := app.Group("/api/tickets")
 	tickets.Get("/", h.listTickets)
 	tickets.Get("/:id", h.findTicket)
 	tickets.Post("/", h.saveTicket)
@@ -21,7 +21,7 @@ func (h *TicketHandler) SetupRoutes(app *fiber.App) {
 	tickets.Put("/:id/pay", h.payTicket)
 }
 
-// @Router /tickets [GET]
+// @Router /api/tickets [GET]
 // @Security ApiKeyAuth
 // @Tags Tickets
 // @Accepts json
@@ -36,7 +36,7 @@ func (h *TicketHandler) listTickets(c *fiber.Ctx) error {
 	return c.JSON(tickets)
 }
 
-// @Router /tickets/{id} [GET]
+// @Router /api/tickets/{id} [GET]
 // @Security ApiKeyAuth
 // @Param id path int true "Ticket ID"
 // @Tags Tickets
@@ -53,7 +53,7 @@ func (h *TicketHandler) findTicket(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
-// @Router /tickets [POST]
+// @Router /api/tickets [POST]
 // @Security ApiKeyAuth
 // @Tags Tickets
 // @Accepts json
@@ -69,7 +69,7 @@ func (h *TicketHandler) saveTicket(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
-// @Router /tickets/{id} [DELETE]
+// @Router /api/tickets/{id} [DELETE]
 // @Security ApiKeyAuth
 // @Param id path int true "Ticket ID"
 // @Tags Tickets
@@ -86,7 +86,7 @@ func (h *TicketHandler) deleteTicket(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
-// @Router /tickets/{id}/products/{productId} [POST]
+// @Router /api/tickets/{id}/products/{productId} [POST]
 // @Security ApiKeyAuth
 // @Param id path int true "Ticket ID"
 // @Param productId path int true "Product ID"
@@ -106,7 +106,7 @@ func (h *TicketHandler) addProduct(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
-// @Router /tickets/{id}/products/{productId} [DELETE]
+// @Router /api/tickets/{id}/products/{productId} [DELETE]
 // @Security ApiKeyAuth
 // @Param id path int true "Ticket ID"
 // @Param productId path int true "Product ID"
@@ -126,7 +126,7 @@ func (h *TicketHandler) deleteProduct(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
-// @Router /tickets/{id}/pay [PUT]
+// @Router /api/tickets/{id}/pay [PUT]
 // @Security ApiKeyAuth
 // @Param id path int true "Ticket ID"
 // @Tags Tickets

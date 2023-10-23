@@ -12,7 +12,7 @@ type UserHandler struct {
 }
 
 func (h *UserHandler) SetupRoutes(app *fiber.App) {
-	users := app.Group("/users")
+	users := app.Group("/api/users")
 	users.Get("/", h.listUsers)
 	users.Get("/:id", h.findUser)
 	users.Post("/", h.saveUser)
@@ -20,7 +20,7 @@ func (h *UserHandler) SetupRoutes(app *fiber.App) {
 	users.Delete("/:id", h.deleteUser)
 }
 
-// @Router /users [GET]
+// @Router /api/users [GET]
 // @Security ApiKeyAuth
 // @Tags User
 // @Accepts json
@@ -35,7 +35,7 @@ func (h *UserHandler) listUsers(c *fiber.Ctx) error {
 	return c.JSON(users)
 }
 
-// @Router /users/{id} [GET]
+// @Router /api/users/{id} [GET]
 // @Security ApiKeyAuth
 // @Param id path int true "User ID"
 // @Tags User
@@ -52,7 +52,7 @@ func (h *UserHandler) findUser(c *fiber.Ctx) error {
 	return c.JSON(user)
 }
 
-// @Router /users [POST]
+// @Router /api/users [POST]
 // @Security ApiKeyAuth
 // @Param dto body dto.CreateUserRequest true "User CreateUserRequest"
 // @Tags User
@@ -73,7 +73,7 @@ func (h *UserHandler) saveUser(c *fiber.Ctx) error {
 	return c.JSON(user)
 }
 
-// @Router /users/{id} [PUT]
+// @Router /api/users/{id} [PUT]
 // @Security ApiKeyAuth
 // @Param id path int true "User ID"
 // @Param dto body dto.UpdateUserRequest true "User UpdateUserRequest"
@@ -96,7 +96,7 @@ func (h *UserHandler) updateUser(c *fiber.Ctx) error {
 	return c.JSON(user)
 }
 
-// @Router /users/{id} [DELETE]
+// @Router /api/users/{id} [DELETE]
 // @Security ApiKeyAuth
 // @Param id path int true "User ID"
 // @Tags User

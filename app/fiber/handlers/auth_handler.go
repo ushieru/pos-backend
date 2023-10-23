@@ -13,10 +13,10 @@ type AuthHandler struct {
 }
 
 func (h *AuthHandler) SetupRoutes(app *fiber.App) {
-	app.Post("/auth", h.auth)
+	app.Post("/api/auth", h.auth)
 }
 
-// @Router /auth [POST]
+// @Router /api/auth [POST]
 // @Tags Auth
 // @Security BasicAuth
 // @Accepts json
