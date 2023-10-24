@@ -13,6 +13,7 @@ type ProductHandler struct {
 func (h *ProductHandler) SetupRoutes(app *fiber.App) {
 	products := app.Group("/api/products")
 	products.Get("/", h.listProducts)
+	products.Get("/categories/:id", h.listProductsByCategoryId)
 	products.Get("/:id", h.findProduct)
 	products.Post("/", h.saveProduct)
 	products.Post("/:id/categories/:categoryId", h.addCategory)
@@ -30,6 +31,23 @@ func (h *ProductHandler) SetupRoutes(app *fiber.App) {
 // @Failure default {object} domain.AppError
 func (h *ProductHandler) listProducts(c *fiber.Ctx) error {
 	products, err := h.service.List()
+	if err != nil {
+		return fiber.NewError(err.Code, err.Message)
+	}
+	return c.JSON(products)
+}
+
+// @Router /api/products/categories/{id} [GET]
+// @Security ApiKeyAuth
+// @Param id path int true "Category Id"
+// @Tags Product
+// @Accepts json
+// @Produce json
+// @Success 200 {array} domain.Product
+// @Failure default {object} domain.AppError
+func (h *ProductHandler) listProductsByCategoryId(c *fiber.Ctx) error {
+	id, _ := c.ParamsInt("id")
+	products, err := h.service.ListByCategoryId(uint(id))
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}

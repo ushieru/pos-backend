@@ -10,6 +10,7 @@ type Product struct {
 
 type IProductRepository interface {
 	List() ([]Product, *AppError)
+	ListByCategoryId(id uint) ([]Product, *AppError)
 	Save(*Product) (*Product, *AppError)
 	Find(id uint) (*Product, *AppError)
 	Update(*Product) (*Product, *AppError)

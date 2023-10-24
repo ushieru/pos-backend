@@ -7,6 +7,7 @@ import (
 
 type IProductService interface {
 	List() ([]domain.Product, *domain.AppError)
+	ListByCategoryId(id uint) ([]domain.Product, *domain.AppError)
 	Find(id uint) (*domain.Product, *domain.AppError)
 	Save(dto *dto.UpsertProductRequest) (*domain.Product, *domain.AppError)
 	Update(id uint, dto *dto.UpsertProductRequest) (*domain.Product, *domain.AppError)
@@ -21,6 +22,10 @@ type ProductService struct {
 
 func (s *ProductService) List() ([]domain.Product, *domain.AppError) {
 	return s.repository.List()
+}
+
+func (s *ProductService) ListByCategoryId(id uint) ([]domain.Product, *domain.AppError) {
+	return s.repository.ListByCategoryId(id)
 }
 
 func (s *ProductService) Find(id uint) (*domain.Product, *domain.AppError) {

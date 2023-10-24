@@ -15,6 +15,15 @@ func (r *ProductGormRepository) List() ([]domain.Product, *domain.AppError) {
 	return products, nil
 }
 
+func (r *ProductGormRepository) ListByCategoryId(id uint) ([]domain.Product, *domain.AppError) {
+	category := new(domain.Category)
+	r.database.Preload("Products").Find(category, id)
+	if category.ID == 0 {
+		return nil, domain.NewNotFoundError("Categoria no existe")
+	}
+	return category.Products, nil
+}
+
 func (r *ProductGormRepository) Save(product *domain.Product) (*domain.Product, *domain.AppError) {
 	result := r.database.Save(product)
 	if result.RowsAffected == 0 {
