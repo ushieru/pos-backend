@@ -120,7 +120,7 @@ func (r *TicketGormRepository) DeleteProduct(ticketId, productId uint, a *domain
 	r.database.First(tp, "Product_Id = ? AND ticket_id = ?", productId, ticketId)
 	if tp.Quantity == 1 {
 		r.database.Model(ticket).Association("TicketProducts").Delete(tp)
-		r.database.Delete(tp)
+		r.database.Unscoped().Delete(tp)
 	}
 	if tp.Quantity > 1 {
 		tp.Quantity = tp.Quantity - 1
