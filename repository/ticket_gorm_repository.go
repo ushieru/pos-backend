@@ -74,11 +74,14 @@ func (r *TicketGormRepository) AddProduct(ticketId, productId uint, a *domain.Ac
 		return nil, err
 	}
 	tp := new(domain.TicketProduct)
-	r.database.First(tp, "id = ? AND ticket_id = ?", productId, ticketId)
+	r.database.First(tp, "Product_Id = ? AND ticket_id = ?", productId, ticketId)
 	if tp.ID == 0 {
 		ticketProduct := new(domain.TicketProduct)
 		ticketProduct.Quantity = 1
-		ticketProduct.Product = *product
+		ticketProduct.Name = product.Name
+		ticketProduct.Description = product.Description
+		ticketProduct.Price = product.Price
+		ticketProduct.ProductId = product.ID
 		r.database.Model(ticket).Association("TicketProducts").Append(ticketProduct)
 	}
 	if tp.ID != 0 {
@@ -114,9 +117,10 @@ func (r *TicketGormRepository) DeleteProduct(ticketId, productId uint, a *domain
 		return nil, err
 	}
 	tp := new(domain.TicketProduct)
-	r.database.First(tp, "id = ? AND ticket_id = ?", productId, ticketId)
+	r.database.First(tp, "Product_Id = ? AND ticket_id = ?", productId, ticketId)
 	if tp.Quantity == 1 {
 		r.database.Model(ticket).Association("TicketProducts").Delete(tp)
+		r.database.Delete(tp)
 	}
 	if tp.Quantity > 1 {
 		tp.Quantity = tp.Quantity - 1
@@ -145,6 +149,12 @@ func (r *TicketGormRepository) PayTicket(id uint, a *domain.Account) (*domain.Ti
 	}
 	if len(ticket.TicketProducts) == 0 {
 		return nil, domain.NewConflictError("Ticket vacio")
+	}
+	table := new(domain.Table)
+	r.database.First(table, "ticket_id = ?", id)
+	if table.ID != 0 {
+		r.database.Model(table).Association("Account").Clear()
+		r.database.Model(table).Association("Ticket").Clear()
 	}
 	ticket.TicketStatus = domain.TicketPaid
 	r.database.Save(ticket)
