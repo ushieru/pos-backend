@@ -2,10 +2,12 @@ package service
 
 import (
 	"github.com/ushieru/pos/domain"
+	domain_criteria "github.com/ushieru/pos/domain/criteria"
+	"github.com/ushieru/pos/dto"
 )
 
 type ITicketService interface {
-	List() ([]domain.Ticket, *domain.AppError)
+	List(*dto.SearchCriteriaQueryRequest) ([]domain.Ticket, *domain.AppError)
 	Find(id uint) (*domain.Ticket, *domain.AppError)
 	Save(account *domain.Account) (*domain.Ticket, *domain.AppError)
 	Delete(id uint) (*domain.Ticket, *domain.AppError)
@@ -18,8 +20,11 @@ type TicketService struct {
 	repository domain.ITicketRepository
 }
 
-func (s *TicketService) List() ([]domain.Ticket, *domain.AppError) {
-	return s.repository.List()
+func (s *TicketService) List(dto *dto.SearchCriteriaQueryRequest) ([]domain.Ticket, *domain.AppError) {
+	criteria := &domain_criteria.Criteria{
+		Filters: dto.Filters,
+	}
+	return s.repository.List(criteria)
 }
 
 func (s *TicketService) Find(id uint) (*domain.Ticket, *domain.AppError) {

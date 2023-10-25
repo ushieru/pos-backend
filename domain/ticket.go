@@ -1,5 +1,7 @@
 package domain
 
+import domain_criteria "github.com/ushieru/pos/domain/criteria"
+
 type TicketStatus string
 
 const (
@@ -18,7 +20,7 @@ type Ticket struct {
 }
 
 type ITicketRepository interface {
-	List() ([]Ticket, *AppError)
+	List(criteria *domain_criteria.Criteria) ([]Ticket, *AppError)
 	Save(*Ticket) (*Ticket, *AppError)
 	Find(id uint) (*Ticket, *AppError)
 	Delete(id uint) (*Ticket, *AppError)

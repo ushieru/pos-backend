@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/ushieru/pos/domain"
+	"github.com/ushieru/pos/domain/criteria"
 	"github.com/ushieru/pos/dto"
 	"github.com/ushieru/pos/service"
 	"gorm.io/gorm"
@@ -16,7 +17,10 @@ func TestTicketGormRepository(t *testing.T) {
 		t.Cleanup(func() {
 			clean()
 		})
-		tickets, err := s.List()
+		dto := &dto.SearchCriteriaQueryRequest{
+			Filters: make([]domain_criteria.Filter, 0),
+		}
+		tickets, err := s.List(dto)
 		if err != nil {
 			t.Fatalf(err.Message)
 		}

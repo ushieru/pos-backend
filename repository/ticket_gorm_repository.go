@@ -2,21 +2,31 @@ package repository
 
 import (
 	"github.com/ushieru/pos/domain"
+	"github.com/ushieru/pos/domain/criteria"
 	"github.com/ushieru/pos/service"
 	"gorm.io/gorm"
 )
 
 type TicketGormRepository struct {
+	c        CriteriaGormRepository
 	database *gorm.DB
 	ps       *service.ProductService
 }
 
-func (r *TicketGormRepository) List() ([]domain.Ticket, *domain.AppError) {
+func (r *TicketGormRepository) List(c *domain_criteria.Criteria) ([]domain.Ticket, *domain.AppError) {
 	var tickets []domain.Ticket
-	r.database.
+	scopes := r.c.FiltersToScopes(c.Filters)
+	statement := r.database
+	for _, scope := range scopes {
+		statement = statement.Scopes(scope)
+	}
+	statement.
 		Preload("Account").
 		Preload("TicketProducts").
 		Find(&tickets)
+	if tickets == nil {
+		tickets = make([]domain.Ticket, 0)
+	}
 	return tickets, nil
 }
 
@@ -164,5 +174,5 @@ func (r *TicketGormRepository) PayTicket(id uint, a *domain.Account) (*domain.Ti
 func NewTicketGormRepository(database *gorm.DB, ps *service.ProductService) *TicketGormRepository {
 	database.AutoMigrate(&domain.Ticket{})
 	database.AutoMigrate(&domain.TicketProduct{})
-	return &TicketGormRepository{database, ps}
+	return &TicketGormRepository{database: database, ps: ps}
 }
