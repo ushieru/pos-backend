@@ -1,0 +1,1041 @@
+definitions:
+  domain.Account:
+    properties:
+      account_type:
+        $ref: '#/definitions/domain.AccountType'
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      update_at:
+        type: string
+      user_id:
+        type: integer
+      username:
+        type: string
+    type: object
+  domain.AccountType:
+    enum:
+    - admin
+    type: string
+    x-enum-varnames:
+    - Admin
+  domain.AppError:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  domain.Category:
+    properties:
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/domain.Product'
+        type: array
+      update_at:
+        type: string
+    type: object
+  domain.Product:
+    properties:
+      categories:
+        items:
+          $ref: '#/definitions/domain.Category'
+        type: array
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+      update_at:
+        type: string
+    type: object
+  domain.Table:
+    properties:
+      account:
+        $ref: '#/definitions/domain.Account'
+      account_id:
+        type: integer
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      pos_x:
+        type: integer
+      pos_y:
+        type: integer
+      ticket:
+        $ref: '#/definitions/domain.Ticket'
+      ticket_id:
+        type: integer
+      update_at:
+        type: string
+    type: object
+  domain.Ticket:
+    properties:
+      account:
+        $ref: '#/definitions/domain.Account'
+      account_id:
+        type: integer
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      id:
+        type: integer
+      ticket_products:
+        items:
+          $ref: '#/definitions/domain.TicketProduct'
+        type: array
+      ticket_status:
+        $ref: '#/definitions/domain.TicketStatus'
+      total:
+        type: number
+      update_at:
+        type: string
+    type: object
+  domain.TicketProduct:
+    properties:
+      categories:
+        items:
+          $ref: '#/definitions/domain.Category'
+        type: array
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+      product_id:
+        type: integer
+      quantity:
+        type: integer
+      ticket_id:
+        type: integer
+      update_at:
+        type: string
+    type: object
+  domain.TicketStatus:
+    enum:
+    - open
+    type: string
+    x-enum-varnames:
+    - TicketOpen
+  domain.User:
+    properties:
+      account:
+        $ref: '#/definitions/domain.Account'
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      update_at:
+        type: string
+    type: object
+  domain_criteria.Filter:
+    properties:
+      field:
+        type: string
+      operator:
+        $ref: '#/definitions/domain_criteria.FilterOperator'
+      value:
+        type: string
+    type: object
+  domain_criteria.FilterOperator:
+    enum:
+    - =
+    type: string
+    x-enum-varnames:
+    - EQUAL
+  dto.AuthUserResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/domain.User'
+    type: object
+  dto.CreateTableRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  dto.CreateUserRequest:
+    properties:
+      account_type:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  dto.UpdateTableRequest:
+    properties:
+      name:
+        type: string
+      pos_x:
+        type: integer
+      pos_y:
+        type: integer
+    type: object
+  dto.UpdateUserRequest:
+    properties:
+      account_type:
+        type: string
+      email:
+        type: string
+      is_active:
+        type: boolean
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  dto.UpsertCategoryRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  dto.UpsertProductRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Point Of Sale - Total Tools
+  title: Point Of Sale API
+  version: "1.0"
+paths:
+  /api/auth:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AuthUserResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - BasicAuth: []
+      tags:
+      - Auth
+  /api/categories:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Category'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+    post:
+      parameters:
+      - description: Category UpsertCategoryRequest
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpsertCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Category'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+  /api/categories/{id}:
+    delete:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Category'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+    get:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Category'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+    put:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Category UpsertCategoryRequest
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpsertCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Category'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Category
+  /api/products:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Product'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
+    post:
+      parameters:
+      - description: Product UpsertProductRequest
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpsertProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Product'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
+  /api/products/{id}:
+    delete:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Product'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
+    get:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Product'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
+    put:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Product UpsertProductRequest
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpsertProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Product'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
+  /api/products/{id}/categories/{categoryId}:
+    delete:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Category ID
+        in: path
+        name: categoryId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Product'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
+    post:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Category ID
+        in: path
+        name: categoryId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Product'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
+  /api/products/categories/{id}:
+    get:
+      parameters:
+      - description: Category Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Product'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Product
+  /api/tables:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Table'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tables
+    post:
+      parameters:
+      - description: Table CreateTableRequest
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateTableRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Table'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tables
+  /api/tables/{id}:
+    delete:
+      parameters:
+      - description: Table ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Table'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tables
+    get:
+      parameters:
+      - description: Table ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Table'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tables
+    put:
+      parameters:
+      - description: Table ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Table UpdateTableRequest
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateTableRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Table'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tables
+  /api/tables/{id}/tickets:
+    post:
+      parameters:
+      - description: Table ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Table'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tables
+  /api/tickets:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Ticket'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tickets
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Ticket'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tickets
+  /api/tickets/{id}:
+    delete:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Ticket'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tickets
+    get:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Ticket'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tickets
+  /api/tickets/{id}/pay:
+    put:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Ticket'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tickets
+  /api/tickets/{id}/products/{productId}:
+    delete:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Product ID
+        in: path
+        name: productId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Ticket'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tickets
+    post:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Product ID
+        in: path
+        name: productId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Ticket'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tickets
+  /api/users:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.User'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+    post:
+      parameters:
+      - description: User CreateUserRequest
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.User'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+  /api/users/{id}:
+    delete:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.User'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+    put:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User UpdateUserRequest
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.User'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - User
+  /ping:
+    get:
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Ping
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+  BasicAuth:
+    type: basic
+swagger: "2.0"

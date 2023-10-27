@@ -1,7 +1,7 @@
 package main
 
-import "github.com/ushieru/pos/cmd"
+import "github.com/ushieru/pos/app/cobra"
 
 func main() {
-	main_cmd.NewCLI().Execute()
+	cobra_app.NewCobraApp().Run()
 }
