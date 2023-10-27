@@ -119,14 +119,24 @@ definitions:
     type: object
   domain.TicketProduct:
     properties:
+      categories:
+        items:
+          $ref: '#/definitions/domain.Category'
+        type: array
       create_at:
         type: string
       delete_at:
         type: string
+      description:
+        type: string
       id:
         type: integer
-      product:
-        $ref: '#/definitions/domain.Product'
+      name:
+        type: string
+      price:
+        type: number
+      product_id:
+        type: integer
       quantity:
         type: integer
       ticket_id:
@@ -157,6 +167,21 @@ definitions:
       update_at:
         type: string
     type: object
+  domain_criteria.Filter:
+    properties:
+      field:
+        type: string
+      operator:
+        $ref: '#/definitions/domain_criteria.FilterOperator'
+      value:
+        type: string
+    type: object
+  domain_criteria.FilterOperator:
+    enum:
+    - =
+    type: string
+    x-enum-varnames:
+    - EQUAL
   dto.AuthUserResponse:
     properties:
       token:

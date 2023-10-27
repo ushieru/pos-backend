@@ -1474,17 +1474,32 @@ const docTemplate = `{
         "domain.TicketProduct": {
             "type": "object",
             "properties": {
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Category"
+                    }
+                },
                 "create_at": {
                     "type": "string"
                 },
                 "delete_at": {
                     "type": "string"
                 },
+                "description": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
-                "product": {
-                    "$ref": "#/definitions/domain.Product"
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "product_id": {
+                    "type": "integer"
                 },
                 "quantity": {
                     "type": "integer"
@@ -1531,6 +1546,29 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "domain_criteria.Filter": {
+            "type": "object",
+            "properties": {
+                "field": {
+                    "type": "string"
+                },
+                "operator": {
+                    "$ref": "#/definitions/domain_criteria.FilterOperator"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain_criteria.FilterOperator": {
+            "type": "string",
+            "enum": [
+                "="
+            ],
+            "x-enum-varnames": [
+                "EQUAL"
+            ]
         },
         "dto.AuthUserResponse": {
             "type": "object",
