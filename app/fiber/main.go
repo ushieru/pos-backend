@@ -41,13 +41,10 @@ func (f *FiberApp) Run() error {
 	switch f.config.DatabaseLogger {
 	case "silent":
 		databaseLogger = logger.Default.LogMode(logger.Silent)
-		break
 	case "info":
 		databaseLogger = logger.Default.LogMode(logger.Info)
-		break
 	case "error":
 		databaseLogger = logger.Default.LogMode(logger.Error)
-		break
 	default:
 		databaseLogger = logger.Default.LogMode(logger.Silent)
 	}
