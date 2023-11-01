@@ -60,6 +60,7 @@ func (f *FiberApp) Run() error {
 
 	notFoundHandler := handler.NewNotFoundHandler()
 	pingHandler := handler.NewPingHandler()
+	infoHandler := handler.NewInfoHandler()
 	swaggerHandler := handler.NewSwaggerHandler()
 	userRepository := repository.NewUserGormRepository(database)
 	userService := service.NewUserService(userRepository)
@@ -88,6 +89,7 @@ func (f *FiberApp) Run() error {
 	f.app.Static("/", "public")
 	swaggerHandler.SetupRoutes(f.app)
 	pingHandler.SetupRoutes(f.app)
+	infoHandler.SetupRoutes(f.app)
 	authHandler.SetupRoutes(f.app)
 	authMiddleware.SetupMiddleware(f.app)
 	userHandler.SetupRoutes(f.app)

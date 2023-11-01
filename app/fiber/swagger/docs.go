@@ -1277,6 +1277,18 @@ const docTemplate = `{
                 }
             }
         },
+        "/info": {
+            "get": {
+                "tags": [
+                    "Ping"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/ping": {
             "get": {
                 "tags": [

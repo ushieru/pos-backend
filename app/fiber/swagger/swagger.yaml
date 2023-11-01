@@ -1024,6 +1024,13 @@ paths:
       - ApiKeyAuth: []
       tags:
       - User
+  /info:
+    get:
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Ping
   /ping:
     get:
       responses:
