@@ -1,6 +1,10 @@
 package domain
 
-import "time"
+import (
+	"time"
+
+	domain_criteria "github.com/ushieru/pos/domain/criteria"
+)
 
 type Product struct {
 	Model
@@ -12,12 +16,12 @@ type Product struct {
 	AvailableDays      string     `json:"available_days"`
 	AvailableFromHour  string     `json:"available_from_hour"`
 	AvailableUntilHour string     `json:"available_until_hour"`
-	Categories         []Category `gorm:"many2many:category_product;" json:"categories"`
+	Categories         []Category `json:"categories"           gorm:"many2many:category_product;"`
 }
 
 type IProductRepository interface {
-	List() ([]Product, *AppError)
-	ListByCategoryId(id uint) ([]Product, *AppError)
+	List(*domain_criteria.Criteria) ([]Product, *AppError)
+	ListByCategoryId(id uint, criteria *domain_criteria.Criteria) ([]Product, *AppError)
 	Save(*Product) (*Product, *AppError)
 	Find(id uint) (*Product, *AppError)
 	Update(*Product) (*Product, *AppError)

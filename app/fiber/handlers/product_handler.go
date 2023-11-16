@@ -25,13 +25,18 @@ func (h *ProductHandler) setupRoutes(app *fiber.App) {
 
 // @Router /api/products [GET]
 // @Security ApiKeyAuth
+// @Param criteria query dto.SearchCriteriaQueryRequest false "Criteria filter"
 // @Tags Product
 // @Accepts json
 // @Produce json
 // @Success 200 {array} domain.Product
 // @Failure default {object} domain.AppError
 func (h *ProductHandler) listProducts(c *fiber.Ctx) error {
-	products, err := h.service.List()
+	searchCriteriaQueryRequest := new(dto.SearchCriteriaQueryRequest)
+	if err := c.QueryParser(searchCriteriaQueryRequest); err != nil {
+		return fiber.NewError(fiber.StatusUnprocessableEntity, "Error parse query")
+	}
+	products, err := h.service.List(searchCriteriaQueryRequest)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -48,7 +53,11 @@ func (h *ProductHandler) listProducts(c *fiber.Ctx) error {
 // @Failure default {object} domain.AppError
 func (h *ProductHandler) listProductsByCategoryId(c *fiber.Ctx) error {
 	id, _ := c.ParamsInt("id")
-	products, err := h.service.ListByCategoryId(uint(id))
+	searchCriteriaQueryRequest := new(dto.SearchCriteriaQueryRequest)
+	if err := c.QueryParser(searchCriteriaQueryRequest); err != nil {
+		return fiber.NewError(fiber.StatusUnprocessableEntity, "Error parse query")
+	}
+	products, err := h.service.ListByCategoryId(uint(id), searchCriteriaQueryRequest)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}

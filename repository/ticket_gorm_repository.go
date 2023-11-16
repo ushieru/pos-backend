@@ -5,6 +5,7 @@ import (
 	"github.com/ushieru/pos/domain/criteria"
 	"github.com/ushieru/pos/service"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type TicketGormRepository struct {
@@ -18,13 +19,12 @@ func (r *TicketGormRepository) List(
 ) ([]domain.Ticket, *domain.AppError) {
 	var tickets []domain.Ticket
 	scopes := r.c.FiltersToScopes(c.Filters)
-	statement := r.database
-	for _, scope := range scopes {
-		statement = statement.Scopes(scope)
+	statement := r.database.Debug()
+	if len(scopes) > 0 {
+		statement = statement.Scopes(scopes...)
 	}
 	statement.
-		Preload("Account").
-		Preload("TicketProducts").
+		Preload(clause.Associations).
 		Find(&tickets)
 	if tickets == nil {
 		tickets = make([]domain.Ticket, 0)
@@ -32,12 +32,12 @@ func (r *TicketGormRepository) List(
 	return tickets, nil
 }
 
-func (r *TicketGormRepository) Save(user *domain.Ticket) (*domain.Ticket, *domain.AppError) {
-	result := r.database.Save(user)
+func (r *TicketGormRepository) Save(ticket *domain.Ticket) (*domain.Ticket, *domain.AppError) {
+	result := r.database.Save(ticket)
 	if result.RowsAffected == 0 {
-		return nil, domain.NewUnexpectedError("Error al crear usuario")
+		return nil, domain.NewUnexpectedError("Error al crear ticket")
 	}
-	return user, nil
+	return ticket, nil
 }
 
 func (r *TicketGormRepository) Find(id uint) (*domain.Ticket, *domain.AppError) {
@@ -88,6 +88,7 @@ func (r *TicketGormRepository) AddProduct(
 	if pError != nil {
 		return nil, err
 	}
+	// TODO: Add validation in availability dates
 	tp := new(domain.TicketProduct)
 	r.database.First(tp, "Product_Id = ? AND ticket_id = ?", productId, ticketId)
 	if tp.ID == 0 {

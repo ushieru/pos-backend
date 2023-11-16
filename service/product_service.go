@@ -2,12 +2,16 @@ package service
 
 import (
 	"github.com/ushieru/pos/domain"
+	domain_criteria "github.com/ushieru/pos/domain/criteria"
 	"github.com/ushieru/pos/dto"
 )
 
 type IProductService interface {
-	List() ([]domain.Product, *domain.AppError)
-	ListByCategoryId(id uint) ([]domain.Product, *domain.AppError)
+	List(*dto.SearchCriteriaQueryRequest) ([]domain.Product, *domain.AppError)
+	ListByCategoryId(
+		id uint,
+		dto *dto.SearchCriteriaQueryRequest,
+	) ([]domain.Product, *domain.AppError)
 	Find(id uint) (*domain.Product, *domain.AppError)
 	Save(dto *dto.UpsertProductRequest) (*domain.Product, *domain.AppError)
 	Update(id uint, dto *dto.UpsertProductRequest) (*domain.Product, *domain.AppError)
@@ -20,12 +24,23 @@ type ProductService struct {
 	repository domain.IProductRepository
 }
 
-func (s *ProductService) List() ([]domain.Product, *domain.AppError) {
-	return s.repository.List()
+func (s *ProductService) List(
+	dto *dto.SearchCriteriaQueryRequest,
+) ([]domain.Product, *domain.AppError) {
+	criteria := &domain_criteria.Criteria{
+		Filters: dto.Filters,
+	}
+	return s.repository.List(criteria)
 }
 
-func (s *ProductService) ListByCategoryId(id uint) ([]domain.Product, *domain.AppError) {
-	return s.repository.ListByCategoryId(id)
+func (s *ProductService) ListByCategoryId(
+	id uint,
+	dto *dto.SearchCriteriaQueryRequest,
+) ([]domain.Product, *domain.AppError) {
+	criteria := &domain_criteria.Criteria{
+		Filters: dto.Filters,
+	}
+	return s.repository.ListByCategoryId(id, criteria)
 }
 
 func (s *ProductService) Find(id uint) (*domain.Product, *domain.AppError) {
@@ -46,7 +61,10 @@ func (s *ProductService) Save(dto *dto.UpsertProductRequest) (*domain.Product, *
 	return s.repository.Save(product)
 }
 
-func (s *ProductService) Update(id uint, dto *dto.UpsertProductRequest) (*domain.Product, *domain.AppError) {
+func (s *ProductService) Update(
+	id uint,
+	dto *dto.UpsertProductRequest,
+) (*domain.Product, *domain.AppError) {
 	if err := dto.Validate(); err != nil {
 		return nil, err
 	}
@@ -63,11 +81,15 @@ func (s *ProductService) Delete(id uint) (*domain.Product, *domain.AppError) {
 	return s.repository.Delete(id)
 }
 
-func (s *ProductService) AddCategory(productId, categoryId uint) (*domain.Product, *domain.AppError) {
+func (s *ProductService) AddCategory(
+	productId, categoryId uint,
+) (*domain.Product, *domain.AppError) {
 	return s.repository.AddCategory(productId, categoryId)
 }
 
-func (s *ProductService) DeleteCategory(productId, categoryId uint) (*domain.Product, *domain.AppError) {
+func (s *ProductService) DeleteCategory(
+	productId, categoryId uint,
+) (*domain.Product, *domain.AppError) {
 	return s.repository.DeleteCategory(productId, categoryId)
 }
 
