@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/viper"
 	"github.com/ushieru/pos/app/fiber"
 	handler "github.com/ushieru/pos/app/fiber/handlers"
+	"github.com/ushieru/pos/app/fiber/middlewares"
 	"github.com/ushieru/pos/db"
 	"github.com/ushieru/pos/domain"
 	"github.com/ushieru/pos/repository"
@@ -50,6 +51,7 @@ var ServeCmd = &cobra.Command{
 				handler.NewInfoHandler,
 				handler.NewSwaggerHandler,
 				handler.NewAuthHandler,
+				middlewares.NewAuthMiddleware,
 				handler.NewUserHandler,
 				handler.NewCategoryHandler,
 				handler.NewProductHandler,

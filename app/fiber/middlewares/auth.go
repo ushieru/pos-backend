@@ -4,6 +4,7 @@ import (
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
+	fiber_app "github.com/ushieru/pos/app/fiber"
 	"github.com/ushieru/pos/service"
 )
 
@@ -11,7 +12,7 @@ type AuthMiddleware struct {
 	service service.IUserService
 }
 
-func (h *AuthMiddleware) SetupMiddleware(app *fiber.App) {
+func (h *AuthMiddleware) setupMiddleware(app *fiber.App) {
 	app.Use(h.checkJWT, h.jwtToSession)
 }
 
@@ -38,6 +39,8 @@ func (s *AuthMiddleware) jwtToSession(c *fiber.Ctx) error {
 	return c.Next()
 }
 
-func NewAuthMiddleware(service service.IUserService) *AuthMiddleware {
-	return &AuthMiddleware{service}
+func NewAuthMiddleware(service service.IUserService, fa *fiber_app.FiberApp) *AuthMiddleware {
+	am := AuthMiddleware{service}
+	am.setupMiddleware(fa.App)
+	return &am
 }
