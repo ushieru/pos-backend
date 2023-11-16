@@ -13,7 +13,9 @@ type TicketGormRepository struct {
 	ps       *service.ProductService
 }
 
-func (r *TicketGormRepository) List(c *domain_criteria.Criteria) ([]domain.Ticket, *domain.AppError) {
+func (r *TicketGormRepository) List(
+	c *domain_criteria.Criteria,
+) ([]domain.Ticket, *domain.AppError) {
 	var tickets []domain.Ticket
 	scopes := r.c.FiltersToScopes(c.Filters)
 	statement := r.database
@@ -68,7 +70,10 @@ func (r *TicketGormRepository) Delete(id uint) (*domain.Ticket, *domain.AppError
 	return ticket, nil
 }
 
-func (r *TicketGormRepository) AddProduct(ticketId, productId uint, a *domain.Account) (*domain.Ticket, *domain.AppError) {
+func (r *TicketGormRepository) AddProduct(
+	ticketId, productId uint,
+	a *domain.Account,
+) (*domain.Ticket, *domain.AppError) {
 	ticket, err := r.Find(ticketId)
 	if err != nil {
 		return nil, err
@@ -111,7 +116,10 @@ func (r *TicketGormRepository) AddProduct(ticketId, productId uint, a *domain.Ac
 	return updatedTicket, nil
 }
 
-func (r *TicketGormRepository) DeleteProduct(ticketId, productId uint, a *domain.Account) (*domain.Ticket, *domain.AppError) {
+func (r *TicketGormRepository) DeleteProduct(
+	ticketId, productId uint,
+	a *domain.Account,
+) (*domain.Ticket, *domain.AppError) {
 	ticket, err := r.Find(ticketId)
 	if err != nil {
 		return nil, err
@@ -149,7 +157,10 @@ func (r *TicketGormRepository) DeleteProduct(ticketId, productId uint, a *domain
 	return updatedTicket, nil
 }
 
-func (r *TicketGormRepository) PayTicket(id uint, a *domain.Account) (*domain.Ticket, *domain.AppError) {
+func (r *TicketGormRepository) PayTicket(
+	id uint,
+	a *domain.Account,
+) (*domain.Ticket, *domain.AppError) {
 	if a.AccountType != domain.Cashier {
 		return nil, domain.NewUnauthorizedError("No tienes autorizacion para cobrar")
 	}

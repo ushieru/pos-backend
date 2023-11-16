@@ -62,7 +62,9 @@ func (r *ProductGormRepository) Delete(id uint) (*domain.Product, *domain.AppErr
 	return product, nil
 }
 
-func (r *ProductGormRepository) AddCategory(productId, categoryId uint) (*domain.Product, *domain.AppError) {
+func (r *ProductGormRepository) AddCategory(
+	productId, categoryId uint,
+) (*domain.Product, *domain.AppError) {
 	product, err := r.Find(productId)
 	if err != nil {
 		return nil, err
@@ -78,7 +80,9 @@ func (r *ProductGormRepository) AddCategory(productId, categoryId uint) (*domain
 	return product, nil
 }
 
-func (r *ProductGormRepository) DeleteCategory(productId, categoryId uint) (*domain.Product, *domain.AppError) {
+func (r *ProductGormRepository) DeleteCategory(
+	productId, categoryId uint,
+) (*domain.Product, *domain.AppError) {
 	product, err := r.Find(productId)
 	if err != nil {
 		return nil, err
