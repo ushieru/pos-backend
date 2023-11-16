@@ -37,9 +37,11 @@ func (s *ProductService) Save(dto *dto.UpsertProductRequest) (*domain.Product, *
 		return nil, err
 	}
 	product := &domain.Product{
-		Name:        dto.Name,
-		Description: dto.Description,
-		Price:       dto.Price,
+		Name:           dto.Name,
+		Description:    dto.Description,
+		Price:          dto.Price,
+		AvailableFrom:  dto.AvailableFrom,
+		AvailableUntil: dto.AvailableUntil,
 	}
 	return s.repository.Save(product)
 }

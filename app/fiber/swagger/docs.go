@@ -1280,11 +1280,14 @@ const docTemplate = `{
         "/info": {
             "get": {
                 "tags": [
-                    "Ping"
+                    "Info"
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Info"
+                        }
                     }
                 }
             }
@@ -1378,9 +1381,35 @@ const docTemplate = `{
                 }
             }
         },
+        "domain.Info": {
+            "type": "object",
+            "properties": {
+                "ip": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                }
+            }
+        },
         "domain.Product": {
             "type": "object",
             "properties": {
+                "available_days": {
+                    "type": "string"
+                },
+                "available_from": {
+                    "type": "string"
+                },
+                "available_from_hour": {
+                    "type": "string"
+                },
+                "available_until": {
+                    "type": "string"
+                },
+                "available_until_hour": {
+                    "type": "string"
+                },
                 "categories": {
                     "type": "array",
                     "items": {
@@ -1486,6 +1515,21 @@ const docTemplate = `{
         "domain.TicketProduct": {
             "type": "object",
             "properties": {
+                "available_days": {
+                    "type": "string"
+                },
+                "available_from": {
+                    "type": "string"
+                },
+                "available_from_hour": {
+                    "type": "string"
+                },
+                "available_until": {
+                    "type": "string"
+                },
+                "available_until_hour": {
+                    "type": "string"
+                },
                 "categories": {
                     "type": "array",
                     "items": {
@@ -1669,6 +1713,14 @@ const docTemplate = `{
         "dto.UpsertProductRequest": {
             "type": "object",
             "properties": {
+                "available_from": {
+                    "type": "string",
+                    "example": "2023-12-15T21:54:42.123Z"
+                },
+                "available_until": {
+                    "type": "string",
+                    "example": "2023-12-18T21:54:42.123Z"
+                },
                 "description": {
                     "type": "string"
                 },

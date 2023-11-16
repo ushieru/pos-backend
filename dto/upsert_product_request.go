@@ -1,11 +1,17 @@
 package dto
 
-import "github.com/ushieru/pos/domain"
+import (
+	"time"
+
+	"github.com/ushieru/pos/domain"
+)
 
 type UpsertProductRequest struct {
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	Price       float64 `json:"price"`
+	Name           string    `json:"name"`
+	Description    string    `json:"description"`
+	AvailableFrom  time.Time `json:"available_from" example:"2023-12-15T21:54:42.123Z"`
+	AvailableUntil time.Time `json:"available_until" example:"2023-12-18T21:54:42.123Z"`
+	Price          float64   `json:"price"`
 }
 
 func (dto *UpsertProductRequest) Validate() *domain.AppError {
@@ -17,6 +23,9 @@ func (dto *UpsertProductRequest) Validate() *domain.AppError {
 	}
 	if dto.Price < 0 {
 		return domain.NewValidationError("No se permiten precios negativos")
+	}
+	if dto.AvailableUntil.Before(dto.AvailableFrom) {
+		return domain.NewValidationError("No se permite una fecha anterior a la fecha de disponibilidad")
 	}
 	return nil
 }

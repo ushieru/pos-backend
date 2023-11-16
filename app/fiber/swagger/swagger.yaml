@@ -48,8 +48,25 @@ definitions:
       update_at:
         type: string
     type: object
+  domain.Info:
+    properties:
+      ip:
+        type: string
+      port:
+        type: integer
+    type: object
   domain.Product:
     properties:
+      available_days:
+        type: string
+      available_from:
+        type: string
+      available_from_hour:
+        type: string
+      available_until:
+        type: string
+      available_until_hour:
+        type: string
       categories:
         items:
           $ref: '#/definitions/domain.Category'
@@ -119,6 +136,16 @@ definitions:
     type: object
   domain.TicketProduct:
     properties:
+      available_days:
+        type: string
+      available_from:
+        type: string
+      available_from_hour:
+        type: string
+      available_until:
+        type: string
+      available_until_hour:
+        type: string
       categories:
         items:
           $ref: '#/definitions/domain.Category'
@@ -238,6 +265,12 @@ definitions:
     type: object
   dto.UpsertProductRequest:
     properties:
+      available_from:
+        example: "2023-12-15T21:54:42.123Z"
+        type: string
+      available_until:
+        example: "2023-12-18T21:54:42.123Z"
+        type: string
       description:
         type: string
       name:
@@ -1029,8 +1062,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/domain.Info'
       tags:
-      - Ping
+      - Info
   /ping:
     get:
       responses:
