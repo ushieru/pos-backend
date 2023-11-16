@@ -10,7 +10,7 @@ import (
 type TicketGormRepository struct {
 	c        CriteriaGormRepository
 	database *gorm.DB
-	ps       *service.ProductService
+	ps       service.IProductService
 }
 
 func (r *TicketGormRepository) List(
@@ -182,7 +182,10 @@ func (r *TicketGormRepository) PayTicket(
 	return ticket, nil
 }
 
-func NewTicketGormRepository(database *gorm.DB, ps *service.ProductService) *TicketGormRepository {
+func NewTicketGormRepository(
+	database *gorm.DB,
+	ps service.IProductService,
+) domain.ITicketRepository {
 	database.AutoMigrate(&domain.Ticket{})
 	database.AutoMigrate(&domain.TicketProduct{})
 	return &TicketGormRepository{database: database, ps: ps}

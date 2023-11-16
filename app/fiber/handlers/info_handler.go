@@ -4,12 +4,13 @@ import (
 	"net"
 
 	"github.com/gofiber/fiber/v2"
+	fiber_app "github.com/ushieru/pos/app/fiber"
 	"github.com/ushieru/pos/domain"
 )
 
 type InfoHandler struct{}
 
-func (h *InfoHandler) SetupRoutes(app *fiber.App) {
+func (h *InfoHandler) setupRoutes(app *fiber.App) {
 	app.Get("/info", h.getInfo)
 }
 
@@ -32,6 +33,8 @@ func (h *InfoHandler) getInfo(c *fiber.Ctx) error {
 	return c.JSON(info)
 }
 
-func NewInfoHandler() *InfoHandler {
-	return &InfoHandler{}
+func NewInfoHandler(fa *fiber_app.FiberApp) *InfoHandler {
+	ih := new(InfoHandler)
+	ih.setupRoutes(fa.App)
+	return ih
 }

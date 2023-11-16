@@ -15,7 +15,9 @@ func (r *CategoryGormRepository) List() ([]domain.Category, *domain.AppError) {
 	return category, nil
 }
 
-func (r *CategoryGormRepository) Save(category *domain.Category) (*domain.Category, *domain.AppError) {
+func (r *CategoryGormRepository) Save(
+	category *domain.Category,
+) (*domain.Category, *domain.AppError) {
 	result := r.database.Save(category)
 	if result.RowsAffected == 0 {
 		return nil, domain.NewUnexpectedError("Error al crear categoria")
@@ -51,7 +53,7 @@ func (r *CategoryGormRepository) Delete(id uint) (*domain.Category, *domain.AppE
 	return category, nil
 }
 
-func NewCategoryGormRepository(database *gorm.DB) *CategoryGormRepository {
+func NewCategoryGormRepository(database *gorm.DB) domain.ICategoryRepository {
 	database.AutoMigrate(&domain.Category{})
 	return &CategoryGormRepository{database}
 }

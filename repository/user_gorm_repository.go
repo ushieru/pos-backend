@@ -111,7 +111,7 @@ func (r *UserGormRepository) Delete(id uint) (*domain.User, *domain.AppError) {
 	return user, nil
 }
 
-func NewUserGormRepository(database *gorm.DB) *UserGormRepository {
+func NewUserGormRepository(database *gorm.DB) domain.IUserRepository {
 	database.AutoMigrate(&domain.User{})
 	r := UserGormRepository{database}
 	r.seed()

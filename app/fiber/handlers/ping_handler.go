@@ -2,11 +2,12 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/ushieru/pos/app/fiber"
 )
 
 type PingHandler struct{}
 
-func (h *PingHandler) SetupRoutes(app *fiber.App) {
+func (h *PingHandler) setupRoutes(app *fiber.App) {
 	app.Get("/ping", h.ping)
 }
 
@@ -17,6 +18,8 @@ func (h *PingHandler) ping(c *fiber.Ctx) error {
 	return c.SendString("\x0A")
 }
 
-func NewPingHandler() *PingHandler {
-	return &PingHandler{}
+func NewPingHandler(fa *fiber_app.FiberApp) *PingHandler {
+	ph := new(PingHandler)
+	ph.setupRoutes(fa.App)
+	return ph
 }

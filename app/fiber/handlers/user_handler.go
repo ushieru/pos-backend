@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
+	fiber_app "github.com/ushieru/pos/app/fiber"
 	"github.com/ushieru/pos/domain"
 	"github.com/ushieru/pos/dto"
 	"github.com/ushieru/pos/service"
@@ -11,7 +12,7 @@ type UserHandler struct {
 	service service.IUserService
 }
 
-func (h *UserHandler) SetupRoutes(app *fiber.App) {
+func (h *UserHandler) setupRoutes(app *fiber.App) {
 	users := app.Group("/api/users")
 	users.Get("/", h.listUsers)
 	users.Get("/:id", h.findUser)
@@ -114,6 +115,8 @@ func (h *UserHandler) deleteUser(c *fiber.Ctx) error {
 	return c.JSON(user)
 }
 
-func NewUserHandler(service service.IUserService) *UserHandler {
-	return &UserHandler{service}
+func NewUserHandler(service service.IUserService, fa *fiber_app.FiberApp) *UserHandler {
+	uh := UserHandler{service}
+	uh.setupRoutes(fa.App)
+	return &uh
 }

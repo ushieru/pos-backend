@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
+	fiber_app "github.com/ushieru/pos/app/fiber"
 	"github.com/ushieru/pos/domain"
 	"github.com/ushieru/pos/dto"
 	"github.com/ushieru/pos/service"
@@ -11,7 +12,7 @@ type TableHandler struct {
 	service service.ITableService
 }
 
-func (h *TableHandler) SetupRoutes(app *fiber.App) {
+func (h *TableHandler) setupRoutes(app *fiber.App) {
 	tables := app.Group("/api/tables")
 	tables.Get("/", h.listTables)
 	tables.Get("/:id", h.findTable)
@@ -130,6 +131,8 @@ func (h *TableHandler) saveTableTicket(c *fiber.Ctx) error {
 	return c.JSON(table)
 }
 
-func NewTableHandler(service service.ITableService) *TableHandler {
-	return &TableHandler{service}
+func NewTableHandler(service service.ITableService, fa *fiber_app.FiberApp) *TableHandler {
+	th := TableHandler{service}
+	th.setupRoutes(fa.App)
+	return &th
 }

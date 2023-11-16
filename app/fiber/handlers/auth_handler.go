@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/ushieru/pos/app/fiber"
 	"github.com/ushieru/pos/service"
 )
 
@@ -12,7 +13,7 @@ type AuthHandler struct {
 	service service.IUserService
 }
 
-func (h *AuthHandler) SetupRoutes(app *fiber.App) {
+func (h *AuthHandler) setupRoutes(app *fiber.App) {
 	app.Post("/api/auth", h.auth)
 }
 
@@ -49,6 +50,8 @@ func (h *AuthHandler) auth(c *fiber.Ctx) error {
 	return c.JSON(authResponse)
 }
 
-func NewAuthHandler(service service.IUserService) *AuthHandler {
-	return &AuthHandler{service}
+func NewAuthHandler(service service.IUserService, fa *fiber_app.FiberApp) *AuthHandler {
+	ah := AuthHandler{service}
+	ah.setupRoutes(fa.App)
+	return &ah
 }

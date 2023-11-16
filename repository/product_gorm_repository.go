@@ -98,7 +98,7 @@ func (r *ProductGormRepository) DeleteCategory(
 	return product, nil
 }
 
-func NewProductGormRepository(database *gorm.DB) *ProductGormRepository {
+func NewProductGormRepository(database *gorm.DB) domain.IProductRepository {
 	database.AutoMigrate(&domain.Product{})
 	return &ProductGormRepository{database}
 }

@@ -91,7 +91,10 @@ func (r *TableGormRepository) Delete(id uint) (*domain.Table, *domain.AppError) 
 	return table, nil
 }
 
-func (r *TableGormRepository) CreateTicket(t *domain.Table, a *domain.Account) (*domain.Table, *domain.AppError) {
+func (r *TableGormRepository) CreateTicket(
+	t *domain.Table,
+	a *domain.Account,
+) (*domain.Table, *domain.AppError) {
 	table, err := r.Find(t.ID)
 	if err != nil {
 		return nil, err
@@ -107,7 +110,7 @@ func (r *TableGormRepository) CreateTicket(t *domain.Table, a *domain.Account) (
 	return table, nil
 }
 
-func NewTableGormRepository(database *gorm.DB) *TableGormRepository {
+func NewTableGormRepository(database *gorm.DB) domain.ITableRepository {
 	database.AutoMigrate(&domain.Table{})
 	return &TableGormRepository{database}
 }

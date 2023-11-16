@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
+	fiber_app "github.com/ushieru/pos/app/fiber"
 	"github.com/ushieru/pos/dto"
 	"github.com/ushieru/pos/service"
 )
@@ -10,7 +11,7 @@ type CategoryHandler struct {
 	service service.ICategoryService
 }
 
-func (h *CategoryHandler) SetupRoutes(app *fiber.App) {
+func (h *CategoryHandler) setupRoutes(app *fiber.App) {
 	categories := app.Group("/api/categories")
 	categories.Get("/", h.listCategories)
 	categories.Get("/:id", h.findCategory)
@@ -110,6 +111,8 @@ func (h *CategoryHandler) deleteCategory(c *fiber.Ctx) error {
 	return c.JSON(category)
 }
 
-func NewCategoryHandler(service service.ICategoryService) *CategoryHandler {
-	return &CategoryHandler{service}
+func NewCategoryHandler(service service.ICategoryService, fa *fiber_app.FiberApp) *CategoryHandler {
+	ch := CategoryHandler{service}
+	ch.setupRoutes(fa.App)
+	return &ch
 }
