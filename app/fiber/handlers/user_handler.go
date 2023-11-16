@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/gofiber/fiber/v2"
 	fiber_app "github.com/ushieru/pos/app/fiber"
+	"github.com/ushieru/pos/app/fiber/middlewares"
 	"github.com/ushieru/pos/domain"
 	"github.com/ushieru/pos/dto"
 	"github.com/ushieru/pos/service"
@@ -13,12 +14,13 @@ type UserHandler struct {
 }
 
 func (h *UserHandler) setupRoutes(app *fiber.App) {
+	middlewareJustAdmins := middlewares.NewCheckRollMiddleware(domain.Admin)
 	users := app.Group("/api/users")
 	users.Get("/", h.listUsers)
 	users.Get("/:id", h.findUser)
-	users.Post("/", h.saveUser)
-	users.Put("/:id", h.updateUser)
-	users.Delete("/:id", h.deleteUser)
+	users.Post("/", middlewareJustAdmins.CheckRol, h.saveUser)
+	users.Put("/:id", middlewareJustAdmins.CheckRol, h.updateUser)
+	users.Delete("/:id", middlewareJustAdmins.CheckRol, h.deleteUser)
 }
 
 // @Router /api/users [GET]
