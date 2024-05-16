@@ -86,6 +86,9 @@ func (c *UserService) Update(id uint, dto *dto.UpdateUserRequest, a *domain.Acco
 	// TODO: update password ¿?
 	hashPassword, _ := utils.HashPassword(dto.Password)
 	user := &domain.User{
+		Model: domain.Model{
+			ID: id,
+		},
 		Name:  dto.Name,
 		Email: dto.Email,
 		Account: domain.Account{
