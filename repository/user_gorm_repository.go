@@ -93,6 +93,9 @@ func (r *UserGormRepository) Update(u *domain.User) (*domain.User, *domain.AppEr
 	if err != nil {
 		return nil, err
 	}
+	if *user.Account.IsActive && !*u.Account.IsActive {
+		return nil, domain.NewUnauthorizedError("No puedes desactivarte a ti mismo")
+	}
 	user.Name = u.Name
 	user.Email = u.Email
 	account.Username = u.Account.Username
