@@ -111,6 +111,9 @@ func (c *UserService) Delete(id uint, a *domain.Account) (*domain.User, *domain.
 	if a.AccountType != domain.Admin {
 		return nil, domain.NewUnauthorizedError("No tienes autorizacion para esta accion")
 	}
+	if id == a.ID {
+		return nil, domain.NewUnauthorizedError("No puedes eliminarte a ti mismo")
+	}
 	return c.repository.Delete(id)
 }
 
