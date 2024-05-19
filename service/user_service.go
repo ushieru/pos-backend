@@ -39,6 +39,9 @@ func (c *UserService) AuthWithCredentials(username, password, secret string) (*d
 	if !matchPassword {
 		return nil, domain.NewNotFoundError("Credenciales incorrectas")
 	}
+	if !*user.Account.IsActive {
+		return nil, domain.NewUnauthorizedError("Usuario desactivado consulte al administrador")
+	}
 	claims := jwt.MapClaims{
 		"SessionParamAdminId": user.Account.ID,
 		"SessionParamUserId":  user.ID,
