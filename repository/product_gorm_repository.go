@@ -65,6 +65,8 @@ func (r *ProductGormRepository) Update(p *domain.Product) (*domain.Product, *dom
 	product.Name = p.Name
 	product.Description = p.Description
 	product.Price = p.Price
+	product.AvailableFrom = p.AvailableFrom
+	product.AvailableUntil = p.AvailableUntil
 	r.database.Save(product)
 	return product, nil
 }

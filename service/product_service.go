@@ -69,10 +69,12 @@ func (s *ProductService) Update(
 		return nil, err
 	}
 	product := &domain.Product{
-		Model:       domain.Model{ID: id},
-		Name:        dto.Name,
-		Description: dto.Description,
-		Price:       dto.Price,
+		Model:          domain.Model{ID: id},
+		Name:           dto.Name,
+		Description:    dto.Description,
+		Price:          dto.Price,
+		AvailableFrom:  dto.AvailableFrom,
+		AvailableUntil: dto.AvailableUntil,
 	}
 	return s.repository.Update(product)
 }
