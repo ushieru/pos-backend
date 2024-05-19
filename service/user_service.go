@@ -83,6 +83,9 @@ func (c *UserService) Update(id uint, dto *dto.UpdateUserRequest, a *domain.Acco
 	if a.AccountType != domain.Admin {
 		return nil, domain.NewUnauthorizedError("No tienes autorizacion para esta accion")
 	}
+	if id == a.ID && !dto.IsActive {
+		return nil, domain.NewUnauthorizedError("No puedes desactivarte a ti mismo")
+	}
 	if err := dto.Validate(); err != nil {
 		return nil, err
 	}

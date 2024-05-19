@@ -23,7 +23,7 @@ func (dto *UpdateUserRequest) Validate() *domain.AppError {
 	}
 	// TODO: update password ¿?
 	if len(dto.Password) < 5 {
-		return domain.NewValidationError("No se permiten contraseñas menores a 5 caracteres")
+		// return domain.NewValidationError("No se permiten contraseñas menores a 5 caracteres")
 	}
 	if dto.AccountType != string(domain.Admin) &&
 		dto.AccountType != string(domain.Cashier) &&
