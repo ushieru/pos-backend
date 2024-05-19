@@ -88,17 +88,20 @@ func (r *UserGormRepository) FindByUserOrEmail(username string) (*domain.User, *
 
 func (r *UserGormRepository) Update(u *domain.User) (*domain.User, *domain.AppError) {
 	user, err := r.Find(u.ID)
+	account := new(domain.Account)
+	r.database.First(account, u.ID)
 	if err != nil {
 		return nil, err
 	}
 	user.Name = u.Name
 	user.Email = u.Email
-	user.Account.Username = u.Account.Username
+	account.Username = u.Account.Username
 	// TODO: update password ¿?
 	// user.Account.Password = u.Account.Password
-	user.Account.IsActive = u.Account.IsActive
-	user.Account.AccountType = u.Account.AccountType
+	account.IsActive = u.Account.IsActive
+	account.AccountType = u.Account.AccountType
 	r.database.Save(user)
+	r.database.Save(account)
 	return user, nil
 }
 
