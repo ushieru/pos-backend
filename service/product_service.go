@@ -24,9 +24,7 @@ type ProductService struct {
 	repository domain.IProductRepository
 }
 
-func (s *ProductService) List(
-	dto *dto.SearchCriteriaQueryRequest,
-) ([]domain.Product, *domain.AppError) {
+func (s *ProductService) List(dto *dto.SearchCriteriaQueryRequest) ([]domain.Product, *domain.AppError) {
 	criteria := &domain_criteria.Criteria{
 		Filters: dto.Filters,
 	}
