@@ -4,8 +4,8 @@ type AccountType string
 
 const (
 	Admin   AccountType = "admin"
-	Cashier             = "cashier"
-	Waiter              = "waiter"
+	Cashier AccountType = "cashier"
+	Waiter  AccountType = "waiter"
 )
 
 type Account struct {

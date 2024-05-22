@@ -6,8 +6,8 @@ type TicketStatus string
 
 const (
 	TicketOpen   TicketStatus = "open"
-	TicketCancel              = "cancel"
-	TicketPaid                = "paid"
+	TicketCancel TicketStatus = "cancel"
+	TicketPaid   TicketStatus = "paid"
 )
 
 type Ticket struct {
