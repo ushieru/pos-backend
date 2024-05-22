@@ -1,17 +1,42 @@
 package repository
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/ushieru/pos/domain"
+	domain_criteria "github.com/ushieru/pos/domain/criteria"
 	"gorm.io/gorm"
 )
 
 type CategoryGormRepository struct {
+	c        CriteriaGormRepository
 	database *gorm.DB
 }
 
-func (r *CategoryGormRepository) List() ([]domain.Category, *domain.AppError) {
+func (r *CategoryGormRepository) seed() {
+	category := new(domain.Category)
+	r.database.First(category)
+	if category.ID != 0 {
+		return
+	}
+	for i := 1; i <= 5; i++ {
+		r.database.Create(&domain.Category{
+			Name:           fmt.Sprintf("Category %d", i),
+			AvailableFrom:  time.Now(),
+			AvailableUntil: time.Now().AddDate(1, 0, 0),
+		})
+	}
+}
+
+func (r *CategoryGormRepository) List(criteria *domain_criteria.Criteria) ([]domain.Category, *domain.AppError) {
 	var category []domain.Category
-	r.database.Preload("Products").Find(&category)
+	scopes := r.c.FiltersToScopes(criteria.Filters)
+	tx := r.database.Preload("Products")
+	if len(scopes) > 0 {
+		tx.Scopes(scopes...)
+	}
+	tx.Find(&category)
 	return category, nil
 }
 
@@ -34,12 +59,7 @@ func (r *CategoryGormRepository) Find(id uint) (*domain.Category, *domain.AppErr
 	return category, nil
 }
 
-func (r *CategoryGormRepository) Update(c *domain.Category) (*domain.Category, *domain.AppError) {
-	category, err := r.Find(c.ID)
-	if err != nil {
-		return nil, err
-	}
-	category.Name = c.Name
+func (r *CategoryGormRepository) Update(category *domain.Category) (*domain.Category, *domain.AppError) {
 	r.database.Save(category)
 	return category, nil
 }
@@ -55,5 +75,7 @@ func (r *CategoryGormRepository) Delete(id uint) (*domain.Category, *domain.AppE
 
 func NewCategoryGormRepository(database *gorm.DB) domain.ICategoryRepository {
 	database.AutoMigrate(&domain.Category{})
-	return &CategoryGormRepository{database}
+	r := CategoryGormRepository{database: database}
+	r.seed()
+	return &r
 }

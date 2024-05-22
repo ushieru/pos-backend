@@ -28,7 +28,11 @@ func (h *CategoryHandler) setupRoutes(app *fiber.App) {
 // @Success 200 {array} domain.Category
 // @Failure default {object} domain.AppError
 func (h *CategoryHandler) listCategories(c *fiber.Ctx) error {
-	categories, err := h.service.List()
+	searchCriteriaQueryRequest := new(dto.SearchCriteriaQueryRequest)
+	if err := c.QueryParser(searchCriteriaQueryRequest); err != nil {
+		return fiber.NewError(fiber.StatusUnprocessableEntity, "Error parse query")
+	}
+	categories, err := h.service.List(searchCriteriaQueryRequest)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}

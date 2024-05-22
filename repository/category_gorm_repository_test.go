@@ -16,7 +16,7 @@ func TestEmptyListCategory(t *testing.T) {
 	})
 	want := 0
 
-	categories, err := s.List()
+	categories, err := s.List(&dto.SearchCriteriaQueryRequest{})
 	categoriesLength := len(categories)
 
 	if err != nil {
@@ -86,7 +86,6 @@ func TestDeleteCategoryFail(t *testing.T) {
 		t.Fatalf("Error: %s, want: %s", err.Message, want)
 	}
 }
-
 
 func getCategoryGormRepository(db *gorm.DB) *service.CategoryService {
 	r := NewCategoryGormRepository(db)
