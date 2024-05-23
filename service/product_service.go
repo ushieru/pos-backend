@@ -7,7 +7,7 @@ import (
 )
 
 type IProductService interface {
-	List(*dto.SearchCriteriaQueryRequest) ([]domain.Product, *domain.AppError)
+	List(*dto.SearchCriteriaQueryRequest, bool) ([]domain.Product, *domain.AppError)
 	ListByCategoryId(
 		id uint,
 		dto *dto.SearchCriteriaQueryRequest,
@@ -24,11 +24,11 @@ type ProductService struct {
 	repository domain.IProductRepository
 }
 
-func (s *ProductService) List(dto *dto.SearchCriteriaQueryRequest) ([]domain.Product, *domain.AppError) {
+func (s *ProductService) List(dto *dto.SearchCriteriaQueryRequest, withCategories bool) ([]domain.Product, *domain.AppError) {
 	criteria := &domain_criteria.Criteria{
 		Filters: dto.Filters,
 	}
-	return s.repository.List(criteria)
+	return s.repository.List(criteria, withCategories)
 }
 
 func (s *ProductService) ListByCategoryId(

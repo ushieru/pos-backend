@@ -20,7 +20,7 @@ type Product struct {
 }
 
 type IProductRepository interface {
-	List(*domain_criteria.Criteria) ([]Product, *AppError)
+	List(*domain_criteria.Criteria, bool) ([]Product, *AppError)
 	ListByCategoryId(id uint, criteria *domain_criteria.Criteria) ([]Product, *AppError)
 	Save(*Product) (*Product, *AppError)
 	Find(id uint) (*Product, *AppError)

@@ -36,7 +36,8 @@ func (h *ProductHandler) listProducts(c *fiber.Ctx) error {
 	if err := c.QueryParser(searchCriteriaQueryRequest); err != nil {
 		return fiber.NewError(fiber.StatusUnprocessableEntity, "Error parse query")
 	}
-	products, err := h.service.List(searchCriteriaQueryRequest)
+	withCategories := c.QueryBool("withCategories")
+	products, err := h.service.List(searchCriteriaQueryRequest, withCategories)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}

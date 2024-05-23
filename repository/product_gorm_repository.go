@@ -11,10 +11,13 @@ type ProductGormRepository struct {
 	database *gorm.DB
 }
 
-func (r *ProductGormRepository) List(criteria *domain_criteria.Criteria) ([]domain.Product, *domain.AppError) {
+func (r *ProductGormRepository) List(criteria *domain_criteria.Criteria, withCategories bool) ([]domain.Product, *domain.AppError) {
 	var products []domain.Product
 	scopes := r.c.FiltersToScopes(criteria.Filters)
-	tx := r.database.Preload("Categories")
+	tx := r.database.Model(&domain.Product{})
+	if withCategories {
+		tx.Preload("Categories")
+	}
 	if len(scopes) > 0 {
 		tx.Scopes(scopes...)
 	}
