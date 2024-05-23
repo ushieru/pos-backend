@@ -14,9 +14,7 @@ type TicketGormRepository struct {
 	ps       service.IProductService
 }
 
-func (r *TicketGormRepository) List(
-	c *domain_criteria.Criteria,
-) ([]domain.Ticket, *domain.AppError) {
+func (r *TicketGormRepository) List(c *domain_criteria.Criteria) ([]domain.Ticket, *domain.AppError) {
 	var tickets []domain.Ticket
 	scopes := r.c.FiltersToScopes(c.Filters)
 	statement := r.database.Debug()
@@ -38,6 +36,27 @@ func (r *TicketGormRepository) Save(ticket *domain.Ticket) (*domain.Ticket, *dom
 		return nil, domain.NewUnexpectedError("Error al crear ticket")
 	}
 	return ticket, nil
+}
+
+func (r *TicketGormRepository) Update(ticket *domain.Ticket) (*domain.Ticket, *domain.AppError) {
+	if ticket.ID == 0 {
+		return nil, domain.NewUnexpectedError("Error al actualizar ticket")
+	}
+	result := r.database.Save(ticket)
+	if result.RowsAffected == 0 {
+		return nil, domain.NewUnexpectedError("Error al actualizar ticket")
+	}
+	return ticket, nil
+}
+
+func (r *TicketGormRepository) UpdateTicketProductsByTicket(ticket *domain.Ticket) (*domain.Ticket, *domain.AppError) {
+	isEditable := false
+	r.database.
+		Model(&domain.TicketProduct{}).
+		Where("ticket_id = ?", ticket.ID).
+		Update("is_editable", &isEditable)
+	updatedTicket, _ := r.Find(ticket.ID)
+	return updatedTicket, nil
 }
 
 func (r *TicketGormRepository) Find(id uint) (*domain.Ticket, *domain.AppError) {
@@ -70,10 +89,7 @@ func (r *TicketGormRepository) Delete(id uint) (*domain.Ticket, *domain.AppError
 	return ticket, nil
 }
 
-func (r *TicketGormRepository) AddProduct(
-	ticketId, productId uint,
-	a *domain.Account,
-) (*domain.Ticket, *domain.AppError) {
+func (r *TicketGormRepository) AddProduct(ticketId, productId uint, a *domain.Account) (*domain.Ticket, *domain.AppError) {
 	ticket, err := r.Find(ticketId)
 	if err != nil {
 		return nil, err
@@ -89,38 +105,32 @@ func (r *TicketGormRepository) AddProduct(
 		return nil, err
 	}
 	// TODO: Add validation in availability dates
-	tp := new(domain.TicketProduct)
-	r.database.First(tp, "Product_Id = ? AND ticket_id = ?", productId, ticketId)
-	if tp.ID == 0 {
-		ticketProduct := new(domain.TicketProduct)
-		ticketProduct.Quantity = 1
-		ticketProduct.Name = product.Name
-		ticketProduct.Description = product.Description
-		ticketProduct.Price = product.Price
-		ticketProduct.ProductId = product.ID
-		r.database.Model(ticket).Association("TicketProducts").Append(ticketProduct)
+	IsEditable := true
+	ticketProduct := &domain.TicketProduct{
+		Name:        product.Name,
+		Description: product.Description,
+		Price:       product.Price,
+		IsEditable:  &IsEditable,
+		ProductID:   product.ID,
+		TicketID:    ticketId,
 	}
-	if tp.ID != 0 {
-		tp.Quantity = tp.Quantity + 1
-		r.database.Save(tp)
-	}
+	r.database.
+		Model(ticketProduct).
+		Create(ticketProduct)
 	updatedTicket, UpdatedTicketErr := r.Find(ticketId)
 	if UpdatedTicketErr != nil {
 		return nil, UpdatedTicketErr
 	}
 	total := 0.0
 	for _, productTicket := range updatedTicket.TicketProducts {
-		total += productTicket.Product.Price * float64(productTicket.Quantity)
+		total += productTicket.Price
 	}
 	updatedTicket.Total = total
 	r.database.Save(updatedTicket)
 	return updatedTicket, nil
 }
 
-func (r *TicketGormRepository) DeleteProduct(
-	ticketId, productId uint,
-	a *domain.Account,
-) (*domain.Ticket, *domain.AppError) {
+func (r *TicketGormRepository) DeleteProduct(ticketId, productId uint, a *domain.Account) (*domain.Ticket, *domain.AppError) {
 	ticket, err := r.Find(ticketId)
 	if err != nil {
 		return nil, err
@@ -131,37 +141,29 @@ func (r *TicketGormRepository) DeleteProduct(
 	if ticket.TicketStatus != domain.TicketOpen {
 		return nil, domain.NewConflictError("Este ticket no esta abierto")
 	}
-	product, pError := r.ps.Find(productId)
-	if pError != nil || product.ID == 0 {
-		return nil, err
+	ticketProduct := new(domain.TicketProduct)
+	r.database.
+		Model(ticketProduct).
+		Where("product_id = ? AND is_editable = ?", productId, 1).
+		First(ticketProduct)
+	if ticketProduct.ID == 0 {
+		return nil, domain.NewUnauthorizedError("Producto en ticket no encontrado")
 	}
-	tp := new(domain.TicketProduct)
-	r.database.First(tp, "Product_Id = ? AND ticket_id = ?", productId, ticketId)
-	if tp.Quantity == 1 {
-		r.database.Model(ticket).Association("TicketProducts").Delete(tp)
-		r.database.Unscoped().Delete(tp)
-	}
-	if tp.Quantity > 1 {
-		tp.Quantity = tp.Quantity - 1
-		r.database.Save(tp)
-	}
+	r.database.Delete(ticketProduct)
 	updatedTicket, UpdatedTicketErr := r.Find(ticketId)
 	if UpdatedTicketErr != nil {
 		return nil, UpdatedTicketErr
 	}
 	total := 0.0
 	for _, productTicket := range updatedTicket.TicketProducts {
-		total += productTicket.Product.Price * float64(productTicket.Quantity)
+		total += productTicket.Price
 	}
 	updatedTicket.Total = total
 	r.database.Save(updatedTicket)
 	return updatedTicket, nil
 }
 
-func (r *TicketGormRepository) PayTicket(
-	id uint,
-	a *domain.Account,
-) (*domain.Ticket, *domain.AppError) {
+func (r *TicketGormRepository) PayTicket(id uint, a *domain.Account) (*domain.Ticket, *domain.AppError) {
 	if a.AccountType != domain.Cashier {
 		return nil, domain.NewUnauthorizedError("No tienes autorizacion para cobrar")
 	}

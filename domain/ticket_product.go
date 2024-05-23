@@ -1,8 +1,11 @@
 package domain
 
 type TicketProduct struct {
-	Product
-	ProductId uint   `json:"product_id"`
-	Quantity  uint16 `json:"quantity"`
-	TicketID  uint   `json:"ticket_id"`
+	Model
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	IsEditable  *bool   `json:"is_editable"`
+	ProductID   uint    `json:"product_id"`
+	TicketID    uint    `json:"ticket_id"`
 }
