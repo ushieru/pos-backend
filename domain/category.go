@@ -18,7 +18,7 @@ type Category struct {
 }
 
 type ICategoryRepository interface {
-	List(*domain_criteria.Criteria) ([]Category, *AppError)
+	List(*domain_criteria.Criteria, bool) ([]Category, *AppError)
 	Save(*Category) (*Category, *AppError)
 	Find(id uint) (*Category, *AppError)
 	Update(*Category) (*Category, *AppError)

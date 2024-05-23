@@ -7,7 +7,7 @@ import (
 )
 
 type ICategoryService interface {
-	List(*dto.SearchCriteriaQueryRequest) ([]domain.Category, *domain.AppError)
+	List(*dto.SearchCriteriaQueryRequest, bool) ([]domain.Category, *domain.AppError)
 	Find(id uint) (*domain.Category, *domain.AppError)
 	Save(dto *dto.UpsertCategoryRequest) (*domain.Category, *domain.AppError)
 	Update(id uint, dto *dto.UpsertCategoryRequest) (*domain.Category, *domain.AppError)
@@ -18,11 +18,11 @@ type CategoryService struct {
 	repository domain.ICategoryRepository
 }
 
-func (c *CategoryService) List(dto *dto.SearchCriteriaQueryRequest) ([]domain.Category, *domain.AppError) {
+func (c *CategoryService) List(dto *dto.SearchCriteriaQueryRequest, withProducts bool) ([]domain.Category, *domain.AppError) {
 	criteria := &domain_criteria.Criteria{
 		Filters: dto.Filters,
 	}
-	return c.repository.List(criteria)
+	return c.repository.List(criteria, withProducts)
 }
 
 func (c *CategoryService) Find(id uint) (*domain.Category, *domain.AppError) {

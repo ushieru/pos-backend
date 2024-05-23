@@ -16,7 +16,7 @@ func TestEmptyListCategory(t *testing.T) {
 	})
 	want := 0
 
-	categories, err := s.List(&dto.SearchCriteriaQueryRequest{})
+	categories, err := s.List(&dto.SearchCriteriaQueryRequest{}, false)
 	categoriesLength := len(categories)
 
 	if err != nil {
