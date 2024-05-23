@@ -50,11 +50,14 @@ func (s *ProductService) Save(dto *dto.UpsertProductRequest) (*domain.Product, *
 		return nil, err
 	}
 	product := &domain.Product{
-		Name:           dto.Name,
-		Description:    dto.Description,
-		Price:          dto.Price,
-		AvailableFrom:  dto.AvailableFrom,
-		AvailableUntil: dto.AvailableUntil,
+		Name:               dto.Name,
+		Description:        dto.Description,
+		Price:              dto.Price,
+		AvailableFrom:      dto.AvailableFrom,
+		AvailableUntil:     dto.AvailableUntil,
+		AvailableFromHour:  dto.AvailableFromHour,
+		AvailableUntilHour: dto.AvailableUntilHour,
+		AvailableDays:      dto.AvailableDays,
 	}
 	return s.repository.Save(product)
 }
@@ -67,12 +70,15 @@ func (s *ProductService) Update(
 		return nil, err
 	}
 	product := &domain.Product{
-		Model:          domain.Model{ID: id},
-		Name:           dto.Name,
-		Description:    dto.Description,
-		Price:          dto.Price,
-		AvailableFrom:  dto.AvailableFrom,
-		AvailableUntil: dto.AvailableUntil,
+		Model:              domain.Model{ID: id},
+		Name:               dto.Name,
+		Description:        dto.Description,
+		Price:              dto.Price,
+		AvailableFrom:      dto.AvailableFrom,
+		AvailableUntil:     dto.AvailableUntil,
+		AvailableFromHour:  dto.AvailableFromHour,
+		AvailableUntilHour: dto.AvailableUntilHour,
+		AvailableDays:      dto.AvailableDays,
 	}
 	return s.repository.Update(product)
 }

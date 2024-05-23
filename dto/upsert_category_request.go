@@ -11,11 +11,11 @@ import (
 
 type UpsertCategoryRequest struct {
 	Name               string    `json:"name"`
-	AvailableFrom      time.Time `json:"available_from"`
-	AvailableUntil     time.Time `json:"available_until"`
-	AvailableFromHour  string    `json:"available_from_hour"`
-	AvailableUntilHour string    `json:"available_until_hour"`
-	AvailableDays      string    `json:"available_days"`
+	AvailableFrom      time.Time `json:"available_from" example:"2023-12-15T21:54:42.123Z"`
+	AvailableUntil     time.Time `json:"available_until" example:"2023-12-18T21:54:42.123Z"`
+	AvailableFromHour  string    `json:"available_from_hour" example:"00:00"`
+	AvailableUntilHour string    `json:"available_until_hour" example:"00:00"`
+	AvailableDays      string    `json:"available_days" example:"0,1,2,3,4,5"`
 }
 
 func (dto *UpsertCategoryRequest) Validate() *domain.AppError {

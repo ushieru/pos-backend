@@ -11,9 +11,7 @@ type ProductGormRepository struct {
 	database *gorm.DB
 }
 
-func (r *ProductGormRepository) List(
-	criteria *domain_criteria.Criteria,
-) ([]domain.Product, *domain.AppError) {
+func (r *ProductGormRepository) List(criteria *domain_criteria.Criteria) ([]domain.Product, *domain.AppError) {
 	var products []domain.Product
 	scopes := r.c.FiltersToScopes(criteria.Filters)
 	tx := r.database.Preload("Categories")
@@ -24,10 +22,7 @@ func (r *ProductGormRepository) List(
 	return products, nil
 }
 
-func (r *ProductGormRepository) ListByCategoryId(
-	id uint,
-	criteria *domain_criteria.Criteria,
-) ([]domain.Product, *domain.AppError) {
+func (r *ProductGormRepository) ListByCategoryId(id uint, criteria *domain_criteria.Criteria) ([]domain.Product, *domain.AppError) {
 	var products []domain.Product
 	scopes := r.c.FiltersToScopes(criteria.Filters)
 	stm := r.database.Debug().
@@ -67,6 +62,9 @@ func (r *ProductGormRepository) Update(p *domain.Product) (*domain.Product, *dom
 	product.Price = p.Price
 	product.AvailableFrom = p.AvailableFrom
 	product.AvailableUntil = p.AvailableUntil
+	product.AvailableFromHour = p.AvailableFromHour
+	product.AvailableUntilHour = p.AvailableUntilHour
+	product.AvailableDays = p.AvailableDays
 	r.database.Save(product)
 	return product, nil
 }
