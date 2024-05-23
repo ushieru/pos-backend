@@ -55,19 +55,7 @@ func (r *ProductGormRepository) Find(id uint) (*domain.Product, *domain.AppError
 	return product, nil
 }
 
-func (r *ProductGormRepository) Update(p *domain.Product) (*domain.Product, *domain.AppError) {
-	product, err := r.Find(p.ID)
-	if err != nil {
-		return nil, err
-	}
-	product.Name = p.Name
-	product.Description = p.Description
-	product.Price = p.Price
-	product.AvailableFrom = p.AvailableFrom
-	product.AvailableUntil = p.AvailableUntil
-	product.AvailableFromHour = p.AvailableFromHour
-	product.AvailableUntilHour = p.AvailableUntilHour
-	product.AvailableDays = p.AvailableDays
+func (r *ProductGormRepository) Update(product *domain.Product) (*domain.Product, *domain.AppError) {
 	r.database.Save(product)
 	return product, nil
 }
