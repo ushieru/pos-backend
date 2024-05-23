@@ -25,7 +25,7 @@ func (r *ProductGormRepository) List(criteria *domain_criteria.Criteria) ([]doma
 func (r *ProductGormRepository) ListByCategoryId(id uint, criteria *domain_criteria.Criteria) ([]domain.Product, *domain.AppError) {
 	var products []domain.Product
 	scopes := r.c.FiltersToScopes(criteria.Filters)
-	stm := r.database.Debug().
+	stm := r.database.
 		Preload("Categories").
 		Where("id IN (SELECT product_id FROM category_product WHERE category_id = ?)", id)
 	if len(scopes) > 0 {
