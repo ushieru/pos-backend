@@ -48,7 +48,6 @@ var ServeCmd = &cobra.Command{
 			fx.Invoke(
 				fiber_app.Init,
 				handler.NewPingHandler,
-				handler.NewInfoHandler,
 				handler.NewSwaggerHandler,
 				handler.NewAuthHandler,
 				middlewares.NewAuthMiddleware,
