@@ -25,8 +25,7 @@ func (h *AuthHandler) setupRoutes(app *fiber.App) {
 // @Success 200 {object} dto.AuthUserResponse
 // @Failure default {object} domain.AppError
 func (h *AuthHandler) auth(c *fiber.Ctx) error {
-	headers := c.GetReqHeaders()
-	authHeader := headers["Authorization"]
+	authHeader := c.Get("Authorization")
 	authHeaderSlice := strings.Split(authHeader, " ")
 	if len(authHeaderSlice) < 2 {
 		return fiber.NewError(fiber.StatusBadRequest, "Bad request")
