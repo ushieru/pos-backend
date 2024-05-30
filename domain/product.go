@@ -25,7 +25,7 @@ type IProductRepository interface {
 	Save(*Product) (*Product, *AppError)
 	Find(id uint) (*Product, *AppError)
 	Update(*Product) (*Product, *AppError)
-	Delete(id uint) (*Product, *AppError)
-	AddCategory(productId, categoryId uint) (*Product, *AppError)
-	DeleteCategory(productId, categoryId uint) (*Product, *AppError)
+	Delete(*Product) (*Product, *AppError)
+	AddCategory(product *Product, category *Category) (*Product, *AppError)
+	DeleteCategory(product *Product, category *Category) (*Product, *AppError)
 }

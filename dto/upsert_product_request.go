@@ -11,12 +11,25 @@ import (
 type UpsertProductRequest struct {
 	Name               string    `json:"name"`
 	Description        string    `json:"description"`
+	Price              float64   `json:"price"`
 	AvailableFrom      time.Time `json:"available_from" example:"2023-12-15T21:54:42.123Z"`
 	AvailableUntil     time.Time `json:"available_until" example:"2023-12-18T21:54:42.123Z"`
-	Price              float64   `json:"price"`
 	AvailableFromHour  string    `json:"available_from_hour" example:"00:00"`
 	AvailableUntilHour string    `json:"available_until_hour" example:"00:00"`
 	AvailableDays      string    `json:"available_days" example:"0,1,2,3,4,5"`
+}
+
+func (dto *UpsertProductRequest) ToProduct() *domain.Product {
+	return &domain.Product{
+		Name:               dto.Name,
+		Description:        dto.Description,
+		Price:              dto.Price,
+		AvailableFrom:      dto.AvailableFrom,
+		AvailableUntil:     dto.AvailableUntil,
+		AvailableFromHour:  dto.AvailableFromHour,
+		AvailableUntilHour: dto.AvailableUntilHour,
+		AvailableDays:      dto.AvailableDays,
+	}
 }
 
 func (dto *UpsertProductRequest) Validate() *domain.AppError {

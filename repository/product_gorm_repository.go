@@ -60,45 +60,19 @@ func (r *ProductGormRepository) Update(product *domain.Product) (*domain.Product
 	return product, nil
 }
 
-func (r *ProductGormRepository) Delete(id uint) (*domain.Product, *domain.AppError) {
-	product, err := r.Find(id)
-	if err != nil {
-		return nil, err
-	}
+func (r *ProductGormRepository) Delete(product *domain.Product) (*domain.Product, *domain.AppError) {
 	r.database.Delete(product)
 	return product, nil
 }
 
-func (r *ProductGormRepository) AddCategory(
-	productId, categoryId uint,
-) (*domain.Product, *domain.AppError) {
-	product, err := r.Find(productId)
-	if err != nil {
-		return nil, err
-	}
-	category := new(domain.Category)
-	r.database.First(category, categoryId)
-	if category.ID == 0 {
-		return nil, domain.NewNotFoundError("Categoria no encontrada")
-	}
+func (r *ProductGormRepository) AddCategory(product *domain.Product, category *domain.Category) (*domain.Product, *domain.AppError) {
 	if err := r.database.Model(product).Association("Categories").Append(category); err != nil {
 		return nil, domain.NewUnexpectedError("No fue posible agregar la categoria al producto")
 	}
 	return product, nil
 }
 
-func (r *ProductGormRepository) DeleteCategory(
-	productId, categoryId uint,
-) (*domain.Product, *domain.AppError) {
-	product, err := r.Find(productId)
-	if err != nil {
-		return nil, err
-	}
-	category := new(domain.Category)
-	r.database.First(category, categoryId)
-	if category.ID == 0 {
-		return nil, domain.NewNotFoundError("Categoria no encontrada")
-	}
+func (r *ProductGormRepository) DeleteCategory(product *domain.Product, category *domain.Category) (*domain.Product, *domain.AppError) {
 	if err := r.database.Model(product).Association("Categories").Delete(category); err != nil {
 		return nil, domain.NewUnexpectedError("No fue posible eliminar la categoria del producto")
 	}
