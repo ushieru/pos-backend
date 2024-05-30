@@ -22,5 +22,5 @@ type ICategoryRepository interface {
 	Save(*Category) (*Category, *AppError)
 	Find(id uint) (*Category, *AppError)
 	Update(*Category) (*Category, *AppError)
-	Delete(id uint) (*Category, *AppError)
+	Delete(category *Category) (*Category, *AppError)
 }

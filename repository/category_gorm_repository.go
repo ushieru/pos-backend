@@ -49,11 +49,7 @@ func (r *CategoryGormRepository) Update(category *domain.Category) (*domain.Cate
 	return category, nil
 }
 
-func (r *CategoryGormRepository) Delete(id uint) (*domain.Category, *domain.AppError) {
-	category, err := r.Find(id)
-	if err != nil {
-		return nil, err
-	}
+func (r *CategoryGormRepository) Delete(category *domain.Category) (*domain.Category, *domain.AppError) {
 	r.database.Delete(category)
 	return category, nil
 }

@@ -33,14 +33,7 @@ func (c *CategoryService) Save(dto *dto.UpsertCategoryRequest) (*domain.Category
 	if err := dto.Validate(); err != nil {
 		return nil, err
 	}
-	category := &domain.Category{
-		Name:               dto.Name,
-		AvailableFrom:      dto.AvailableFrom,
-		AvailableUntil:     dto.AvailableUntil,
-		AvailableFromHour:  dto.AvailableFromHour,
-		AvailableUntilHour: dto.AvailableUntilHour,
-		AvailableDays:      dto.AvailableDays,
-	}
+	category := dto.ToCategory()
 	return c.repository.Save(category)
 
 }
@@ -49,21 +42,21 @@ func (c *CategoryService) Update(id uint, dto *dto.UpsertCategoryRequest) (*doma
 	if err := dto.Validate(); err != nil {
 		return nil, err
 	}
-	category, err := c.repository.Find(id)
+	_, err := c.repository.Find(id)
 	if err != nil {
 		return nil, err
 	}
-	category.Name = dto.Name
-	category.AvailableFrom = dto.AvailableFrom
-	category.AvailableUntil = dto.AvailableUntil
-	category.AvailableFromHour = dto.AvailableFromHour
-	category.AvailableUntilHour = dto.AvailableUntilHour
-	category.AvailableDays = dto.AvailableDays
+	category := dto.ToCategory()
+	category.ID = id
 	return c.repository.Update(category)
 }
 
 func (c *CategoryService) Delete(id uint) (*domain.Category, *domain.AppError) {
-	return c.repository.Delete(id)
+	category, err := c.repository.Find(id)
+	if err != nil {
+		return nil, err
+	}
+	return c.repository.Delete(category)
 }
 
 func NewCategoryService(repository domain.ICategoryRepository) *CategoryService {

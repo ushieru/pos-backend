@@ -18,6 +18,17 @@ type UpsertCategoryRequest struct {
 	AvailableDays      string    `json:"available_days" example:"0,1,2,3,4,5"`
 }
 
+func (dto *UpsertCategoryRequest) ToCategory() *domain.Category {
+	return &domain.Category{
+		Name:               dto.Name,
+		AvailableFrom:      dto.AvailableFrom,
+		AvailableUntil:     dto.AvailableUntil,
+		AvailableFromHour:  dto.AvailableFromHour,
+		AvailableUntilHour: dto.AvailableUntilHour,
+		AvailableDays:      dto.AvailableDays,
+	}
+}
+
 func (dto *UpsertCategoryRequest) Validate() *domain.AppError {
 	if dto.Name == "" {
 		return domain.NewValidationError("No se permiten nombres vacios")
