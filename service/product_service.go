@@ -8,7 +8,7 @@ import (
 
 type IProductService interface {
 	List(*dto.SearchCriteriaQueryRequest, bool) ([]domain.Product, *domain.AppError)
-	ListByCategoryId(uint, dto *dto.SearchCriteriaQueryRequest) ([]domain.Product, *domain.AppError)
+	ListByCategoryId(id uint, dto *dto.SearchCriteriaQueryRequest) ([]domain.Product, *domain.AppError)
 	Find(id uint) (*domain.Product, *domain.AppError)
 	Save(dto *dto.UpsertProductRequest) (*domain.Product, *domain.AppError)
 	Update(id uint, dto *dto.UpsertProductRequest) (*domain.Product, *domain.AppError)
