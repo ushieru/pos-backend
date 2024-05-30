@@ -11,27 +11,27 @@ import (
 
 type IUserService interface {
 	List() ([]domain.User, *domain.AppError)
-	Find(id uint) (*domain.User, *domain.AppError)
+	Find(id string) (*domain.User, *domain.AppError)
 	AuthWithCredentials(username, password, secret string) (*dto.AuthUserResponse, *domain.AppError)
 	Save(dto *dto.CreateUserRequest, a *domain.Account) (*domain.User, *domain.AppError)
-	Update(id uint, dto *dto.UpdateUserRequest, a *domain.Account) (*domain.User, *domain.AppError)
-	Delete(id uint, a *domain.Account) (*domain.User, *domain.AppError)
+	Update(id string, dto *dto.UpdateUserRequest, a *domain.Account) (*domain.User, *domain.AppError)
+	Delete(id string, a *domain.Account) (*domain.User, *domain.AppError)
 }
 
 type UserService struct {
 	repository domain.IUserRepository
 }
 
-func (c *UserService) List() ([]domain.User, *domain.AppError) {
-	return c.repository.List()
+func (s *UserService) List() ([]domain.User, *domain.AppError) {
+	return s.repository.List()
 }
 
-func (c *UserService) Find(id uint) (*domain.User, *domain.AppError) {
-	return c.repository.Find(id)
+func (s *UserService) Find(id string) (*domain.User, *domain.AppError) {
+	return s.repository.Find(id)
 }
 
-func (c *UserService) AuthWithCredentials(username, password, secret string) (*dto.AuthUserResponse, *domain.AppError) {
-	user, err := c.repository.FindByUserOrEmail(username)
+func (s *UserService) AuthWithCredentials(username, password, secret string) (*dto.AuthUserResponse, *domain.AppError) {
+	user, err := s.repository.FindByUserOrEmail(username)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (c *UserService) AuthWithCredentials(username, password, secret string) (*d
 	return authUserResponse, nil
 }
 
-func (c *UserService) Save(dto *dto.CreateUserRequest, a *domain.Account) (*domain.User, *domain.AppError) {
+func (s *UserService) Save(dto *dto.CreateUserRequest, a *domain.Account) (*domain.User, *domain.AppError) {
 	if a.AccountType != domain.Admin {
 		return nil, domain.NewUnauthorizedError("No tienes autorizacion para esta accion")
 	}
@@ -76,10 +76,10 @@ func (c *UserService) Save(dto *dto.CreateUserRequest, a *domain.Account) (*doma
 			AccountType: domain.AccountType(dto.AccountType),
 		},
 	}
-	return c.repository.Save(user)
+	return s.repository.Save(user)
 }
 
-func (c *UserService) Update(id uint, dto *dto.UpdateUserRequest, a *domain.Account) (*domain.User, *domain.AppError) {
+func (s *UserService) Update(id string, dto *dto.UpdateUserRequest, a *domain.Account) (*domain.User, *domain.AppError) {
 	if a.AccountType != domain.Admin {
 		return nil, domain.NewUnauthorizedError("No tienes autorizacion para esta accion")
 	}
@@ -104,19 +104,39 @@ func (c *UserService) Update(id uint, dto *dto.UpdateUserRequest, a *domain.Acco
 			AccountType: domain.AccountType(dto.AccountType),
 		},
 	}
-	return c.repository.Update(user)
+	return s.repository.Update(user)
 }
 
-func (c *UserService) Delete(id uint, a *domain.Account) (*domain.User, *domain.AppError) {
+func (s *UserService) Delete(id string, a *domain.Account) (*domain.User, *domain.AppError) {
 	if a.AccountType != domain.Admin {
 		return nil, domain.NewUnauthorizedError("No tienes autorizacion para esta accion")
 	}
 	if id == a.ID {
 		return nil, domain.NewUnauthorizedError("No puedes eliminarte a ti mismo")
 	}
-	return c.repository.Delete(id)
+	return s.repository.Delete(id)
+}
+
+func (s *UserService) seed() {
+	users, err := s.List()
+	if err != nil {
+		return
+	}
+	if len(users) != 0 {
+		return
+	}
+	adminMooc := &domain.Account{AccountType: domain.Admin}
+	s.Save(&dto.CreateUserRequest{
+		Name:        "admin",
+		Email:       "admin@email.com",
+		Username:    "admin",
+		Password:    "admin",
+		AccountType: "admin",
+	}, adminMooc)
 }
 
 func NewUserService(repository domain.IUserRepository) *UserService {
-	return &UserService{repository}
+	service := &UserService{repository}
+	service.seed()
+	return service
 }

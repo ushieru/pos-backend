@@ -5,17 +5,17 @@ type Table struct {
 	Name      string  `json:"name"`
 	PosX      uint    `json:"pos_x"`
 	PosY      uint    `json:"pos_y"`
-	AccountID uint    `json:"account_id"`
+	AccountID string  `json:"account_id"`
 	Account   Account `json:"account"`
-	TicketID  uint    `json:"ticket_id"`
+	TicketID  string  `json:"ticket_id"`
 	Ticket    Ticket  `json:"ticket"`
 }
 
 type ITableRepository interface {
 	List() ([]Table, *AppError)
 	Save(*Table) (*Table, *AppError)
-	Find(id uint) (*Table, *AppError)
+	Find(id string) (*Table, *AppError)
 	Update(*Table) (*Table, *AppError)
-	Delete(id uint) (*Table, *AppError)
+	Delete(id string) (*Table, *AppError)
 	CreateTicket(*Table, *Account) (*Table, *AppError)
 }

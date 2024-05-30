@@ -6,6 +6,6 @@ type TicketProduct struct {
 	Description string  `json:"description"`
 	Price       float64 `json:"price"`
 	IsEditable  *bool   `json:"is_editable"`
-	ProductID   uint    `json:"product_id"`
-	TicketID    uint    `json:"ticket_id"`
+	ProductID   string  `json:"product_id"`
+	TicketID    string  `json:"ticket_id"`
 }

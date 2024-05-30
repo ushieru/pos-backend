@@ -35,10 +35,10 @@ func (r *CategoryGormRepository) Save(
 	return category, nil
 }
 
-func (r *CategoryGormRepository) Find(id uint) (*domain.Category, *domain.AppError) {
+func (r *CategoryGormRepository) Find(id string) (*domain.Category, *domain.AppError) {
 	category := new(domain.Category)
 	r.database.Preload("Products").First(category, id)
-	if category.ID == 0 {
+	if category.ID == "" {
 		return nil, domain.NewNotFoundError("Categoria no encontrada")
 	}
 	return category, nil

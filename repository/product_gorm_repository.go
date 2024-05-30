@@ -25,7 +25,7 @@ func (r *ProductGormRepository) List(criteria *domain_criteria.Criteria, withCat
 	return products, nil
 }
 
-func (r *ProductGormRepository) ListByCategoryId(id uint, criteria *domain_criteria.Criteria) ([]domain.Product, *domain.AppError) {
+func (r *ProductGormRepository) ListByCategoryId(id string, criteria *domain_criteria.Criteria) ([]domain.Product, *domain.AppError) {
 	var products []domain.Product
 	scopes := r.c.FiltersToScopes(criteria.Filters)
 	stm := r.database.
@@ -46,10 +46,10 @@ func (r *ProductGormRepository) Save(product *domain.Product) (*domain.Product, 
 	return product, nil
 }
 
-func (r *ProductGormRepository) Find(id uint) (*domain.Product, *domain.AppError) {
+func (r *ProductGormRepository) Find(id string) (*domain.Product, *domain.AppError) {
 	product := new(domain.Product)
 	r.database.Preload("Categories").First(product, id)
-	if product.ID == 0 {
+	if product.ID == "" {
 		return nil, domain.NewNotFoundError("Producto no encontrado")
 	}
 	return product, nil

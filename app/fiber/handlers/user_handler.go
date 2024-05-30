@@ -47,8 +47,8 @@ func (h *UserHandler) listUsers(c *fiber.Ctx) error {
 // @Success 200 {object} domain.User
 // @Failure default {object} domain.AppError
 func (h *UserHandler) findUser(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
-	user, err := h.service.Find(uint(id))
+	id := c.Params("id")
+	user, err := h.service.Find(id)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -86,13 +86,13 @@ func (h *UserHandler) saveUser(c *fiber.Ctx) error {
 // @Success 200 {array} domain.User
 // @Failure default {object} domain.AppError
 func (h *UserHandler) updateUser(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+	id := c.Params("id")
 	dto := new(dto.UpdateUserRequest)
 	if err := c.BodyParser(dto); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Bad Request")
 	}
 	user := c.Locals("session").(*domain.User)
-	user, err := h.service.Update(uint(id), dto, &user.Account)
+	user, err := h.service.Update(id, dto, &user.Account)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -108,9 +108,9 @@ func (h *UserHandler) updateUser(c *fiber.Ctx) error {
 // @Success 200 {array} domain.User
 // @Failure default {object} domain.AppError
 func (h *UserHandler) deleteUser(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+	id := c.Params("id")
 	user := c.Locals("session").(*domain.User)
-	user, err := h.service.Delete(uint(id), &user.Account)
+	user, err := h.service.Delete(id, &user.Account)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}

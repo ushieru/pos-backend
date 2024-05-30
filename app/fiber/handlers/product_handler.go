@@ -53,12 +53,12 @@ func (h *ProductHandler) listProducts(c *fiber.Ctx) error {
 // @Success 200 {array} domain.Product
 // @Failure default {object} domain.AppError
 func (h *ProductHandler) listProductsByCategoryId(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+	id := c.Params("id")
 	searchCriteriaQueryRequest := new(dto.SearchCriteriaQueryRequest)
 	if err := c.QueryParser(searchCriteriaQueryRequest); err != nil {
 		return fiber.NewError(fiber.StatusUnprocessableEntity, "Error parse query")
 	}
-	products, err := h.service.ListByCategoryId(uint(id), searchCriteriaQueryRequest)
+	products, err := h.service.ListByCategoryId(id, searchCriteriaQueryRequest)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -74,8 +74,8 @@ func (h *ProductHandler) listProductsByCategoryId(c *fiber.Ctx) error {
 // @Success 200 {object} domain.Product
 // @Failure default {object} domain.AppError
 func (h *ProductHandler) findProduct(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
-	product, err := h.service.Find(uint(id))
+	id := c.Params("id")
+	product, err := h.service.Find(id)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -112,12 +112,12 @@ func (h *ProductHandler) saveProduct(c *fiber.Ctx) error {
 // @Success 200 {array} domain.Product
 // @Failure default {object} domain.AppError
 func (h *ProductHandler) updateProduct(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+	id := c.Params("id")
 	dto := new(dto.UpsertProductRequest)
 	if err := c.BodyParser(dto); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Bad Request")
 	}
-	product, err := h.service.Update(uint(id), dto)
+	product, err := h.service.Update(id, dto)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -133,8 +133,8 @@ func (h *ProductHandler) updateProduct(c *fiber.Ctx) error {
 // @Success 200 {array} domain.Product
 // @Failure default {object} domain.AppError
 func (h *ProductHandler) deleteProduct(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
-	product, err := h.service.Delete(uint(id))
+	id := c.Params("id")
+	product, err := h.service.Delete(id)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -151,9 +151,9 @@ func (h *ProductHandler) deleteProduct(c *fiber.Ctx) error {
 // @Success 200 {array} domain.Product
 // @Failure default {object} domain.AppError
 func (h *ProductHandler) addCategory(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
-	categoryId, _ := c.ParamsInt("categoryId")
-	product, err := h.service.AddCategory(uint(id), uint(categoryId))
+	id := c.Params("id")
+	categoryId := c.Params("categoryId")
+	product, err := h.service.AddCategory(id, categoryId)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -170,9 +170,9 @@ func (h *ProductHandler) addCategory(c *fiber.Ctx) error {
 // @Success 200 {array} domain.Product
 // @Failure default {object} domain.AppError
 func (h *ProductHandler) deleteCategory(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
-	categoryId, _ := c.ParamsInt("categoryId")
-	product, err := h.service.DeleteCategory(uint(id), uint(categoryId))
+	id := c.Params("id")
+	categoryId := c.Params("categoryId")
+	product, err := h.service.DeleteCategory(id, categoryId)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}

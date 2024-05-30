@@ -20,7 +20,7 @@ type Category struct {
 type ICategoryRepository interface {
 	List(*domain_criteria.Criteria, bool) ([]Category, *AppError)
 	Save(*Category) (*Category, *AppError)
-	Find(id uint) (*Category, *AppError)
+	Find(id string) (*Category, *AppError)
 	Update(*Category) (*Category, *AppError)
 	Delete(category *Category) (*Category, *AppError)
 }

@@ -34,7 +34,7 @@ func (r *TableGormRepository) Save(table *domain.Table) (*domain.Table, *domain.
 	findPos := false
 	for y, rt := range tables2dSlice {
 		for x, t := range rt {
-			if t.ID == 0 {
+			if t.ID == "" {
 				posXAvailable, posYAvailable = uint(x+1), uint(y+1)
 				findPos = true
 				break
@@ -53,13 +53,13 @@ func (r *TableGormRepository) Save(table *domain.Table) (*domain.Table, *domain.
 	return table, nil
 }
 
-func (r *TableGormRepository) Find(id uint) (*domain.Table, *domain.AppError) {
+func (r *TableGormRepository) Find(id string) (*domain.Table, *domain.AppError) {
 	table := new(domain.Table)
 	r.database.
 		Preload("Account").
 		Preload("Ticket").
 		First(table, id)
-	if table.ID == 0 {
+	if table.ID == "" {
 		return nil, domain.NewNotFoundError("Mesa no encontrada")
 	}
 	return table, nil
@@ -72,7 +72,7 @@ func (r *TableGormRepository) Update(t *domain.Table) (*domain.Table, *domain.Ap
 	}
 	tableFind := new(domain.Table)
 	r.database.First(tableFind, "Pos_X = ? AND Pos_Y = ?", t.PosX, t.PosY)
-	if tableFind.ID != 0 && tableFind.ID != t.ID {
+	if tableFind.ID != "0" && tableFind.ID != t.ID {
 		return nil, domain.NewConflictError("Posicion ocupada")
 	}
 	table.Name = t.Name
@@ -82,7 +82,7 @@ func (r *TableGormRepository) Update(t *domain.Table) (*domain.Table, *domain.Ap
 	return table, nil
 }
 
-func (r *TableGormRepository) Delete(id uint) (*domain.Table, *domain.AppError) {
+func (r *TableGormRepository) Delete(id string) (*domain.Table, *domain.AppError) {
 	table, err := r.Find(id)
 	if err != nil {
 		return nil, err

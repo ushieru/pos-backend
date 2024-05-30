@@ -2,56 +2,11 @@ package repository
 
 import (
 	"github.com/ushieru/pos/domain"
-	"github.com/ushieru/pos/utils"
 	"gorm.io/gorm"
 )
 
 type UserGormRepository struct {
 	database *gorm.DB
-}
-
-func (r *UserGormRepository) seed() {
-	user := new(domain.User)
-	r.database.First(user)
-	if user.ID != 0 {
-		return
-	}
-	password, _ := utils.HashPassword("admin")
-	isActive := true
-	r.database.Create(&domain.User{
-		Name:  "Admin",
-		Email: "admin@email.com",
-		Account: domain.Account{
-			Username:    "admin",
-			Password:    password,
-			IsActive:    &isActive,
-			AccountType: domain.Admin,
-		},
-	})
-	password, _ = utils.HashPassword("cashier")
-	isActive = true
-	r.database.Create(&domain.User{
-		Name:  "Cashier",
-		Email: "cashier@email.com",
-		Account: domain.Account{
-			Username:    "cashier",
-			Password:    password,
-			IsActive:    &isActive,
-			AccountType: domain.Cashier,
-		},
-	})
-	password, _ = utils.HashPassword("waiter")
-	isActive = true
-	r.database.Create(&domain.User{
-		Name:  "Waiter",
-		Email: "waiter@email.com",
-		Account: domain.Account{
-			Username:    "waiter",
-			Password:    password,
-			IsActive:    &isActive,
-			AccountType: domain.Waiter,
-		},
-	})
 }
 
 func (r *UserGormRepository) List() ([]domain.User, *domain.AppError) {
@@ -68,10 +23,10 @@ func (r *UserGormRepository) Save(user *domain.User) (*domain.User, *domain.AppE
 	return user, nil
 }
 
-func (r *UserGormRepository) Find(id uint) (*domain.User, *domain.AppError) {
+func (r *UserGormRepository) Find(id string) (*domain.User, *domain.AppError) {
 	user := new(domain.User)
 	r.database.Preload("Account").First(user, id)
-	if user.ID == 0 {
+	if user.ID == "" {
 		return nil, domain.NewNotFoundError("Usuario no encontrado")
 	}
 	return user, nil
@@ -80,7 +35,7 @@ func (r *UserGormRepository) Find(id uint) (*domain.User, *domain.AppError) {
 func (r *UserGormRepository) FindByUserOrEmail(username string) (*domain.User, *domain.AppError) {
 	user := new(domain.User)
 	r.database.Joins("Account").First(user, "Email = ? or Account.Username = ?", username, username)
-	if user.ID == 0 {
+	if user.ID == "" {
 		return nil, domain.NewNotFoundError("Usuario no encontrado")
 	}
 	return user, nil
@@ -105,7 +60,7 @@ func (r *UserGormRepository) Update(u *domain.User) (*domain.User, *domain.AppEr
 	return user, nil
 }
 
-func (r *UserGormRepository) Delete(id uint) (*domain.User, *domain.AppError) {
+func (r *UserGormRepository) Delete(id string) (*domain.User, *domain.AppError) {
 	user, err := r.Find(id)
 	if err != nil {
 		return nil, err
@@ -117,6 +72,5 @@ func (r *UserGormRepository) Delete(id uint) (*domain.User, *domain.AppError) {
 func NewUserGormRepository(database *gorm.DB) domain.IUserRepository {
 	database.AutoMigrate(&domain.User{})
 	r := UserGormRepository{database}
-	r.seed()
 	return &r
 }

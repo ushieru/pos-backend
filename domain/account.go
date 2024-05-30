@@ -14,5 +14,5 @@ type Account struct {
 	Password    string      `json:"-"`
 	IsActive    *bool       `json:"is_active"`
 	AccountType AccountType `json:"account_type"`
-	UserID      uint        `json:"user_id"`
+	UserID      string      `json:"user_id"`
 }

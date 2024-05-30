@@ -53,8 +53,8 @@ func (h *TicketHandler) listTickets(c *fiber.Ctx) error {
 // @Success 200 {object} domain.Ticket
 // @Failure default {object} domain.AppError
 func (h *TicketHandler) findTicket(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
-	ticket, err := h.service.Find(uint(id))
+	id := c.Params("id")
+	ticket, err := h.service.Find(id)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -86,8 +86,8 @@ func (h *TicketHandler) saveTicket(c *fiber.Ctx) error {
 // @Success 200 {array} domain.Ticket
 // @Failure default {object} domain.AppError
 func (h *TicketHandler) deleteTicket(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
-	ticket, err := h.service.Delete(uint(id))
+	id := c.Params("id")
+	ticket, err := h.service.Delete(id)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -105,9 +105,9 @@ func (h *TicketHandler) deleteTicket(c *fiber.Ctx) error {
 // @Failure default {object} domain.AppError
 func (h *TicketHandler) addProduct(c *fiber.Ctx) error {
 	user := c.Locals("session").(*domain.User)
-	id, _ := c.ParamsInt("id")
-	productId, _ := c.ParamsInt("productId")
-	ticket, err := h.service.AddProduct(uint(id), uint(productId), &user.Account)
+	id := c.Params("id")
+	productId := c.Params("productId")
+	ticket, err := h.service.AddProduct(id, productId, &user.Account)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -125,9 +125,9 @@ func (h *TicketHandler) addProduct(c *fiber.Ctx) error {
 // @Failure default {object} domain.AppError
 func (h *TicketHandler) deleteProduct(c *fiber.Ctx) error {
 	user := c.Locals("session").(*domain.User)
-	id, _ := c.ParamsInt("id")
-	productId, _ := c.ParamsInt("productId")
-	ticket, err := h.service.DeleteProduct(uint(id), uint(productId), &user.Account)
+	id := c.Params("id")
+	productId := c.Params("productId")
+	ticket, err := h.service.DeleteProduct(id, productId, &user.Account)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -144,8 +144,8 @@ func (h *TicketHandler) deleteProduct(c *fiber.Ctx) error {
 // @Failure default {object} domain.AppError
 func (h *TicketHandler) payTicket(c *fiber.Ctx) error {
 	user := c.Locals("session").(*domain.User)
-	id, _ := c.ParamsInt("id")
-	ticket, err := h.service.PayTicket(uint(id), &user.Account)
+	id := c.Params("id")
+	ticket, err := h.service.PayTicket(id, &user.Account)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -162,8 +162,8 @@ func (h *TicketHandler) payTicket(c *fiber.Ctx) error {
 // @Failure default {object} domain.AppError
 func (h *TicketHandler) orderTicket(c *fiber.Ctx) error {
 	user := c.Locals("session").(*domain.User)
-	id, _ := c.ParamsInt("id")
-	ticket, err := h.service.OrderTicketProducts(uint(id), &user.Account)
+	id := c.Params("id")
+	ticket, err := h.service.OrderTicketProducts(id, &user.Account)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}

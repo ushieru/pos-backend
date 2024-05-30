@@ -49,8 +49,8 @@ func (h *CategoryHandler) listCategories(c *fiber.Ctx) error {
 // @Success 200 {object} domain.Category
 // @Failure default {object} domain.AppError
 func (h *CategoryHandler) findCategory(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
-	categories, err := h.service.Find(uint(id))
+	id := c.Params("id")
+	categories, err := h.service.Find(id)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -87,12 +87,12 @@ func (h *CategoryHandler) saveCategory(c *fiber.Ctx) error {
 // @Success 200 {object} domain.Category
 // @Failure default {object} domain.AppError
 func (h *CategoryHandler) updateCategory(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+	id := c.Params("id")
 	dto := new(dto.UpsertCategoryRequest)
 	if err := c.BodyParser(dto); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Bad Request")
 	}
-	category, err := h.service.Update(uint(id), dto)
+	category, err := h.service.Update(id, dto)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -108,8 +108,8 @@ func (h *CategoryHandler) updateCategory(c *fiber.Ctx) error {
 // @Success 200 {object} domain.Category
 // @Failure default {object} domain.AppError
 func (h *CategoryHandler) deleteCategory(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
-	category, err := h.service.Delete(uint(id))
+	id := c.Params("id")
+	category, err := h.service.Delete(id)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}

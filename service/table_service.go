@@ -7,11 +7,11 @@ import (
 
 type ITableService interface {
 	List() ([]domain.Table, *domain.AppError)
-	Find(id uint) (*domain.Table, *domain.AppError)
+	Find(id string) (*domain.Table, *domain.AppError)
 	Save(dto *dto.CreateTableRequest) (*domain.Table, *domain.AppError)
-	Update(id uint, dto *dto.UpdateTableRequest) (*domain.Table, *domain.AppError)
-	Delete(id uint) (*domain.Table, *domain.AppError)
-	CreateTicket(tableId uint, account *domain.Account) (*domain.Table, *domain.AppError)
+	Update(id string, dto *dto.UpdateTableRequest) (*domain.Table, *domain.AppError)
+	Delete(id string) (*domain.Table, *domain.AppError)
+	CreateTicket(tableId string, account *domain.Account) (*domain.Table, *domain.AppError)
 }
 
 type TableService struct {
@@ -22,7 +22,7 @@ func (s *TableService) List() ([]domain.Table, *domain.AppError) {
 	return s.repository.List()
 }
 
-func (s *TableService) Find(id uint) (*domain.Table, *domain.AppError) {
+func (s *TableService) Find(id string) (*domain.Table, *domain.AppError) {
 	return s.repository.Find(id)
 }
 
@@ -34,7 +34,7 @@ func (s *TableService) Save(dto *dto.CreateTableRequest) (*domain.Table, *domain
 	return s.repository.Save(table)
 }
 
-func (s *TableService) Update(id uint, dto *dto.UpdateTableRequest) (*domain.Table, *domain.AppError) {
+func (s *TableService) Update(id string, dto *dto.UpdateTableRequest) (*domain.Table, *domain.AppError) {
 	if err := dto.Validate(); err != nil {
 		return nil, err
 	}
@@ -47,10 +47,10 @@ func (s *TableService) Update(id uint, dto *dto.UpdateTableRequest) (*domain.Tab
 	return s.repository.Update(table)
 }
 
-func (s *TableService) Delete(id uint) (*domain.Table, *domain.AppError) {
+func (s *TableService) Delete(id string) (*domain.Table, *domain.AppError) {
 	return s.repository.Delete(id)
 }
-func (s *TableService) CreateTicket(tableId uint, account *domain.Account) (*domain.Table, *domain.AppError) {
+func (s *TableService) CreateTicket(tableId string, account *domain.Account) (*domain.Table, *domain.AppError) {
 	table := &domain.Table{
 		Model: domain.Model{ID: tableId},
 	}

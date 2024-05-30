@@ -30,7 +30,7 @@ func (s *AuthMiddleware) checkJWT(c *fiber.Ctx) error {
 func (s *AuthMiddleware) jwtToSession(c *fiber.Ctx) error {
 	jwtToken := c.Locals("jwtToken").(*jwt.Token)
 	claims := jwtToken.Claims.(jwt.MapClaims)
-	userId := uint(claims["SessionParamUserId"].(float64))
+	userId := claims["SessionParamUserId"].(string)
 	user, err := s.service.Find(userId)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)

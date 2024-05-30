@@ -46,8 +46,8 @@ func (h *TableHandler) listTables(c *fiber.Ctx) error {
 // @Success 200 {object} domain.Table
 // @Failure default {object} domain.AppError
 func (h *TableHandler) findTable(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
-	table, err := h.service.Find(uint(id))
+	id := c.Params("id")
+	table, err := h.service.Find(id)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -84,12 +84,12 @@ func (h *TableHandler) saveTable(c *fiber.Ctx) error {
 // @Success 200 {array} domain.Table
 // @Failure default {object} domain.AppError
 func (h *TableHandler) updateTable(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+	id := c.Params("id")
 	dto := new(dto.UpdateTableRequest)
 	if err := c.BodyParser(dto); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Bad Request")
 	}
-	table, err := h.service.Update(uint(id), dto)
+	table, err := h.service.Update(id, dto)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -105,8 +105,8 @@ func (h *TableHandler) updateTable(c *fiber.Ctx) error {
 // @Success 200 {array} domain.Table
 // @Failure default {object} domain.AppError
 func (h *TableHandler) deleteTable(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
-	table, err := h.service.Delete(uint(id))
+	id := c.Params("id")
+	table, err := h.service.Delete(id)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
@@ -122,9 +122,9 @@ func (h *TableHandler) deleteTable(c *fiber.Ctx) error {
 // @Success 200 {array} domain.Table
 // @Failure default {object} domain.AppError
 func (h *TableHandler) saveTableTicket(c *fiber.Ctx) error {
-	id, _ := c.ParamsInt("id")
+	id := c.Params("id")
 	user := c.Locals("session").(*domain.User)
-	table, err := h.service.CreateTicket(uint(id), &user.Account)
+	table, err := h.service.CreateTicket(id, &user.Account)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}

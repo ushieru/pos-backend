@@ -8,10 +8,10 @@ import (
 
 type ICategoryService interface {
 	List(*dto.SearchCriteriaQueryRequest, bool) ([]domain.Category, *domain.AppError)
-	Find(id uint) (*domain.Category, *domain.AppError)
+	Find(id string) (*domain.Category, *domain.AppError)
 	Save(dto *dto.UpsertCategoryRequest) (*domain.Category, *domain.AppError)
-	Update(id uint, dto *dto.UpsertCategoryRequest) (*domain.Category, *domain.AppError)
-	Delete(id uint) (*domain.Category, *domain.AppError)
+	Update(id string, dto *dto.UpsertCategoryRequest) (*domain.Category, *domain.AppError)
+	Delete(id string) (*domain.Category, *domain.AppError)
 }
 
 type CategoryService struct {
@@ -25,7 +25,7 @@ func (c *CategoryService) List(dto *dto.SearchCriteriaQueryRequest, withProducts
 	return c.repository.List(criteria, withProducts)
 }
 
-func (c *CategoryService) Find(id uint) (*domain.Category, *domain.AppError) {
+func (c *CategoryService) Find(id string) (*domain.Category, *domain.AppError) {
 	return c.repository.Find(id)
 }
 
@@ -38,7 +38,7 @@ func (c *CategoryService) Save(dto *dto.UpsertCategoryRequest) (*domain.Category
 
 }
 
-func (c *CategoryService) Update(id uint, dto *dto.UpsertCategoryRequest) (*domain.Category, *domain.AppError) {
+func (c *CategoryService) Update(id string, dto *dto.UpsertCategoryRequest) (*domain.Category, *domain.AppError) {
 	if err := dto.Validate(); err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (c *CategoryService) Update(id uint, dto *dto.UpsertCategoryRequest) (*doma
 	return c.repository.Update(category)
 }
 
-func (c *CategoryService) Delete(id uint) (*domain.Category, *domain.AppError) {
+func (c *CategoryService) Delete(id string) (*domain.Category, *domain.AppError) {
 	category, err := c.repository.Find(id)
 	if err != nil {
 		return nil, err
