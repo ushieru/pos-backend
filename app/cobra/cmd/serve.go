@@ -59,6 +59,7 @@ var ServeCmd = &cobra.Command{
 				handler.NewTableHandler,
 				handler.NewNotFoundHandler,
 			),
+			fx.NopLogger,
 		).Run()
 	},
 }
