@@ -58,7 +58,7 @@ func (r *TableGormRepository) Find(id string) (*domain.Table, *domain.AppError) 
 	r.database.
 		Preload("Account").
 		Preload("Ticket").
-		First(table, id)
+		First(table, "id = ?", id)
 	if table.ID == "" {
 		return nil, domain.NewNotFoundError("Mesa no encontrada")
 	}

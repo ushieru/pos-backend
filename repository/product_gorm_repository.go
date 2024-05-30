@@ -48,7 +48,7 @@ func (r *ProductGormRepository) Save(product *domain.Product) (*domain.Product, 
 
 func (r *ProductGormRepository) Find(id string) (*domain.Product, *domain.AppError) {
 	product := new(domain.Product)
-	r.database.Preload("Categories").First(product, id)
+	r.database.Preload("Categories").First(product, "id = ?", id)
 	if product.ID == "" {
 		return nil, domain.NewNotFoundError("Producto no encontrado")
 	}

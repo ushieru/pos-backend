@@ -64,7 +64,7 @@ func (r *TicketGormRepository) Find(id string) (*domain.Ticket, *domain.AppError
 	r.database.
 		Preload("Account").
 		Preload("TicketProducts").
-		First(ticket, id)
+		First(ticket, "id = ?", id)
 	if ticket.ID == "" {
 		return nil, domain.NewNotFoundError("Ticket no encontrado")
 	}

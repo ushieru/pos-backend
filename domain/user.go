@@ -11,7 +11,7 @@ type IUserRepository interface {
 	List() ([]User, *AppError)
 	Save(*User) (*User, *AppError)
 	Find(id string) (*User, *AppError)
-	FindByUserOrEmail(username string) (*User, *AppError)
+	FindByUserOrEmailAndPassword(username, password string) (*User, *AppError)
 	Update(*User) (*User, *AppError)
-	Delete(id string) (*User, *AppError)
+	Delete(*User) (*User, *AppError)
 }

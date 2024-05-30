@@ -1,12 +1,13 @@
 package service
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/ushieru/pos/domain"
 	"github.com/ushieru/pos/dto"
-	"github.com/ushieru/pos/utils"
 )
 
 type IUserService interface {
@@ -31,13 +32,12 @@ func (s *UserService) Find(id string) (*domain.User, *domain.AppError) {
 }
 
 func (s *UserService) AuthWithCredentials(username, password, secret string) (*dto.AuthUserResponse, *domain.AppError) {
-	user, err := s.repository.FindByUserOrEmail(username)
+	h := sha256.New()
+	h.Write([]byte(password))
+	hashPassword := hex.EncodeToString(h.Sum(nil))
+	user, err := s.repository.FindByUserOrEmailAndPassword(username, hashPassword)
 	if err != nil {
 		return nil, err
-	}
-	matchPassword := utils.CheckPasswordHash(password, user.Account.Password)
-	if !matchPassword {
-		return nil, domain.NewNotFoundError("Credenciales incorrectas")
 	}
 	if !*user.Account.IsActive {
 		return nil, domain.NewUnauthorizedError("Usuario desactivado consulte al administrador")
@@ -65,7 +65,9 @@ func (s *UserService) Save(dto *dto.CreateUserRequest, a *domain.Account) (*doma
 		return nil, err
 	}
 	isActive := true
-	hashPassword, _ := utils.HashPassword(dto.Password)
+	h := sha256.New()
+	h.Write([]byte(dto.Password))
+	hashPassword := hex.EncodeToString(h.Sum(nil))
 	user := &domain.User{
 		Name:  dto.Name,
 		Email: dto.Email,
@@ -89,21 +91,15 @@ func (s *UserService) Update(id string, dto *dto.UpdateUserRequest, a *domain.Ac
 	if err := dto.Validate(); err != nil {
 		return nil, err
 	}
-	// TODO: update password ¿?
-	hashPassword, _ := utils.HashPassword(dto.Password)
-	user := &domain.User{
-		Model: domain.Model{
-			ID: id,
-		},
-		Name:  dto.Name,
-		Email: dto.Email,
-		Account: domain.Account{
-			Username:    dto.Username,
-			Password:    hashPassword,
-			IsActive:    &dto.IsActive,
-			AccountType: domain.AccountType(dto.AccountType),
-		},
+	user, err := s.Find(id)
+	if err != nil {
+		return nil, err
 	}
+	user.Name = dto.Name
+	user.Email = dto.Email
+	user.Account.Username = dto.Username
+	user.Account.IsActive = &dto.IsActive
+	user.Account.AccountType = domain.AccountType(dto.AccountType)
 	return s.repository.Update(user)
 }
 
@@ -114,7 +110,11 @@ func (s *UserService) Delete(id string, a *domain.Account) (*domain.User, *domai
 	if id == a.ID {
 		return nil, domain.NewUnauthorizedError("No puedes eliminarte a ti mismo")
 	}
-	return s.repository.Delete(id)
+	user, err := s.Find(id)
+	if err != nil {
+		return nil, err
+	}
+	return s.repository.Delete(user)
 }
 
 func (s *UserService) seed() {
