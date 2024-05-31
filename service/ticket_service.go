@@ -50,15 +50,14 @@ func (s *TicketService) Delete(id string) (*domain.Ticket, *domain.AppError) {
 	if len(ticket.TicketProducts) != 0 {
 		return nil, domain.NewConflictError("Ticket no esta vacio")
 	}
-	table, err := s.tableRepository.FindByTicketId(id)
-	if err != nil {
-		return nil, err
-	}
-	if _, err := s.tableRepository.UpdateAccountRelation(table, nil); err != nil {
-		return nil, err
-	}
-	if _, err := s.tableRepository.UpdateTicketRelation(table, nil); err != nil {
-		return nil, err
+	table, _ := s.tableRepository.FindByTicketId(id)
+	if table != nil {
+		if _, err := s.tableRepository.UpdateAccountRelation(table, nil); err != nil {
+			return nil, err
+		}
+		if _, err := s.tableRepository.UpdateTicketRelation(table, nil); err != nil {
+			return nil, err
+		}
 	}
 	return s.ticketRepository.Delete(ticket)
 }
@@ -111,16 +110,16 @@ func (s *TicketService) PayTicket(ticketId string, a *domain.Account) (*domain.T
 	if len(ticket.TicketProducts) == 0 {
 		return nil, domain.NewConflictError("Ticket vacio")
 	}
-	table, err := s.tableRepository.FindByTicketId(ticketId)
-	if err != nil {
-		return nil, err
+	table, _ := s.tableRepository.FindByTicketId(ticketId)
+	if table != nil {
+		if _, err := s.tableRepository.UpdateAccountRelation(table, nil); err != nil {
+			return nil, err
+		}
+		if _, err := s.tableRepository.UpdateTicketRelation(table, nil); err != nil {
+			return nil, err
+		}
 	}
-	if _, err := s.tableRepository.UpdateAccountRelation(table, nil); err != nil {
-		return nil, err
-	}
-	if _, err := s.tableRepository.UpdateTicketRelation(table, nil); err != nil {
-		return nil, err
-	}
+	s.ticketRepository.OrderTicketProductsByTicket(ticket)
 	return s.ticketRepository.PayTicket(ticket)
 }
 
@@ -132,9 +131,14 @@ func (s *TicketService) OrderTicketProducts(id string, a *domain.Account) (*doma
 	return s.ticketRepository.OrderTicketProductsByTicket(ticket)
 }
 
-func NewTicketService(ticketRepository domain.ITicketRepository, tableRepository domain.ITableRepository) *TicketService {
+func NewTicketService(
+	ticketRepository domain.ITicketRepository,
+	tableRepository domain.ITableRepository,
+	productRepository domain.IProductRepository,
+) *TicketService {
 	return &TicketService{
-		ticketRepository: ticketRepository,
-		tableRepository:  tableRepository,
+		ticketRepository,
+		tableRepository,
+		productRepository,
 	}
 }
