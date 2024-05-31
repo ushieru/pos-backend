@@ -4,11 +4,13 @@ type FilterOperator string
 
 const (
 	EQUAL        FilterOperator = "="
-	NOT_EQUAL                   = "<>"
-	GT                          = ">"
-	LT                          = "<"
-	CONTAINS                    = "CONTAINS"
-	NOT_CONTAINS                = "NOT_CONTAINS"
+	NOT_EQUAL    FilterOperator = "<>"
+	GT           FilterOperator = ">"
+	GTE          FilterOperator = ">="
+	LT           FilterOperator = "<"
+	LTE          FilterOperator = "<="
+	CONTAINS     FilterOperator = "CONTAINS"
+	NOT_CONTAINS FilterOperator = "NOT_CONTAINS"
 )
 
 type Filter struct {
