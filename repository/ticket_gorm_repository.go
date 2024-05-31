@@ -47,7 +47,7 @@ func (r *TicketGormRepository) Update(ticket *domain.Ticket) (*domain.Ticket, *d
 func (r *TicketGormRepository) OrderTicketProductsByTicket(ticket *domain.Ticket) (*domain.Ticket, *domain.AppError) {
 	r.database.
 		Model(&domain.TicketProduct{}).
-		Where("ticket_id = ?", ticket.ID).
+		Where("ticket_id = ? AND status = ?", ticket.ID, "Added").
 		Update("status", domain.Ordered)
 	updatedTicket, _ := r.Find(ticket.ID)
 	return updatedTicket, nil
