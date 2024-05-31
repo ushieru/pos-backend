@@ -104,8 +104,10 @@ func (s *TicketService) DeleteProduct(ticketId, productId string, a *domain.Acco
 	if err != nil {
 		return nil, err
 	}
-	if ticket.AccountID != a.ID {
-		return nil, domain.NewUnauthorizedError("Este ticket no es tuyo")
+	if a.AccountType != domain.Admin {
+		if ticket.AccountID != a.ID {
+			return nil, domain.NewUnauthorizedError("Este ticket no es tuyo")
+		}
 	}
 	if ticket.TicketStatus != domain.TicketOpen {
 		return nil, domain.NewConflictError("Este ticket no esta abierto")
