@@ -41,7 +41,7 @@ func NewFiberApp(config *FiberAppConfig) *FiberApp {
 	return &FiberApp{app, *config}
 }
 
-func (f *FiberApp) Init(services *FiberAppServices) error {
+func (f *FiberApp) Init(services *FiberAppServices) {
 	f.App.Use(cors.New())
 	f.App.Use(func(c *fiber.Ctx) error {
 		c.Locals("secret", f.Config.Secret)
@@ -58,7 +58,6 @@ func (f *FiberApp) Init(services *FiberAppServices) error {
 	handler.NewNotFoundHandler(f.App)
 	f.App.Static("/", "public")
 	f.App.Listen(fmt.Sprintf(":%d", f.Config.Port))
-	return nil
 }
 
 func (f *FiberApp) Stop() error {
