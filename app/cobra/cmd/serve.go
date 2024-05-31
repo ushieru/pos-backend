@@ -28,7 +28,7 @@ var ServeCmd = &cobra.Command{
 		categoryService := service.NewCategoryService(categoryRepository)
 		productService := service.NewProductService(productRepository, categoryRepository)
 		tableService := service.NewTableService(tableRepository)
-		ticketService := service.NewTicketService(ticketRepository, tableRepository)
+		ticketService := service.NewTicketService(ticketRepository, tableRepository, productRepository)
 
 		fiberApp.Init(&fiber_app.FiberAppServices{
 			UserService:     userService,
