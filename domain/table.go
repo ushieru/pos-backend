@@ -15,7 +15,10 @@ type ITableRepository interface {
 	List() ([]Table, *AppError)
 	Save(*Table) (*Table, *AppError)
 	Find(id string) (*Table, *AppError)
+	FindByTicketId(id string) (*Table, *AppError)
+	UpdateAccountRelation(*Table, *Account) (*Table, *AppError)
+	UpdateTicketRelation(*Table, *Ticket) (*Table, *AppError)
 	Update(*Table) (*Table, *AppError)
-	Delete(id string) (*Table, *AppError)
+	Delete(*Table) (*Table, *AppError)
 	CreateTicket(*Table, *Account) (*Table, *AppError)
 }

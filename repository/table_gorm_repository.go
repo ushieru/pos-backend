@@ -65,6 +65,44 @@ func (r *TableGormRepository) Find(id string) (*domain.Table, *domain.AppError) 
 	return table, nil
 }
 
+func (r *TableGormRepository) FindByTicketId(id string) (*domain.Table, *domain.AppError) {
+	table := new(domain.Table)
+	r.database.
+		Preload("Account").
+		Preload("Ticket").
+		First(table, "ticket_id = ?", id)
+	if table.ID == "" {
+		return nil, domain.NewNotFoundError("Mesa no encontrada")
+	}
+	return table, nil
+}
+
+func (r *TableGormRepository) UpdateAccountRelation(table *domain.Table, account *domain.Account) (*domain.Table, *domain.AppError) {
+	if account == nil {
+		r.database.Model(&table).Association("Account").Clear()
+	} else {
+		r.database.Model(&table).Association("Account").Replace(account)
+	}
+	table, err := r.Find(table.ID)
+	if err != nil {
+		return nil, err
+	}
+	return table, nil
+}
+
+func (r *TableGormRepository) UpdateTicketRelation(table *domain.Table, ticket *domain.Ticket) (*domain.Table, *domain.AppError) {
+	if ticket == nil {
+		r.database.Model(&table).Association("Ticket").Clear()
+	} else {
+		r.database.Model(&table).Association("Ticket").Replace(ticket)
+	}
+	table, err := r.Find(table.ID)
+	if err != nil {
+		return nil, err
+	}
+	return table, nil
+}
+
 func (r *TableGormRepository) Update(t *domain.Table) (*domain.Table, *domain.AppError) {
 	table, err := r.Find(t.ID)
 	if err != nil {
@@ -72,7 +110,7 @@ func (r *TableGormRepository) Update(t *domain.Table) (*domain.Table, *domain.Ap
 	}
 	tableFind := new(domain.Table)
 	r.database.First(tableFind, "Pos_X = ? AND Pos_Y = ?", t.PosX, t.PosY)
-	if tableFind.ID != "0" && tableFind.ID != t.ID {
+	if tableFind.ID != "" && tableFind.ID != t.ID {
 		return nil, domain.NewConflictError("Posicion ocupada")
 	}
 	table.Name = t.Name
@@ -82,11 +120,7 @@ func (r *TableGormRepository) Update(t *domain.Table) (*domain.Table, *domain.Ap
 	return table, nil
 }
 
-func (r *TableGormRepository) Delete(id string) (*domain.Table, *domain.AppError) {
-	table, err := r.Find(id)
-	if err != nil {
-		return nil, err
-	}
+func (r *TableGormRepository) Delete(table *domain.Table) (*domain.Table, *domain.AppError) {
 	r.database.Delete(table)
 	return table, nil
 }

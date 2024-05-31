@@ -48,7 +48,11 @@ func (s *TableService) Update(id string, dto *dto.UpdateTableRequest) (*domain.T
 }
 
 func (s *TableService) Delete(id string) (*domain.Table, *domain.AppError) {
-	return s.repository.Delete(id)
+	table, err := s.Find(id)
+	if err != nil {
+		return nil, err
+	}
+	return s.repository.Delete(table)
 }
 func (s *TableService) CreateTicket(tableId string, account *domain.Account) (*domain.Table, *domain.AppError) {
 	table := &domain.Table{
