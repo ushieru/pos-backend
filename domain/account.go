@@ -3,9 +3,11 @@ package domain
 type AccountType string
 
 const (
-	Admin   AccountType = "admin"
-	Cashier AccountType = "cashier"
-	Waiter  AccountType = "waiter"
+	Admin     AccountType = "admin"
+	Cashier   AccountType = "cashier"
+	Waiter    AccountType = "waiter"
+	Cook      AccountType = "cook"
+	Bartender AccountType = "bartender"
 )
 
 type Account struct {
