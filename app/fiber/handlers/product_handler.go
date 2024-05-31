@@ -2,13 +2,14 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
-	fiber_app "github.com/ushieru/pos/app/fiber"
+	"github.com/ushieru/pos/app/fiber/middlewares"
 	"github.com/ushieru/pos/dto"
 	"github.com/ushieru/pos/service"
 )
 
 type ProductHandler struct {
-	service service.IProductService
+	service    service.IProductService
+	middleware *middlewares.AuthMiddleware
 }
 
 func (h *ProductHandler) setupRoutes(app *fiber.App) {
@@ -16,6 +17,7 @@ func (h *ProductHandler) setupRoutes(app *fiber.App) {
 	products.Get("/", h.listProducts)
 	products.Get("/categories/:id", h.listProductsByCategoryId)
 	products.Get("/:id", h.findProduct)
+	products.Use(h.middleware.CheckJWT)
 	products.Post("/", h.saveProduct)
 	products.Post("/:id/categories/:categoryId", h.addCategory)
 	products.Delete("/:id/categories/:categoryId", h.deleteCategory)
@@ -24,7 +26,6 @@ func (h *ProductHandler) setupRoutes(app *fiber.App) {
 }
 
 // @Router /api/products [GET]
-// @Security ApiKeyAuth
 // @Param criteria query dto.SearchCriteriaQueryRequest false "Criteria filter"
 // @Tags Product
 // @Accepts json
@@ -45,7 +46,6 @@ func (h *ProductHandler) listProducts(c *fiber.Ctx) error {
 }
 
 // @Router /api/products/categories/{id} [GET]
-// @Security ApiKeyAuth
 // @Param id path int true "Category Id"
 // @Tags Product
 // @Accepts json
@@ -66,7 +66,6 @@ func (h *ProductHandler) listProductsByCategoryId(c *fiber.Ctx) error {
 }
 
 // @Router /api/products/{id} [GET]
-// @Security ApiKeyAuth
 // @Param id path int true "Product ID"
 // @Tags Product
 // @Accepts json
@@ -179,8 +178,8 @@ func (h *ProductHandler) deleteCategory(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
-func NewProductHandler(service service.IProductService, fa *fiber_app.FiberApp) *ProductHandler {
-	ph := ProductHandler{service}
-	ph.setupRoutes(fa.App)
+func NewProductHandler(service service.IProductService, middleware *middlewares.AuthMiddleware, app *fiber.App) *ProductHandler {
+	ph := ProductHandler{service, middleware}
+	ph.setupRoutes(app)
 	return &ph
 }

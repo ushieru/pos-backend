@@ -2,26 +2,27 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
-	fiber_app "github.com/ushieru/pos/app/fiber"
+	"github.com/ushieru/pos/app/fiber/middlewares"
 	"github.com/ushieru/pos/dto"
 	"github.com/ushieru/pos/service"
 )
 
 type CategoryHandler struct {
-	service service.ICategoryService
+	service    service.ICategoryService
+	middleware *middlewares.AuthMiddleware
 }
 
 func (h *CategoryHandler) setupRoutes(app *fiber.App) {
 	categories := app.Group("/api/categories")
 	categories.Get("/", h.listCategories)
 	categories.Get("/:id", h.findCategory)
+	categories.Use(h.middleware.CheckJWT)
 	categories.Post("/", h.saveCategory)
 	categories.Put("/:id", h.updateCategory)
 	categories.Delete("/:id", h.deleteCategory)
 }
 
 // @Router /api/categories [GET]
-// @Security ApiKeyAuth
 // @Tags Category
 // @Accepts json
 // @Produce json
@@ -41,7 +42,6 @@ func (h *CategoryHandler) listCategories(c *fiber.Ctx) error {
 }
 
 // @Router /api/categories/{id} [GET]
-// @Security ApiKeyAuth
 // @Param id path int true "Category ID"
 // @Tags Category
 // @Accepts json
@@ -116,8 +116,8 @@ func (h *CategoryHandler) deleteCategory(c *fiber.Ctx) error {
 	return c.JSON(category)
 }
 
-func NewCategoryHandler(service service.ICategoryService, fa *fiber_app.FiberApp) *CategoryHandler {
-	ch := CategoryHandler{service}
-	ch.setupRoutes(fa.App)
+func NewCategoryHandler(service service.ICategoryService, middleware *middlewares.AuthMiddleware, app *fiber.App) *CategoryHandler {
+	ch := CategoryHandler{service, middleware}
+	ch.setupRoutes(app)
 	return &ch
 }

@@ -6,8 +6,11 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/ushieru/pos/app/fiber/handlers"
+	"github.com/ushieru/pos/app/fiber/middlewares"
 	docs "github.com/ushieru/pos/app/fiber/swagger"
 	"github.com/ushieru/pos/domain"
+	"github.com/ushieru/pos/service"
 )
 
 // @Title Point Of Sale API
@@ -38,14 +41,23 @@ func NewFiberApp(config *FiberAppConfig) *FiberApp {
 	return &FiberApp{app, *config}
 }
 
-func Init(f *FiberApp) error {
+func (f *FiberApp) Init(services *FiberAppServices) error {
 	f.App.Use(cors.New())
 	f.App.Use(func(c *fiber.Ctx) error {
-		c.Locals("port", f.Config.Port)
 		c.Locals("secret", f.Config.Secret)
 		return c.Next()
 	})
+	authMiddleware := middlewares.NewAuthMiddleware(services.UserService)
+	handler.NewPingHandler(f.App)
+	handler.NewAuthHandler(services.UserService, f.App)
+	handler.NewUserHandler(services.UserService, authMiddleware, f.App)
+	handler.NewCategoryHandler(services.CategoryService, authMiddleware, f.App)
+	handler.NewProductHandler(services.ProductService, authMiddleware, f.App)
+	handler.NewTicketHandler(services.TicketService, authMiddleware, f.App)
+	handler.NewTableHandler(services.TableService, authMiddleware, f.App)
+	handler.NewNotFoundHandler(f.App)
 	f.App.Static("/", "public")
+	f.App.Listen(fmt.Sprintf(":%d", f.Config.Port))
 	return nil
 }
 
@@ -55,6 +67,14 @@ func (f *FiberApp) Stop() error {
 
 func NewDefaultFiberAppConfig() *FiberAppConfig {
 	return &FiberAppConfig{DatabaseName: "pos.db", Port: 8080, Secret: "supersecretword"}
+}
+
+type FiberAppServices struct {
+	UserService     *service.UserService
+	CategoryService *service.CategoryService
+	ProductService  *service.ProductService
+	TableService    *service.TableService
+	TicketService   *service.TicketService
 }
 
 type FiberApp struct {

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
-	fiber_app "github.com/ushieru/pos/app/fiber"
 	"github.com/ushieru/pos/app/fiber/middlewares"
 	"github.com/ushieru/pos/domain"
 	"github.com/ushieru/pos/dto"
@@ -10,12 +9,14 @@ import (
 )
 
 type UserHandler struct {
-	service service.IUserService
+	service    service.IUserService
+	middleware *middlewares.AuthMiddleware
 }
 
 func (h *UserHandler) setupRoutes(app *fiber.App) {
 	middlewareJustAdmins := middlewares.NewCheckRollMiddleware(domain.Admin)
 	users := app.Group("/api/users")
+	users.Use(h.middleware.CheckJWT)
 	users.Get("/", h.listUsers)
 	users.Get("/:id", h.findUser)
 	users.Post("/", middlewareJustAdmins.CheckRol, h.saveUser)
@@ -117,8 +118,8 @@ func (h *UserHandler) deleteUser(c *fiber.Ctx) error {
 	return c.JSON(user)
 }
 
-func NewUserHandler(service service.IUserService, fa *fiber_app.FiberApp) *UserHandler {
-	uh := UserHandler{service}
-	uh.setupRoutes(fa.App)
+func NewUserHandler(service service.IUserService, middleware *middlewares.AuthMiddleware, app *fiber.App) *UserHandler {
+	uh := UserHandler{service, middleware}
+	uh.setupRoutes(app)
 	return &uh
 }

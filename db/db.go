@@ -2,14 +2,13 @@ package db
 
 import (
 	"github.com/glebarez/sqlite"
-	fiber_app "github.com/ushieru/pos/app/fiber"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
-func GetDB(f *fiber_app.FiberApp) *gorm.DB {
+func GetDB(loggerLevel, connection string) *gorm.DB {
 	var databaseLogger logger.Interface
-	switch f.Config.DatabaseLogger {
+	switch loggerLevel {
 	case "silent":
 		databaseLogger = logger.Default.LogMode(logger.Silent)
 	case "info":
@@ -19,7 +18,7 @@ func GetDB(f *fiber_app.FiberApp) *gorm.DB {
 	default:
 		databaseLogger = logger.Default.LogMode(logger.Silent)
 	}
-	database, err := gorm.Open(sqlite.Open(f.Config.DatabaseName),
+	database, err := gorm.Open(sqlite.Open(connection),
 		&gorm.Config{Logger: databaseLogger},
 	)
 	if err != nil {

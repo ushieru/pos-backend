@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/ushieru/pos/app/fiber"
 	"github.com/ushieru/pos/service"
 )
 
@@ -49,8 +48,8 @@ func (h *AuthHandler) auth(c *fiber.Ctx) error {
 	return c.JSON(authResponse)
 }
 
-func NewAuthHandler(service service.IUserService, fa *fiber_app.FiberApp) *AuthHandler {
+func NewAuthHandler(service service.IUserService, app *fiber.App) *AuthHandler {
 	ah := AuthHandler{service}
-	ah.setupRoutes(fa.App)
+	ah.setupRoutes(app)
 	return &ah
 }

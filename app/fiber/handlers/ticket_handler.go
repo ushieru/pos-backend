@@ -2,20 +2,22 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
-	fiber_app "github.com/ushieru/pos/app/fiber"
+	"github.com/ushieru/pos/app/fiber/middlewares"
 	"github.com/ushieru/pos/domain"
 	"github.com/ushieru/pos/dto"
 	"github.com/ushieru/pos/service"
 )
 
 type TicketHandler struct {
-	service service.ITicketService
+	service    service.ITicketService
+	middleware *middlewares.AuthMiddleware
 }
 
 func (h *TicketHandler) setupRoutes(app *fiber.App) {
 	tickets := app.Group("/api/tickets")
 	tickets.Get("/", h.listTickets)
 	tickets.Get("/:id", h.findTicket)
+	tickets.Use(h.middleware.CheckJWT)
 	tickets.Post("/", h.saveTicket)
 	tickets.Delete("/:id", h.deleteTicket)
 	tickets.Post("/:id/products/:productId", h.addProduct)
@@ -170,8 +172,8 @@ func (h *TicketHandler) orderTicket(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
-func NewTicketHandler(service service.ITicketService, fa *fiber_app.FiberApp) *TicketHandler {
-	th := TicketHandler{service}
-	th.setupRoutes(fa.App)
+func NewTicketHandler(service service.ITicketService, middleware *middlewares.AuthMiddleware, app *fiber.App) *TicketHandler {
+	th := TicketHandler{service, middleware}
+	th.setupRoutes(app)
 	return &th
 }

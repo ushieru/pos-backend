@@ -2,20 +2,22 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
-	fiber_app "github.com/ushieru/pos/app/fiber"
+	"github.com/ushieru/pos/app/fiber/middlewares"
 	"github.com/ushieru/pos/domain"
 	"github.com/ushieru/pos/dto"
 	"github.com/ushieru/pos/service"
 )
 
 type TableHandler struct {
-	service service.ITableService
+	service    service.ITableService
+	middleware *middlewares.AuthMiddleware
 }
 
 func (h *TableHandler) setupRoutes(app *fiber.App) {
 	tables := app.Group("/api/tables")
 	tables.Get("/", h.listTables)
 	tables.Get("/:id", h.findTable)
+	tables.Use(h.middleware.CheckJWT)
 	tables.Post("/", h.saveTable)
 	tables.Post("/:id/tickets", h.saveTableTicket)
 	tables.Put("/:id", h.updateTable)
@@ -131,8 +133,8 @@ func (h *TableHandler) saveTableTicket(c *fiber.Ctx) error {
 	return c.JSON(table)
 }
 
-func NewTableHandler(service service.ITableService, fa *fiber_app.FiberApp) *TableHandler {
-	th := TableHandler{service}
-	th.setupRoutes(fa.App)
+func NewTableHandler(service service.ITableService, middleware *middlewares.AuthMiddleware, app *fiber.App) *TableHandler {
+	th := TableHandler{service, middleware}
+	th.setupRoutes(app)
 	return &th
 }
