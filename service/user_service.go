@@ -126,13 +126,47 @@ func (s *UserService) seed() {
 		return
 	}
 	adminMooc := &domain.Account{AccountType: domain.Admin}
-	s.Save(&dto.CreateUserRequest{
-		Name:        "admin",
-		Email:       "admin@email.com",
-		Username:    "admin",
-		Password:    "admin",
-		AccountType: "admin",
-	}, adminMooc)
+	dtoUsers := []dto.CreateUserRequest{
+		{
+			Name:        "admin",
+			Email:       "admin@email.com",
+			Username:    "admin",
+			Password:    "admin",
+			AccountType: "admin",
+		},
+		{
+			Name:        "cashier",
+			Email:       "cashier@email.com",
+			Username:    "cashier",
+			Password:    "cashier",
+			AccountType: "cashier",
+		},
+		{
+			Name:        "waiter",
+			Email:       "waiter@email.com",
+			Username:    "waiter",
+			Password:    "waiter",
+			AccountType: "waiter",
+		},
+		{
+			Name:        "cook",
+			Email:       "cook@email.com",
+			Username:    "cook",
+			Password:    "cook",
+			AccountType: "cook",
+		},
+		{
+			Name:        "bartender",
+			Email:       "bartender@email.com",
+			Username:    "bartender",
+			Password:    "bartender",
+			AccountType: "bartender",
+		},
+	}
+
+	for _, dto := range dtoUsers {
+		s.Save(&dto, adminMooc)
+	}
 }
 
 func NewUserService(repository domain.IUserRepository) *UserService {
