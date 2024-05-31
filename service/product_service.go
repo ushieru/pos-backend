@@ -37,7 +37,7 @@ func (s *ProductService) ListByCategoryId(id string, dto *dto.SearchCriteriaQuer
 }
 
 func (s *ProductService) Find(id string) (*domain.Product, *domain.AppError) {
-	return s.productRepository.Find(id)
+	return s.productRepository.Find(id, nil)
 }
 
 func (s *ProductService) Save(dto *dto.UpsertProductRequest) (*domain.Product, *domain.AppError) {
@@ -69,7 +69,7 @@ func (s *ProductService) Delete(id string) (*domain.Product, *domain.AppError) {
 }
 
 func (s *ProductService) AddCategory(productId, categoryId string) (*domain.Product, *domain.AppError) {
-	product, err := s.productRepository.Find(productId)
+	product, err := s.productRepository.Find(productId, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (s *ProductService) AddCategory(productId, categoryId string) (*domain.Prod
 }
 
 func (s *ProductService) DeleteCategory(productId, categoryId string) (*domain.Product, *domain.AppError) {
-	product, err := s.productRepository.Find(productId)
+	product, err := s.productRepository.Find(productId, nil)
 	if err != nil {
 		return nil, err
 	}

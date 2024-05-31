@@ -73,11 +73,29 @@ func (s *TicketService) AddProduct(ticketId, productId string, a *domain.Account
 	if ticket.TicketStatus != domain.TicketOpen {
 		return nil, domain.NewConflictError("Este ticket no esta abierto")
 	}
-	product, err := s.productRepository.Find(productId)
+	product, err := s.productRepository.
+		Find(productId, &domain_criteria.Criteria{
+			Filters: []domain_criteria.Filter{
+				{
+					Field:    "instr(available_days, strftime('%w', date('now')))",
+					Operator: domain_criteria.GT,
+					Value:    "0",
+				},
+				{
+					Field:    "time('now', 'localtime')",
+					Operator: domain_criteria.GTE,
+					Value:    "time(available_from_hour)",
+				},
+				{
+					Field:    "time('now', 'localtime')",
+					Operator: domain_criteria.LTE,
+					Value:    "time(available_until_hour)",
+				},
+			},
+		})
 	if err != nil {
 		return nil, err
 	}
-	// TODO: Add validation in availability dates
 	return s.ticketRepository.AddProduct(ticket, product)
 }
 
@@ -92,8 +110,8 @@ func (s *TicketService) DeleteProduct(ticketId, productId string, a *domain.Acco
 	if ticket.TicketStatus != domain.TicketOpen {
 		return nil, domain.NewConflictError("Este ticket no esta abierto")
 	}
-	product, pError := s.productRepository.Find(productId)
-	if pError != nil {
+	product, err := s.productRepository.Find(productId, nil)
+	if err != nil {
 		return nil, err
 	}
 	return s.ticketRepository.DeleteProduct(ticket, product)

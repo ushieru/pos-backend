@@ -23,7 +23,7 @@ type IProductRepository interface {
 	List(*domain_criteria.Criteria, bool) ([]Product, *AppError)
 	ListByCategoryId(id string, criteria *domain_criteria.Criteria) ([]Product, *AppError)
 	Save(*Product) (*Product, *AppError)
-	Find(id string) (*Product, *AppError)
+	Find(id string, criteria *domain_criteria.Criteria) (*Product, *AppError)
 	Update(*Product) (*Product, *AppError)
 	Delete(*Product) (*Product, *AppError)
 	AddCategory(product *Product, category *Category) (*Product, *AppError)

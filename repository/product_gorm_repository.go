@@ -46,9 +46,19 @@ func (r *ProductGormRepository) Save(product *domain.Product) (*domain.Product, 
 	return product, nil
 }
 
-func (r *ProductGormRepository) Find(id string) (*domain.Product, *domain.AppError) {
+func (r *ProductGormRepository) Find(id string, criteria *domain_criteria.Criteria) (*domain.Product, *domain.AppError) {
 	product := new(domain.Product)
-	r.database.Preload("Categories").First(product, "id = ?", id)
+	stm := r.database.Model(product)
+	if criteria == nil {
+		criteria = &domain_criteria.Criteria{}
+	}
+	scopes := r.c.FiltersToScopes(criteria.Filters)
+	if len(scopes) > 0 {
+		stm.Scopes(scopes...)
+	}
+	stm.
+		Preload("Categories").
+		First(product, "id = ?", id)
 	if product.ID == "" {
 		return nil, domain.NewNotFoundError("Producto no encontrado")
 	}
