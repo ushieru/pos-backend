@@ -15,8 +15,8 @@ type TicketProductHandler struct {
 func (h *TicketProductHandler) setupRoutes(app *fiber.App) {
 	ticketProducts := app.Group("/api/ticket-products")
 	ticketProducts.Use(h.middleware.CheckJWT)
-	ticketProducts.Put("/:id/in-preparation")
-	ticketProducts.Put("/:id/prepared")
+	ticketProducts.Put("/:id/in-preparation", h.InPreparation)
+	ticketProducts.Put("/:id/prepared", h.Prepared)
 }
 
 // @Router /api/ticket-products/{id}/in-preparation [PUT]
@@ -55,7 +55,7 @@ func (h *TicketProductHandler) Prepared(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
-func NewTicketProductHandlerTicketHandler(service service.ITicketProductService, middleware *middlewares.AuthMiddleware, app *fiber.App) *TicketProductHandler {
+func NewTicketProductHandler(service service.ITicketProductService, middleware *middlewares.AuthMiddleware, app *fiber.App) *TicketProductHandler {
 	th := TicketProductHandler{service, middleware}
 	th.setupRoutes(app)
 	return &th
