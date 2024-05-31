@@ -20,7 +20,7 @@ func (dto *CreateUserRequest) Validate() *domain.AppError {
 	if dto.Username == "" {
 		return domain.NewValidationError("No se permiten usuarios vacios")
 	}
-	if len(dto.Password) < 5 {
+	if len(dto.Password) < 4 {
 		return domain.NewValidationError("No se permiten contraseñas menores a 5 caracteres")
 	}
 	if dto.AccountType != string(domain.Admin) &&
