@@ -7,6 +7,13 @@ type AppError struct {
 	Message string `json:"message"`
 }
 
+func NewCustomError(message string, code int) *AppError {
+	return &AppError{
+		Message: message,
+		Code:    code,
+	}
+}
+
 func NewNotFoundError(message string) *AppError {
 	return &AppError{
 		Message: message,
