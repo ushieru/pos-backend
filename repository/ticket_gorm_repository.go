@@ -45,11 +45,10 @@ func (r *TicketGormRepository) Update(ticket *domain.Ticket) (*domain.Ticket, *d
 }
 
 func (r *TicketGormRepository) OrderTicketProductsByTicket(ticket *domain.Ticket) (*domain.Ticket, *domain.AppError) {
-	isEditable := false
 	r.database.
 		Model(&domain.TicketProduct{}).
 		Where("ticket_id = ?", ticket.ID).
-		Update("is_editable", &isEditable)
+		Update("status", domain.Ordered)
 	updatedTicket, _ := r.Find(ticket.ID)
 	return updatedTicket, nil
 }
@@ -72,12 +71,11 @@ func (r *TicketGormRepository) Delete(ticket *domain.Ticket) (*domain.Ticket, *d
 }
 
 func (r *TicketGormRepository) AddProduct(ticket *domain.Ticket, product *domain.Product) (*domain.Ticket, *domain.AppError) {
-	IsEditable := true
 	ticketProduct := &domain.TicketProduct{
 		Name:        product.Name,
 		Description: product.Description,
 		Price:       product.Price,
-		IsEditable:  &IsEditable,
+		Status:      domain.Added,
 		ProductID:   product.ID,
 		TicketID:    ticket.ID,
 	}
@@ -97,7 +95,7 @@ func (r *TicketGormRepository) DeleteProduct(ticket *domain.Ticket, product *dom
 	ticketProduct := new(domain.TicketProduct)
 	r.database.
 		Model(ticketProduct).
-		Where("product_id = ? AND is_editable = ?", product.ID, 1).
+		Where("product_id = ? AND status = ?", product.ID, domain.Added).
 		First(ticketProduct)
 	if ticketProduct.ID == "" {
 		return nil, domain.NewUnauthorizedError("Producto en ticket no encontrado")

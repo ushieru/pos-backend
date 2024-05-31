@@ -13,6 +13,7 @@ type ITicketService interface {
 	Delete(id string) (*domain.Ticket, *domain.AppError)
 	AddProduct(ticketId, productId string, a *domain.Account) (*domain.Ticket, *domain.AppError)
 	DeleteProduct(ticketId, productId string, a *domain.Account) (*domain.Ticket, *domain.AppError)
+	ChangeTable(ticketId, tableId string) (*domain.Ticket, *domain.AppError)
 	PayTicket(id string, a *domain.Account) (*domain.Ticket, *domain.AppError)
 	OrderTicketProducts(id string, a *domain.Account) (*domain.Ticket, *domain.AppError)
 }
@@ -141,6 +142,22 @@ func (s *TicketService) PayTicket(ticketId string, a *domain.Account) (*domain.T
 	}
 	s.ticketRepository.OrderTicketProductsByTicket(ticket)
 	return s.ticketRepository.PayTicket(ticket)
+}
+
+func (s *TicketService) ChangeTable(ticketId, tableId string) (*domain.Ticket, *domain.AppError) {
+	ticket, err := s.ticketRepository.Find(ticketId)
+	if err != nil {
+		return nil, err
+	}
+	table, err := s.tableRepository.FindByTicketId(ticketId)
+	if err != nil {
+		return nil, err
+	}
+	if _, err := s.tableRepository.UpdateTicketRelation(table, ticket); err != nil {
+		return nil, err
+	}
+	updatedTicket, _ := s.ticketRepository.Find(ticketId)
+	return updatedTicket, nil
 }
 
 func (s *TicketService) OrderTicketProducts(id string, a *domain.Account) (*domain.Ticket, *domain.AppError) {
