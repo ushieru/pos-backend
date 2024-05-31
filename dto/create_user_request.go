@@ -25,8 +25,10 @@ func (dto *CreateUserRequest) Validate() *domain.AppError {
 	}
 	if dto.AccountType != string(domain.Admin) &&
 		dto.AccountType != string(domain.Cashier) &&
-		dto.AccountType != string(domain.Waiter) {
-		return domain.NewValidationError("AccountType permitidos: admin, cashier o waiter")
+		dto.AccountType != string(domain.Waiter) &&
+		dto.AccountType != string(domain.Cook) &&
+		dto.AccountType != string(domain.Bartender) {
+		return domain.NewValidationError("AccountType permitidos: admin, cashier, waiter, cook o bartender")
 	}
 	return nil
 }

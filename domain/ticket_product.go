@@ -1,5 +1,7 @@
 package domain
 
+import domain_criteria "github.com/ushieru/pos/domain/criteria"
+
 type TicketProductStatus string
 
 const (
@@ -17,4 +19,9 @@ type TicketProduct struct {
 	Status      TicketProductStatus `json:"status"`
 	ProductID   string              `json:"product_id"`
 	TicketID    string              `json:"ticket_id"`
+}
+
+type ITicketProductRepository interface {
+	Find(id string, criteria *domain_criteria.Criteria) (*TicketProduct, *AppError)
+	Update(*TicketProduct) (*TicketProduct, *AppError)
 }
