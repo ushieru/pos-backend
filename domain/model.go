@@ -15,6 +15,9 @@ type Model struct {
 }
 
 func (m *Model) BeforeCreate(tx *gorm.DB) (err error) {
+	if m.ID != "" {
+		return
+	}
 	id, err := gonanoid.New()
 	if err != nil {
 		panic(err)
