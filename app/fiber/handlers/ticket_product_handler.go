@@ -37,7 +37,7 @@ func (h *TicketProductHandler) InPreparation(c *fiber.Ctx) error {
 	return c.JSON(ticket)
 }
 
-// @Router /api/ticket-products/{id}/in-prepared [PUT]
+// @Router /api/ticket-products/{id}/prepared [PUT]
 // @Security ApiKeyAuth
 // @Param id path int true "TicketProduct ID"
 // @Tags TicketProducts
