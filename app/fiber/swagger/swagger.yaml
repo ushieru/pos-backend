@@ -8,22 +8,30 @@ definitions:
       delete_at:
         type: string
       id:
-        type: integer
+        type: string
       is_active:
         type: boolean
       update_at:
         type: string
       user_id:
-        type: integer
+        type: string
       username:
         type: string
     type: object
   domain.AccountType:
     enum:
     - admin
+    - cashier
+    - waiter
+    - cook
+    - bartender
     type: string
     x-enum-varnames:
     - Admin
+    - Cashier
+    - Waiter
+    - Cook
+    - Bartender
   domain.AppError:
     properties:
       code:
@@ -33,12 +41,22 @@ definitions:
     type: object
   domain.Category:
     properties:
+      available_days:
+        type: string
+      available_from:
+        type: string
+      available_from_hour:
+        type: string
+      available_until:
+        type: string
+      available_until_hour:
+        type: string
       create_at:
         type: string
       delete_at:
         type: string
       id:
-        type: integer
+        type: string
       name:
         type: string
       products:
@@ -47,13 +65,6 @@ definitions:
         type: array
       update_at:
         type: string
-    type: object
-  domain.Info:
-    properties:
-      ip:
-        type: string
-      port:
-        type: integer
     type: object
   domain.Product:
     properties:
@@ -78,7 +89,7 @@ definitions:
       description:
         type: string
       id:
-        type: integer
+        type: string
       name:
         type: string
       price:
@@ -91,13 +102,13 @@ definitions:
       account:
         $ref: '#/definitions/domain.Account'
       account_id:
-        type: integer
+        type: string
       create_at:
         type: string
       delete_at:
         type: string
       id:
-        type: integer
+        type: string
       name:
         type: string
       pos_x:
@@ -107,7 +118,7 @@ definitions:
       ticket:
         $ref: '#/definitions/domain.Ticket'
       ticket_id:
-        type: integer
+        type: string
       update_at:
         type: string
     type: object
@@ -116,13 +127,13 @@ definitions:
       account:
         $ref: '#/definitions/domain.Account'
       account_id:
-        type: integer
+        type: string
       create_at:
         type: string
       delete_at:
         type: string
       id:
-        type: integer
+        type: string
       ticket_products:
         items:
           $ref: '#/definitions/domain.TicketProduct'
@@ -136,20 +147,6 @@ definitions:
     type: object
   domain.TicketProduct:
     properties:
-      available_days:
-        type: string
-      available_from:
-        type: string
-      available_from_hour:
-        type: string
-      available_until:
-        type: string
-      available_until_hour:
-        type: string
-      categories:
-        items:
-          $ref: '#/definitions/domain.Category'
-        type: array
       create_at:
         type: string
       delete_at:
@@ -157,26 +154,42 @@ definitions:
       description:
         type: string
       id:
-        type: integer
+        type: string
       name:
         type: string
       price:
         type: number
       product_id:
-        type: integer
-      quantity:
-        type: integer
+        type: string
+      status:
+        $ref: '#/definitions/domain.TicketProductStatus'
       ticket_id:
-        type: integer
+        type: string
       update_at:
         type: string
     type: object
+  domain.TicketProductStatus:
+    enum:
+    - Added
+    - Ordered
+    - InPreparation
+    - Prepared
+    type: string
+    x-enum-varnames:
+    - Added
+    - Ordered
+    - InPreparation
+    - Prepared
   domain.TicketStatus:
     enum:
     - open
+    - cancel
+    - paid
     type: string
     x-enum-varnames:
     - TicketOpen
+    - TicketCancel
+    - TicketPaid
   domain.User:
     properties:
       account:
@@ -188,7 +201,7 @@ definitions:
       email:
         type: string
       id:
-        type: integer
+        type: string
       name:
         type: string
       update_at:
@@ -206,9 +219,23 @@ definitions:
   domain_criteria.FilterOperator:
     enum:
     - =
+    - <>
+    - '>'
+    - '>='
+    - <
+    - <=
+    - CONTAINS
+    - NOT_CONTAINS
     type: string
     x-enum-varnames:
     - EQUAL
+    - NOT_EQUAL
+    - GT
+    - GTE
+    - LT
+    - LTE
+    - CONTAINS
+    - NOT_CONTAINS
   dto.AuthUserResponse:
     properties:
       token:
@@ -260,16 +287,40 @@ definitions:
     type: object
   dto.UpsertCategoryRequest:
     properties:
+      available_days:
+        example: 0,1,2,3,4,5
+        type: string
+      available_from:
+        example: "2023-12-15T21:54:42.123Z"
+        type: string
+      available_from_hour:
+        example: "00:00"
+        type: string
+      available_until:
+        example: "2023-12-18T21:54:42.123Z"
+        type: string
+      available_until_hour:
+        example: "00:00"
+        type: string
       name:
         type: string
     type: object
   dto.UpsertProductRequest:
     properties:
+      available_days:
+        example: 0,1,2,3,4,5
+        type: string
       available_from:
         example: "2023-12-15T21:54:42.123Z"
         type: string
+      available_from_hour:
+        example: "00:00"
+        type: string
       available_until:
         example: "2023-12-18T21:54:42.123Z"
+        type: string
+      available_until_hour:
+        example: "00:00"
         type: string
       description:
         type: string
@@ -317,8 +368,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/domain.AppError'
-      security:
-      - ApiKeyAuth: []
       tags:
       - Category
     post:
@@ -385,8 +434,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/domain.AppError'
-      security:
-      - ApiKeyAuth: []
       tags:
       - Category
     put:
@@ -432,8 +479,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/domain.AppError'
-      security:
-      - ApiKeyAuth: []
       tags:
       - Product
     post:
@@ -504,8 +549,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/domain.AppError'
-      security:
-      - ApiKeyAuth: []
       tags:
       - Product
     put:
@@ -618,8 +661,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/domain.AppError'
-      security:
-      - ApiKeyAuth: []
       tags:
       - Product
   /api/tables:
@@ -768,6 +809,52 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Tables
+  /api/ticket-products/{id}/in-preparation:
+    put:
+      parameters:
+      - description: TicketProduct ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.TicketProduct'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - TicketProducts
+  /api/ticket-products/{id}/prepared:
+    put:
+      parameters:
+      - description: TicketProduct ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.TicketProduct'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - TicketProducts
   /api/tickets:
     get:
       produces:
@@ -844,6 +931,31 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domain.Ticket'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Tickets
+  /api/tickets/{id}/order:
+    put:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Ticket'
+            type: array
         default:
           description: ""
           schema:
@@ -1057,15 +1169,6 @@ paths:
       - ApiKeyAuth: []
       tags:
       - User
-  /info:
-    get:
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/domain.Info'
-      tags:
-      - Info
   /ping:
     get:
       responses:

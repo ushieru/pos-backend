@@ -46,11 +46,6 @@ const docTemplate = `{
         },
         "/api/categories": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -116,11 +111,6 @@ const docTemplate = `{
         },
         "/api/categories/{id}": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -235,11 +225,6 @@ const docTemplate = `{
         },
         "/api/products": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -308,11 +293,6 @@ const docTemplate = `{
         },
         "/api/products/categories/{id}": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -349,11 +329,6 @@ const docTemplate = `{
         },
         "/api/products/{id}": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -805,6 +780,82 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/ticket-products/{id}/in-preparation": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TicketProducts"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "TicketProduct ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.TicketProduct"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ticket-products/{id}/prepared": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TicketProducts"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "TicketProduct ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.TicketProduct"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/tickets": {
             "get": {
                 "security": [
@@ -905,6 +956,47 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tickets"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Ticket ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Ticket"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tickets/{id}/order": {
+            "put": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -1277,21 +1369,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/info": {
-            "get": {
-                "tags": [
-                    "Info"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/domain.Info"
-                        }
-                    }
-                }
-            }
-        },
         "/ping": {
             "get": {
                 "tags": [
@@ -1319,7 +1396,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "is_active": {
                     "type": "boolean"
@@ -1328,7 +1405,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "username": {
                     "type": "string"
@@ -1338,10 +1415,18 @@ const docTemplate = `{
         "domain.AccountType": {
             "type": "string",
             "enum": [
-                "admin"
+                "admin",
+                "cashier",
+                "waiter",
+                "cook",
+                "bartender"
             ],
             "x-enum-varnames": [
-                "Admin"
+                "Admin",
+                "Cashier",
+                "Waiter",
+                "Cook",
+                "Bartender"
             ]
         },
         "domain.AppError": {
@@ -1358,6 +1443,21 @@ const docTemplate = `{
         "domain.Category": {
             "type": "object",
             "properties": {
+                "available_days": {
+                    "type": "string"
+                },
+                "available_from": {
+                    "type": "string"
+                },
+                "available_from_hour": {
+                    "type": "string"
+                },
+                "available_until": {
+                    "type": "string"
+                },
+                "available_until_hour": {
+                    "type": "string"
+                },
                 "create_at": {
                     "type": "string"
                 },
@@ -1365,7 +1465,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
@@ -1378,17 +1478,6 @@ const docTemplate = `{
                 },
                 "update_at": {
                     "type": "string"
-                }
-            }
-        },
-        "domain.Info": {
-            "type": "object",
-            "properties": {
-                "ip": {
-                    "type": "string"
-                },
-                "port": {
-                    "type": "integer"
                 }
             }
         },
@@ -1426,7 +1515,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
@@ -1446,7 +1535,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/domain.Account"
                 },
                 "account_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "create_at": {
                     "type": "string"
@@ -1455,7 +1544,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
@@ -1470,7 +1559,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/domain.Ticket"
                 },
                 "ticket_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "update_at": {
                     "type": "string"
@@ -1484,7 +1573,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/domain.Account"
                 },
                 "account_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "create_at": {
                     "type": "string"
@@ -1493,7 +1582,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "ticket_products": {
                     "type": "array",
@@ -1515,27 +1604,6 @@ const docTemplate = `{
         "domain.TicketProduct": {
             "type": "object",
             "properties": {
-                "available_days": {
-                    "type": "string"
-                },
-                "available_from": {
-                    "type": "string"
-                },
-                "available_from_hour": {
-                    "type": "string"
-                },
-                "available_until": {
-                    "type": "string"
-                },
-                "available_until_hour": {
-                    "type": "string"
-                },
-                "categories": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/domain.Category"
-                    }
-                },
                 "create_at": {
                     "type": "string"
                 },
@@ -1546,7 +1614,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
@@ -1555,26 +1623,45 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "product_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
-                "quantity": {
-                    "type": "integer"
+                "status": {
+                    "$ref": "#/definitions/domain.TicketProductStatus"
                 },
                 "ticket_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "update_at": {
                     "type": "string"
                 }
             }
         },
+        "domain.TicketProductStatus": {
+            "type": "string",
+            "enum": [
+                "Added",
+                "Ordered",
+                "InPreparation",
+                "Prepared"
+            ],
+            "x-enum-varnames": [
+                "Added",
+                "Ordered",
+                "InPreparation",
+                "Prepared"
+            ]
+        },
         "domain.TicketStatus": {
             "type": "string",
             "enum": [
-                "open"
+                "open",
+                "cancel",
+                "paid"
             ],
             "x-enum-varnames": [
-                "TicketOpen"
+                "TicketOpen",
+                "TicketCancel",
+                "TicketPaid"
             ]
         },
         "domain.User": {
@@ -1593,7 +1680,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
@@ -1620,10 +1707,24 @@ const docTemplate = `{
         "domain_criteria.FilterOperator": {
             "type": "string",
             "enum": [
-                "="
+                "=",
+                "\u003c\u003e",
+                "\u003e",
+                "\u003e=",
+                "\u003c",
+                "\u003c=",
+                "CONTAINS",
+                "NOT_CONTAINS"
             ],
             "x-enum-varnames": [
-                "EQUAL"
+                "EQUAL",
+                "NOT_EQUAL",
+                "GT",
+                "GTE",
+                "LT",
+                "LTE",
+                "CONTAINS",
+                "NOT_CONTAINS"
             ]
         },
         "dto.AuthUserResponse": {
@@ -1705,6 +1806,26 @@ const docTemplate = `{
         "dto.UpsertCategoryRequest": {
             "type": "object",
             "properties": {
+                "available_days": {
+                    "type": "string",
+                    "example": "0,1,2,3,4,5"
+                },
+                "available_from": {
+                    "type": "string",
+                    "example": "2023-12-15T21:54:42.123Z"
+                },
+                "available_from_hour": {
+                    "type": "string",
+                    "example": "00:00"
+                },
+                "available_until": {
+                    "type": "string",
+                    "example": "2023-12-18T21:54:42.123Z"
+                },
+                "available_until_hour": {
+                    "type": "string",
+                    "example": "00:00"
+                },
                 "name": {
                     "type": "string"
                 }
@@ -1713,13 +1834,25 @@ const docTemplate = `{
         "dto.UpsertProductRequest": {
             "type": "object",
             "properties": {
+                "available_days": {
+                    "type": "string",
+                    "example": "0,1,2,3,4,5"
+                },
                 "available_from": {
                     "type": "string",
                     "example": "2023-12-15T21:54:42.123Z"
                 },
+                "available_from_hour": {
+                    "type": "string",
+                    "example": "00:00"
+                },
                 "available_until": {
                     "type": "string",
                     "example": "2023-12-18T21:54:42.123Z"
+                },
+                "available_until_hour": {
+                    "type": "string",
+                    "example": "00:00"
                 },
                 "description": {
                     "type": "string"
