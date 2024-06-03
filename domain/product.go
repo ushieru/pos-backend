@@ -16,7 +16,7 @@ type Product struct {
 	AvailableDays      string     `json:"available_days"`
 	AvailableFromHour  string     `json:"available_from_hour"`
 	AvailableUntilHour string     `json:"available_until_hour"`
-	Categories         []Category `json:"categories"           gorm:"many2many:category_product;"`
+	Categories         []Category `json:"categories" gorm:"many2many:category_product;"`
 }
 
 type IProductRepository interface {
