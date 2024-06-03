@@ -49,6 +49,7 @@ func (f *FiberApp) Init(services *FiberAppServices) {
 	})
 	authMiddleware := middlewares.NewAuthMiddleware(services.UserService)
 	handler.NewPingHandler(f.App)
+	handler.NewSwaggerHandler(f.App)
 	handler.NewAuthHandler(services.UserService, f.App)
 	handler.NewUserHandler(services.UserService, authMiddleware, f.App)
 	handler.NewCategoryHandler(services.CategoryService, authMiddleware, f.App)
