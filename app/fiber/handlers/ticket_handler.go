@@ -15,9 +15,9 @@ type TicketHandler struct {
 
 func (h *TicketHandler) setupRoutes(app *fiber.App) {
 	tickets := app.Group("/api/tickets")
+	tickets.Use(h.middleware.CheckJWT)
 	tickets.Get("/", h.listTickets)
 	tickets.Get("/:id", h.findTicket)
-	tickets.Use(h.middleware.CheckJWT)
 	tickets.Post("/", h.saveTicket)
 	tickets.Delete("/:id", h.deleteTicket)
 	tickets.Post("/:id/products/:productId", h.addProduct)

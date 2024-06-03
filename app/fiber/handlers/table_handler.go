@@ -15,9 +15,9 @@ type TableHandler struct {
 
 func (h *TableHandler) setupRoutes(app *fiber.App) {
 	tables := app.Group("/api/tables")
+	tables.Use(h.middleware.CheckJWT)
 	tables.Get("/", h.listTables)
 	tables.Get("/:id", h.findTable)
-	tables.Use(h.middleware.CheckJWT)
 	tables.Post("/", h.saveTable)
 	tables.Post("/:id/tickets", h.saveTableTicket)
 	tables.Put("/:id", h.updateTable)
