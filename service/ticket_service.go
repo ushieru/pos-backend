@@ -165,6 +165,9 @@ func (s *TicketService) OrderTicketProducts(id string, a *domain.Account) (*doma
 	if err != nil {
 		return nil, err
 	}
+	if ticket.AccountID != a.ID {
+		return nil, domain.NewUnauthorizedError("Este ticket no es tuyo")
+	}
 	return s.ticketRepository.OrderTicketProductsByTicket(ticket)
 }
 
