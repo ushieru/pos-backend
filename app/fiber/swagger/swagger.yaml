@@ -97,6 +97,27 @@ definitions:
       update_at:
         type: string
     type: object
+  domain.ProductionCenter:
+    properties:
+      accounts:
+        items:
+          $ref: '#/definitions/domain.Account'
+        type: array
+      categories:
+        items:
+          $ref: '#/definitions/domain.Category'
+        type: array
+      create_at:
+        type: string
+      delete_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      update_at:
+        type: string
+    type: object
   domain.Table:
     properties:
       account:
@@ -242,6 +263,11 @@ definitions:
         type: string
       user:
         $ref: '#/definitions/domain.User'
+    type: object
+  dto.CreateProductionCenterRequest:
+    properties:
+      name:
+        type: string
     type: object
   dto.CreateTableRequest:
     properties:
@@ -400,7 +426,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -422,7 +448,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -442,7 +468,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: Category UpsertCategoryRequest
         in: body
         name: dto
@@ -464,6 +490,259 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Category
+  /api/production-centers:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.ProductionCenter'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Production center
+    post:
+      parameters:
+      - description: Create ProductionCenter dto
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateProductionCenterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ProductionCenter'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Production center
+  /api/production-centers/{id}:
+    delete:
+      parameters:
+      - description: Production Center ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ProductionCenter'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Production center
+    get:
+      parameters:
+      - description: Production Center ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ProductionCenter'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Production center
+    put:
+      parameters:
+      - description: Production Center ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Create ProductionCenter dto
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateProductionCenterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ProductionCenter'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Production center
+  /api/production-centers/{id}/account/{accountId}:
+    delete:
+      parameters:
+      - description: Production Center ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Account ID
+        in: path
+        name: accountId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ProductionCenter'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Production center
+    post:
+      parameters:
+      - description: Production Center ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Account ID
+        in: path
+        name: accountId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ProductionCenter'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Production center
+  /api/production-centers/{id}/category/{categoryId}:
+    delete:
+      parameters:
+      - description: Production Center ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Category ID
+        in: path
+        name: categoryId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ProductionCenter'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Production center
+    post:
+      parameters:
+      - description: Production Center ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Category ID
+        in: path
+        name: categoryId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.ProductionCenter'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Production center
+  /api/production-centers/{id}/tickets/{ticketId}:
+    get:
+      parameters:
+      - description: Production Center ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Ticket ID
+        in: path
+        name: ticketId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Ticket'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Production center
   /api/products:
     get:
       produces:
@@ -513,7 +792,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -537,7 +816,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -557,7 +836,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: Product UpsertProductRequest
         in: body
         name: dto
@@ -588,7 +867,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: Category ID
         in: path
         name: categoryId
@@ -617,7 +896,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: Category ID
         in: path
         name: categoryId
@@ -647,7 +926,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -714,7 +993,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -738,7 +1017,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -760,7 +1039,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: Table UpdateTableRequest
         in: body
         name: dto
@@ -791,7 +1070,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -816,7 +1095,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -839,7 +1118,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -899,7 +1178,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -923,7 +1202,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -946,7 +1225,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -971,7 +1250,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -996,7 +1275,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: Product ID
         in: path
         name: productId
@@ -1025,7 +1304,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: Product ID
         in: path
         name: productId
@@ -1099,7 +1378,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -1123,7 +1402,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -1145,7 +1424,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: User UpdateUserRequest
         in: body
         name: dto
