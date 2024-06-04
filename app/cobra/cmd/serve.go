@@ -19,11 +19,13 @@ var ServeCmd = &cobra.Command{
 		fiberApp := fiber_app.NewFiberApp(config)
 		database := db.GetDB(config.DatabaseLogger, config.DatabaseName)
 		userRepository := repository.NewUserGormRepository(database)
+		accountRepository := repository.NewAccountGormRepository(database)
 		categoryRepository := repository.NewCategoryGormRepository(database)
 		productRepository := repository.NewProductGormRepository(database)
 		ticketRepository := repository.NewTicketGormRepository(database)
 		ticketProductRepository := repository.NewTicketProductGormRepository(database)
 		tableRepository := repository.NewTableGormRepository(database)
+		productionCenterRepository := repository.NewProductionCenterRepository(database)
 
 		userService := service.NewUserService(userRepository)
 		categoryService := service.NewCategoryService(categoryRepository)
@@ -31,6 +33,8 @@ var ServeCmd = &cobra.Command{
 		tableService := service.NewTableService(tableRepository)
 		ticketService := service.NewTicketService(ticketRepository, tableRepository, productRepository)
 		ticketProductService := service.NewTicketProductService(ticketProductRepository)
+		ProductionCenterService := service.NewProductionCenterService(
+			productionCenterRepository, accountRepository, categoryRepository, ticketRepository, ticketProductRepository)
 
 		fiberApp.Init(&fiber_app.FiberAppServices{
 			UserService:          userService,
@@ -39,6 +43,7 @@ var ServeCmd = &cobra.Command{
 			TableService:         tableService,
 			TicketService:        ticketService,
 			TicketProductService: ticketProductService,
+			ProductionCenter:     ProductionCenterService,
 		})
 	},
 }

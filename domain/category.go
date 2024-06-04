@@ -15,6 +15,7 @@ type Category struct {
 	AvailableUntilHour string    `json:"available_until_hour"`
 	AvailableDays      string    `json:"available_days"`
 	Products           []Product `gorm:"many2many:category_product;" json:"products"`
+	ProductionCenterID string    `json:"-"`
 }
 
 type ICategoryRepository interface {

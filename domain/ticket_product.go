@@ -24,4 +24,5 @@ type TicketProduct struct {
 type ITicketProductRepository interface {
 	Find(id string, criteria *domain_criteria.Criteria) (*TicketProduct, *AppError)
 	Update(*TicketProduct) (*TicketProduct, *AppError)
+	FindByProductionCenter(productCenterId string) ([]TicketProduct, *AppError)
 }

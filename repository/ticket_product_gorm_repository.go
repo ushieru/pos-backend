@@ -28,6 +28,18 @@ func (r *TicketProductGormRepository) Find(id string, criteria *domain_criteria.
 	return ticketProduct, nil
 }
 
+func (r *TicketProductGormRepository) FindByProductionCenter(productionCenterId string) ([]domain.TicketProduct, *domain.AppError) {
+	var ticketProducts []domain.TicketProduct
+	r.database.
+		Model(&domain.TicketProduct{}).
+		Select("ticket_products.*").
+		Joins("INNER JOIN category_product ON ticket_products.product_id = category_product.product_id").
+		Joins("INNER JOIN categories ON category_product.category_id = categories.id").
+		Where("categories.production_center_id = ?", productionCenterId).
+		Scan(&ticketProducts)
+	return ticketProducts, nil
+}
+
 func (r *TicketProductGormRepository) Update(ticketProduct *domain.TicketProduct) (*domain.TicketProduct, *domain.AppError) {
 	r.database.Save(ticketProduct)
 	return ticketProduct, nil

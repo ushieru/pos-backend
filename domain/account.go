@@ -12,9 +12,14 @@ const (
 
 type Account struct {
 	Model
-	Username    string      `json:"username"`
-	Password    string      `json:"-"`
-	IsActive    *bool       `json:"is_active"`
-	AccountType AccountType `json:"account_type"`
-	UserID      string      `json:"user_id"`
+	Username           string      `json:"username"`
+	Password           string      `json:"-"`
+	IsActive           *bool       `json:"is_active"`
+	AccountType        AccountType `json:"account_type"`
+	UserID             string      `json:"user_id"`
+	ProductionCenterID string      `json:"-"`
+}
+
+type IAccountRepository interface {
+	Find(id string) (*Account, *AppError)
 }

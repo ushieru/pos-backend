@@ -57,6 +57,7 @@ func (f *FiberApp) Init(services *FiberAppServices) {
 	handler.NewTicketHandler(services.TicketService, authMiddleware, f.App)
 	handler.NewTicketProductHandler(services.TicketProductService, authMiddleware, f.App)
 	handler.NewTableHandler(services.TableService, authMiddleware, f.App)
+	handler.NewProductionCenterHandler(services.ProductionCenter, authMiddleware, f.App)
 	handler.NewNotFoundHandler(f.App)
 	f.App.Static("/", "public")
 	f.App.Listen(fmt.Sprintf(":%d", f.Config.Port))
@@ -71,12 +72,13 @@ func NewDefaultFiberAppConfig() *FiberAppConfig {
 }
 
 type FiberAppServices struct {
-	UserService          *service.UserService
-	CategoryService      *service.CategoryService
-	ProductService       *service.ProductService
-	TableService         *service.TableService
-	TicketService        *service.TicketService
-	TicketProductService *service.TicketProductService
+	UserService          service.IUserService
+	CategoryService      service.ICategoryService
+	ProductService       service.IProductService
+	TableService         service.ITableService
+	TicketService        service.ITicketService
+	TicketProductService service.ITicketProductService
+	ProductionCenter     service.IProductionCenterService
 }
 
 type FiberApp struct {
