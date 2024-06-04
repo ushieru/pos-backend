@@ -41,7 +41,7 @@ func (h *UserHandler) listUsers(c *fiber.Ctx) error {
 
 // @Router /api/users/{id} [GET]
 // @Security ApiKeyAuth
-// @Param id path int true "User ID"
+// @Param id path string true "User ID"
 // @Tags User
 // @Accepts json
 // @Produce json
@@ -79,7 +79,7 @@ func (h *UserHandler) saveUser(c *fiber.Ctx) error {
 
 // @Router /api/users/{id} [PUT]
 // @Security ApiKeyAuth
-// @Param id path int true "User ID"
+// @Param id path string true "User ID"
 // @Param dto body dto.UpdateUserRequest true "User UpdateUserRequest"
 // @Tags User
 // @Accepts json
@@ -102,7 +102,7 @@ func (h *UserHandler) updateUser(c *fiber.Ctx) error {
 
 // @Router /api/users/{id} [DELETE]
 // @Security ApiKeyAuth
-// @Param id path int true "User ID"
+// @Param id path string true "User ID"
 // @Tags User
 // @Accepts json
 // @Produce json

@@ -21,7 +21,7 @@ func (h *TicketProductHandler) setupRoutes(app *fiber.App) {
 
 // @Router /api/ticket-products/{id}/in-preparation [PUT]
 // @Security ApiKeyAuth
-// @Param id path int true "TicketProduct ID"
+// @Param id path string true "TicketProduct ID"
 // @Tags TicketProducts
 // @Accepts json
 // @Produce json
@@ -39,7 +39,7 @@ func (h *TicketProductHandler) InPreparation(c *fiber.Ctx) error {
 
 // @Router /api/ticket-products/{id}/prepared [PUT]
 // @Security ApiKeyAuth
-// @Param id path int true "TicketProduct ID"
+// @Param id path string true "TicketProduct ID"
 // @Tags TicketProducts
 // @Accepts json
 // @Produce json

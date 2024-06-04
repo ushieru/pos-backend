@@ -42,7 +42,7 @@ func (h *CategoryHandler) listCategories(c *fiber.Ctx) error {
 }
 
 // @Router /api/categories/{id} [GET]
-// @Param id path int true "Category ID"
+// @Param id path string true "Category ID"
 // @Tags Category
 // @Accepts json
 // @Produce json
@@ -79,7 +79,7 @@ func (h *CategoryHandler) saveCategory(c *fiber.Ctx) error {
 
 // @Router /api/categories/{id} [PUT]
 // @Security ApiKeyAuth
-// @Param id path int true "Category ID"
+// @Param id path string true "Category ID"
 // @Param dto body dto.UpsertCategoryRequest true "Category UpsertCategoryRequest"
 // @Tags Category
 // @Accepts json
@@ -101,7 +101,7 @@ func (h *CategoryHandler) updateCategory(c *fiber.Ctx) error {
 
 // @Router /api/categories/{id} [DELETE]
 // @Security ApiKeyAuth
-// @Param id path int true "Category ID"
+// @Param id path string true "Category ID"
 // @Tags Category
 // @Accepts json
 // @Produce json

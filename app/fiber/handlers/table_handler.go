@@ -41,7 +41,7 @@ func (h *TableHandler) listTables(c *fiber.Ctx) error {
 
 // @Router /api/tables/{id} [GET]
 // @Security ApiKeyAuth
-// @Param id path int true "Table ID"
+// @Param id path string true "Table ID"
 // @Tags Tables
 // @Accepts json
 // @Produce json
@@ -78,7 +78,7 @@ func (h *TableHandler) saveTable(c *fiber.Ctx) error {
 
 // @Router /api/tables/{id} [PUT]
 // @Security ApiKeyAuth
-// @Param id path int true "Table ID"
+// @Param id path string true "Table ID"
 // @Param dto body dto.UpdateTableRequest true "Table UpdateTableRequest"
 // @Tags Tables
 // @Accepts json
@@ -100,7 +100,7 @@ func (h *TableHandler) updateTable(c *fiber.Ctx) error {
 
 // @Router /api/tables/{id} [DELETE]
 // @Security ApiKeyAuth
-// @Param id path int true "Table ID"
+// @Param id path string true "Table ID"
 // @Tags Tables
 // @Accepts json
 // @Produce json
@@ -117,7 +117,7 @@ func (h *TableHandler) deleteTable(c *fiber.Ctx) error {
 
 // @Router /api/tables/{id}/tickets [POST]
 // @Security ApiKeyAuth
-// @Param id path int true "Table ID"
+// @Param id path string true "Table ID"
 // @Tags Tables
 // @Accepts json
 // @Produce json

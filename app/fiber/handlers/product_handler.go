@@ -46,7 +46,7 @@ func (h *ProductHandler) listProducts(c *fiber.Ctx) error {
 }
 
 // @Router /api/products/categories/{id} [GET]
-// @Param id path int true "Category Id"
+// @Param id path string true "Category Id"
 // @Tags Product
 // @Accepts json
 // @Produce json
@@ -66,7 +66,7 @@ func (h *ProductHandler) listProductsByCategoryId(c *fiber.Ctx) error {
 }
 
 // @Router /api/products/{id} [GET]
-// @Param id path int true "Product ID"
+// @Param id path string true "Product ID"
 // @Tags Product
 // @Accepts json
 // @Produce json
@@ -103,7 +103,7 @@ func (h *ProductHandler) saveProduct(c *fiber.Ctx) error {
 
 // @Router /api/products/{id} [PUT]
 // @Security ApiKeyAuth
-// @Param id path int true "Product ID"
+// @Param id path string true "Product ID"
 // @Param dto body dto.UpsertProductRequest true "Product UpsertProductRequest"
 // @Tags Product
 // @Accepts json
@@ -125,7 +125,7 @@ func (h *ProductHandler) updateProduct(c *fiber.Ctx) error {
 
 // @Router /api/products/{id} [DELETE]
 // @Security ApiKeyAuth
-// @Param id path int true "Product ID"
+// @Param id path string true "Product ID"
 // @Tags Product
 // @Accepts json
 // @Produce json
@@ -142,7 +142,7 @@ func (h *ProductHandler) deleteProduct(c *fiber.Ctx) error {
 
 // @Router /api/products/{id}/categories/{categoryId} [POST]
 // @Security ApiKeyAuth
-// @Param id path int true "Product ID"
+// @Param id path string true "Product ID"
 // @Param categoryId path int true "Category ID"
 // @Tags Product
 // @Accepts json
@@ -161,7 +161,7 @@ func (h *ProductHandler) addCategory(c *fiber.Ctx) error {
 
 // @Router /api/products/{id}/categories/{categoryId} [DELETE]
 // @Security ApiKeyAuth
-// @Param id path int true "Product ID"
+// @Param id path string true "Product ID"
 // @Param categoryId path int true "Category ID"
 // @Tags Product
 // @Accepts json

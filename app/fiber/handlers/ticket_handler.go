@@ -48,7 +48,7 @@ func (h *TicketHandler) listTickets(c *fiber.Ctx) error {
 
 // @Router /api/tickets/{id} [GET]
 // @Security ApiKeyAuth
-// @Param id path int true "Ticket ID"
+// @Param id path string true "Ticket ID"
 // @Tags Tickets
 // @Accepts json
 // @Produce json
@@ -81,7 +81,7 @@ func (h *TicketHandler) saveTicket(c *fiber.Ctx) error {
 
 // @Router /api/tickets/{id} [DELETE]
 // @Security ApiKeyAuth
-// @Param id path int true "Ticket ID"
+// @Param id path string true "Ticket ID"
 // @Tags Tickets
 // @Accepts json
 // @Produce json
@@ -98,7 +98,7 @@ func (h *TicketHandler) deleteTicket(c *fiber.Ctx) error {
 
 // @Router /api/tickets/{id}/products/{productId} [POST]
 // @Security ApiKeyAuth
-// @Param id path int true "Ticket ID"
+// @Param id path string true "Ticket ID"
 // @Param productId path int true "Product ID"
 // @Tags Tickets
 // @Accepts json
@@ -118,7 +118,7 @@ func (h *TicketHandler) addProduct(c *fiber.Ctx) error {
 
 // @Router /api/tickets/{id}/products/{productId} [DELETE]
 // @Security ApiKeyAuth
-// @Param id path int true "Ticket ID"
+// @Param id path string true "Ticket ID"
 // @Param productId path int true "Product ID"
 // @Tags Tickets
 // @Accepts json
@@ -138,7 +138,7 @@ func (h *TicketHandler) deleteProduct(c *fiber.Ctx) error {
 
 // @Router /api/tickets/{id}/pay [PUT]
 // @Security ApiKeyAuth
-// @Param id path int true "Ticket ID"
+// @Param id path string true "Ticket ID"
 // @Tags Tickets
 // @Accepts json
 // @Produce json
@@ -156,7 +156,7 @@ func (h *TicketHandler) payTicket(c *fiber.Ctx) error {
 
 // @Router /api/tickets/{id}/order [PUT]
 // @Security ApiKeyAuth
-// @Param id path int true "Ticket ID"
+// @Param id path string true "Ticket ID"
 // @Tags Tickets
 // @Accepts json
 // @Produce json
