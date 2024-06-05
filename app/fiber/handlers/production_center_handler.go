@@ -20,10 +20,10 @@ func (h *ProductionCenterHandler) setupRoutes(app *fiber.App) {
 	productionCenter.Get("/:id/tickets/:ticketId", h.findTicketByProductionCenter)
 	productionCenter.Post("/", h.saveProductionCenter)
 	productionCenter.Put("/:id", h.updateProductionCenter)
-	productionCenter.Post("/:id/account/:accountId", h.addAccount)
-	productionCenter.Post("/:id/category/:categoryId", h.addCategory)
-	productionCenter.Delete("/:id/account/:accountId", h.deleteAccount)
-	productionCenter.Delete("/:id/category/:categoryId", h.deleteCategory)
+	productionCenter.Post("/:id/accounts/:accountId", h.addAccount)
+	productionCenter.Post("/:id/categories/:categoryId", h.addCategory)
+	productionCenter.Delete("/:id/accounts/:accountId", h.deleteAccount)
+	productionCenter.Delete("/:id/categories/:categoryId", h.deleteCategory)
 	productionCenter.Delete("/:id", h.deleteProductionCenter)
 }
 
@@ -124,7 +124,7 @@ func (h *ProductionCenterHandler) updateProductionCenter(c *fiber.Ctx) error {
 	return c.JSON(productionCenter)
 }
 
-// @Router /api/production-centers/{id}/account/{accountId} [POST]
+// @Router /api/production-centers/{id}/accounts/{accountId} [POST]
 // @Security ApiKeyAuth
 // @Param id path string true "Production Center ID"
 // @Param accountId path string true "Account ID"
@@ -143,7 +143,7 @@ func (h *ProductionCenterHandler) addAccount(c *fiber.Ctx) error {
 	return c.JSON(productionCenter)
 }
 
-// @Router /api/production-centers/{id}/account/{accountId} [DELETE]
+// @Router /api/production-centers/{id}/accounts/{accountId} [DELETE]
 // @Security ApiKeyAuth
 // @Param id path string true "Production Center ID"
 // @Param accountId path string true "Account ID"
@@ -162,7 +162,7 @@ func (h *ProductionCenterHandler) deleteAccount(c *fiber.Ctx) error {
 	return c.JSON(productionCenter)
 }
 
-// @Router /api/production-centers/{id}/category/{categoryId} [POST]
+// @Router /api/production-centers/{id}/categories/{categoryId} [POST]
 // @Security ApiKeyAuth
 // @Param id path string true "Production Center ID"
 // @Param categoryId path string true "Category ID"
@@ -181,7 +181,7 @@ func (h *ProductionCenterHandler) addCategory(c *fiber.Ctx) error {
 	return c.JSON(productionCenter)
 }
 
-// @Router /api/production-centers/{id}/category/{categoryId} [DELETE]
+// @Router /api/production-centers/{id}/categories/{categoryId} [DELETE]
 // @Security ApiKeyAuth
 // @Param id path string true "Production Center ID"
 // @Param categoryId path string true "Category ID"
