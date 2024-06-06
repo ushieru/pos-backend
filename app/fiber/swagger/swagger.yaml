@@ -3,6 +3,10 @@ definitions:
     properties:
       account_type:
         $ref: '#/definitions/domain.AccountType'
+      accounts:
+        items:
+          $ref: '#/definitions/domain.ProductionCenter'
+        type: array
       create_at:
         type: string
       delete_at:
@@ -23,15 +27,13 @@ definitions:
     - admin
     - cashier
     - waiter
-    - cook
-    - bartender
+    - producer
     type: string
     x-enum-varnames:
     - Admin
     - Cashier
     - Waiter
-    - Cook
-    - Bartender
+    - Producer
   domain.AppError:
     properties:
       code:
@@ -605,7 +607,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Production center
-  /api/production-centers/{id}/account/{accountId}:
+  /api/production-centers/{id}/accounts/{accountId}:
     delete:
       parameters:
       - description: Production Center ID
@@ -660,7 +662,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Production center
-  /api/production-centers/{id}/category/{categoryId}:
+  /api/production-centers/{id}/categories/{categoryId}:
     delete:
       parameters:
       - description: Production Center ID
@@ -715,26 +717,17 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Production center
-  /api/production-centers/{id}/tickets/{ticketId}:
+  /api/production-centers/ticket-products:
     get:
-      parameters:
-      - description: Production Center ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Ticket ID
-        in: path
-        name: ticketId
-        required: true
-        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.Ticket'
+            items:
+              $ref: '#/definitions/domain.TicketProduct'
+            type: array
         default:
           description: ""
           schema:
@@ -1088,6 +1081,27 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Tables
+  /api/ticket-products:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/domain.TicketProduct'
+              type: array
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/domain.AppError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - TicketProducts
   /api/ticket-products/{id}/in-preparation:
     put:
       parameters:

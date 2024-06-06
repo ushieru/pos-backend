@@ -293,6 +293,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/production-centers/ticket-products": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Production center"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.TicketProduct"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/production-centers/{id}": {
             "get": {
                 "security": [
@@ -412,7 +444,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/production-centers/{id}/account/{accountId}": {
+        "/api/production-centers/{id}/accounts/{accountId}": {
             "post": {
                 "security": [
                     {
@@ -500,7 +532,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/production-centers/{id}/category/{categoryId}": {
+        "/api/production-centers/{id}/categories/{categoryId}": {
             "post": {
                 "security": [
                     {
@@ -577,51 +609,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/domain.ProductionCenter"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/domain.AppError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/production-centers/{id}/tickets/{ticketId}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Production center"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Production Center ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Ticket ID",
-                        "name": "ticketId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/domain.Ticket"
                         }
                     },
                     "default": {
@@ -1178,6 +1165,41 @@ const docTemplate = `{
                             "type": "array",
                             "items": {
                                 "$ref": "#/definitions/domain.Table"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/domain.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ticket-products": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TicketProducts"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/domain.TicketProduct"
+                                }
                             }
                         }
                     },
@@ -1799,6 +1821,12 @@ const docTemplate = `{
                 "account_type": {
                     "$ref": "#/definitions/domain.AccountType"
                 },
+                "accounts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.ProductionCenter"
+                    }
+                },
                 "create_at": {
                     "type": "string"
                 },
@@ -1828,15 +1856,13 @@ const docTemplate = `{
                 "admin",
                 "cashier",
                 "waiter",
-                "cook",
-                "bartender"
+                "producer"
             ],
             "x-enum-varnames": [
                 "Admin",
                 "Cashier",
                 "Waiter",
-                "Cook",
-                "Bartender"
+                "Producer"
             ]
         },
         "domain.AppError": {
