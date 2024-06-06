@@ -57,7 +57,12 @@ func (f *FiberApp) Init(services *FiberAppServices) {
 	handler.NewTicketHandler(services.TicketService, authMiddleware, f.App)
 	handler.NewTicketProductHandler(services.TicketProductService, authMiddleware, f.App)
 	handler.NewTableHandler(services.TableService, authMiddleware, f.App)
-	handler.NewProductionCenterHandler(services.ProductionCenter, authMiddleware, f.App)
+	handler.NewProductionCenterHandler(
+		services.ProductionCenter,
+		services.TicketProductService,
+		authMiddleware,
+		f.App,
+	)
 	handler.NewNotFoundHandler(f.App)
 	f.App.Static("/", "public")
 	f.App.Listen(fmt.Sprintf(":%d", f.Config.Port))

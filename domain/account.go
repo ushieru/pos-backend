@@ -3,11 +3,10 @@ package domain
 type AccountType string
 
 const (
-	Admin     AccountType = "admin"
-	Cashier   AccountType = "cashier"
-	Waiter    AccountType = "waiter"
-	Cook      AccountType = "cook"
-	Bartender AccountType = "bartender"
+	Admin    AccountType = "admin"
+	Cashier  AccountType = "cashier"
+	Waiter   AccountType = "waiter"
+	Producer AccountType = "producer"
 )
 
 type Account struct {
@@ -17,7 +16,7 @@ type Account struct {
 	IsActive           *bool       `json:"is_active"`
 	AccountType        AccountType `json:"account_type"`
 	UserID             string      `json:"user_id"`
-	ProductionCenterID string      `json:"-"`
+	ProductionCenter   []ProductionCenter  `gorm:"many2many:account_production_center;" json:"accounts"`
 }
 
 type IAccountRepository interface {

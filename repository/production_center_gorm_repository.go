@@ -60,7 +60,7 @@ func (r *ProductionCenterGormRepository) AddAccount(pc *domain.ProductionCenter,
 }
 
 func (r *ProductionCenterGormRepository) DeleteAccount(pc *domain.ProductionCenter, a *domain.Account) (*domain.ProductionCenter, *domain.AppError) {
-	if err := r.database.Model(&pc).Association("Accounts").Append(a); err != nil {
+	if err := r.database.Model(&pc).Association("Accounts").Delete(a); err != nil {
 		return nil, domain.NewUnexpectedError("No fue posible realizar esta accion")
 	}
 	return pc, nil
@@ -76,7 +76,7 @@ func (r *ProductionCenterGormRepository) AddCategory(pc *domain.ProductionCenter
 }
 
 func (r *ProductionCenterGormRepository) DeleteCategory(pc *domain.ProductionCenter, c *domain.Category) (*domain.ProductionCenter, *domain.AppError) {
-	if err := r.database.Model(&pc).Association("Categories").Append(c); err != nil {
+	if err := r.database.Model(&pc).Association("Categories").Delete(c); err != nil {
 		return nil, domain.NewUnexpectedError("No fue posible realizar esta accion")
 	}
 	return pc, nil

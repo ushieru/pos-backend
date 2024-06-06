@@ -1,23 +1,27 @@
 package handler
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/ushieru/pos/app/fiber/middlewares"
+	"github.com/ushieru/pos/domain"
 	"github.com/ushieru/pos/dto"
 	"github.com/ushieru/pos/service"
 )
 
 type ProductionCenterHandler struct {
-	service    service.IProductionCenterService
-	middleware *middlewares.AuthMiddleware
+	service              service.IProductionCenterService
+	ticketProductService service.ITicketProductService
+	middleware           *middlewares.AuthMiddleware
 }
 
 func (h *ProductionCenterHandler) setupRoutes(app *fiber.App) {
 	productionCenter := app.Group("/api/production-centers")
 	productionCenter.Use(h.middleware.CheckJWT)
 	productionCenter.Get("/", h.listProductionCenters)
+	productionCenter.Get("/ticket-products", h.listTicketProducts)
 	productionCenter.Get("/:id", h.findProductionCenter)
-	productionCenter.Get("/:id/tickets/:ticketId", h.findTicketByProductionCenter)
 	productionCenter.Post("/", h.saveProductionCenter)
 	productionCenter.Put("/:id", h.updateProductionCenter)
 	productionCenter.Post("/:id/accounts/:accountId", h.addAccount)
@@ -63,23 +67,21 @@ func (h *ProductionCenterHandler) findProductionCenter(c *fiber.Ctx) error {
 	return c.JSON(productionCenters)
 }
 
-// @Router /api/production-centers/{id}/tickets/{ticketId} [GET]
+// @Router /api/production-centers/ticket-products [GET]
 // @Security ApiKeyAuth
-// @Param id path string true "Production Center ID"
-// @Param ticketId path string true "Ticket ID"
 // @Tags Production center
 // @Accepts json
 // @Produce json
-// @Success 200 {object} domain.Ticket
+// @Success 200 {array} domain.TicketProduct
 // @Failure default {object} domain.AppError
-func (h *ProductionCenterHandler) findTicketByProductionCenter(c *fiber.Ctx) error {
-	id := c.Params("id")
-	ticketId := c.Params("ticketId")
-	productionCenters, err := h.service.GetTicket(id, ticketId)
+func (h *ProductionCenterHandler) listTicketProducts(c *fiber.Ctx) error {
+	user := c.Locals("session").(*domain.User)
+	fmt.Println("ASDLASMCLKAMSCKASMKAD")
+	ticketProducts, err := h.ticketProductService.FindByAccountProductionCenters(&user.Account)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}
-	return c.JSON(productionCenters)
+	return c.JSON(ticketProducts)
 }
 
 // @Router /api/production-centers [POST]
@@ -217,8 +219,13 @@ func (h *ProductionCenterHandler) deleteProductionCenter(c *fiber.Ctx) error {
 	return c.JSON(productionCenter)
 }
 
-func NewProductionCenterHandler(service service.IProductionCenterService, middleware *middlewares.AuthMiddleware, app *fiber.App) *ProductionCenterHandler {
-	ch := ProductionCenterHandler{service, middleware}
+func NewProductionCenterHandler(
+	service service.IProductionCenterService,
+	ticketProductService service.ITicketProductService,
+	middleware *middlewares.AuthMiddleware,
+	app *fiber.App,
+) *ProductionCenterHandler {
+	ch := ProductionCenterHandler{service, ticketProductService, middleware}
 	ch.setupRoutes(app)
 	return &ch
 }

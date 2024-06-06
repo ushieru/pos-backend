@@ -4,8 +4,8 @@ import domain_criteria "github.com/ushieru/pos/domain/criteria"
 
 type ProductionCenter struct {
 	Model
-	Name       string
-	Accounts    []Account  `gorm:"many2many:account_production_center;" json:"accounts"`
+	Name       string     `json:"name"`
+	Accounts   []Account  `gorm:"many2many:account_production_center;" json:"accounts"`
 	Categories []Category `json:"categories"`
 }
 

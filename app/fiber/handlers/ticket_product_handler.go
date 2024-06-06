@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/ushieru/pos/app/fiber/middlewares"
 	"github.com/ushieru/pos/domain"
+	"github.com/ushieru/pos/dto"
 	"github.com/ushieru/pos/service"
 )
 
@@ -15,8 +16,28 @@ type TicketProductHandler struct {
 func (h *TicketProductHandler) setupRoutes(app *fiber.App) {
 	ticketProducts := app.Group("/api/ticket-products")
 	ticketProducts.Use(h.middleware.CheckJWT)
+	ticketProducts.Get("/", h.listTicketProducts)
 	ticketProducts.Put("/:id/in-preparation", h.InPreparation)
 	ticketProducts.Put("/:id/prepared", h.Prepared)
+}
+
+// @Router /api/ticket-products [GET]
+// @Security ApiKeyAuth
+// @Tags TicketProducts
+// @Accepts json
+// @Produce json
+// @Success 200 {array} []domain.TicketProduct
+// @Failure default {object} domain.AppError
+func (h *TicketProductHandler) listTicketProducts(c *fiber.Ctx) error {
+	searchCriteriaQueryRequest := new(dto.SearchCriteriaQueryRequest)
+	if err := c.QueryParser(searchCriteriaQueryRequest); err != nil {
+		return fiber.NewError(fiber.StatusUnprocessableEntity, "Error parse query")
+	}
+	productionCenter, err := h.service.List(searchCriteriaQueryRequest)
+	if err != nil {
+		return fiber.NewError(err.Code, err.Message)
+	}
+	return c.JSON(productionCenter)
 }
 
 // @Router /api/ticket-products/{id}/in-preparation [PUT]

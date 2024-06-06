@@ -153,6 +153,7 @@ func (s *TicketService) ChangeTable(ticketId, tableId string) (*domain.Ticket, *
 	if err != nil {
 		return nil, err
 	}
+	// TODO: check table availability
 	if _, err := s.tableRepository.UpdateTicketRelation(table, ticket); err != nil {
 		return nil, err
 	}

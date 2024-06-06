@@ -3,19 +3,34 @@ package service
 import (
 	"github.com/ushieru/pos/domain"
 	domain_criteria "github.com/ushieru/pos/domain/criteria"
+	"github.com/ushieru/pos/dto"
 )
 
 type ITicketProductService interface {
+	List(*dto.SearchCriteriaQueryRequest) ([]domain.TicketProduct, *domain.AppError)
+	FindByAccountProductionCenters(*domain.Account) ([]domain.TicketProduct, *domain.AppError)
 	InPreparation(ticketProductId string, account *domain.Account) (*domain.TicketProduct, *domain.AppError)
 	Prepared(ticketProductId string, account *domain.Account) (*domain.TicketProduct, *domain.AppError)
 }
 
 type TicketProductService struct {
-	repository domain.ITicketProductRepository
+	repository                 domain.ITicketProductRepository
+	productionCenterRepository domain.IProductionCenterRepository
+}
+
+func (s *TicketProductService) List(dto *dto.SearchCriteriaQueryRequest) ([]domain.TicketProduct, *domain.AppError) {
+	criteria := &domain_criteria.Criteria{
+		Filters: dto.Filters,
+	}
+	return s.repository.List(criteria)
+}
+
+func (s *TicketProductService) FindByAccountProductionCenters(account *domain.Account) ([]domain.TicketProduct, *domain.AppError) {
+	return s.repository.FindByAccountProductionCenters(account)
 }
 
 func (s *TicketProductService) InPreparation(ticketProductId string, account *domain.Account) (*domain.TicketProduct, *domain.AppError) {
-	if account.AccountType != domain.Cook && account.AccountType != domain.Bartender {
+	if account.AccountType != domain.Producer {
 		return nil, domain.NewUnauthorizedError("No estas autorizado para esta accion")
 	}
 	ticketProduct, err := s.repository.Find(ticketProductId, &domain_criteria.Criteria{
@@ -35,7 +50,7 @@ func (s *TicketProductService) InPreparation(ticketProductId string, account *do
 }
 
 func (s *TicketProductService) Prepared(ticketProductId string, account *domain.Account) (*domain.TicketProduct, *domain.AppError) {
-	if account.AccountType != domain.Cook && account.AccountType != domain.Bartender {
+	if account.AccountType != domain.Producer {
 		return nil, domain.NewUnauthorizedError("No estas autorizado para esta accion")
 	}
 	ticketProduct, err := s.repository.Find(ticketProductId, &domain_criteria.Criteria{
@@ -54,6 +69,6 @@ func (s *TicketProductService) Prepared(ticketProductId string, account *domain.
 	return s.repository.Update(ticketProduct)
 }
 
-func NewTicketProductService(repository domain.ITicketProductRepository) *TicketProductService {
-	return &TicketProductService{repository}
+func NewTicketProductService(repository domain.ITicketProductRepository, productionCenterRepository domain.IProductionCenterRepository) *TicketProductService {
+	return &TicketProductService{repository, productionCenterRepository}
 }

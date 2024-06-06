@@ -11,7 +11,6 @@ type IProductionCenterService interface {
 	Find(id string) (*domain.ProductionCenter, *domain.AppError)
 	Save(dto *dto.CreateProductionCenterRequest) (*domain.ProductionCenter, *domain.AppError)
 	Update(id string, dto *dto.CreateProductionCenterRequest) (*domain.ProductionCenter, *domain.AppError)
-	GetTicket(id, ticketId string) (*domain.Ticket, *domain.AppError)
 	AddAccount(productionCenterId, accountId string) (*domain.ProductionCenter, *domain.AppError)
 	DeleteAccount(productionCenterId, accountId string) (*domain.ProductionCenter, *domain.AppError)
 	AddCategory(productionCenterId, categoryId string) (*domain.ProductionCenter, *domain.AppError)
@@ -23,8 +22,6 @@ type ProductionCenterService struct {
 	productionCenterRepository domain.IProductionCenterRepository
 	accountRepository          domain.IAccountRepository
 	categoryRepository         domain.ICategoryRepository
-	ticketRepository           domain.ITicketRepository
-	ticketProductRepository    domain.ITicketProductRepository
 }
 
 func (c *ProductionCenterService) List(dto *dto.SearchCriteriaQueryRequest) ([]domain.ProductionCenter, *domain.AppError) {
@@ -59,23 +56,6 @@ func (c *ProductionCenterService) Update(id string, dto *dto.CreateProductionCen
 	}
 	productionCenter.Name = dto.Name
 	return c.productionCenterRepository.Update(productionCenter)
-}
-
-func (c *ProductionCenterService) GetTicket(id, ticketId string) (*domain.Ticket, *domain.AppError) {
-	productionCenter, err := c.productionCenterRepository.Find(id)
-	if err != nil {
-		return nil, err
-	}
-	ticket, err := c.ticketRepository.Find(ticketId)
-	if err != nil {
-		return nil, err
-	}
-	ticketProducst, err := c.ticketProductRepository.FindByProductionCenter(productionCenter.ID)
-	if err != nil {
-		return nil, err
-	}
-	ticket.TicketProducts = ticketProducst
-	return ticket, nil
 }
 
 func (c *ProductionCenterService) AddAccount(productionCenterId, accountId string) (*domain.ProductionCenter, *domain.AppError) {
@@ -138,14 +118,10 @@ func NewProductionCenterService(
 	productionCenterRepository domain.IProductionCenterRepository,
 	accountRepository domain.IAccountRepository,
 	categoryRepository domain.ICategoryRepository,
-	ticketRepository domain.ITicketRepository,
-	ticketProductRepository domain.ITicketProductRepository,
 ) IProductionCenterService {
 	return &ProductionCenterService{
 		productionCenterRepository,
 		accountRepository,
 		categoryRepository,
-		ticketRepository,
-		ticketProductRepository,
 	}
 }
