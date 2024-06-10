@@ -19,6 +19,7 @@ func (h *TicketProductHandler) setupRoutes(app *fiber.App) {
 	ticketProducts.Get("/", h.listTicketProducts)
 	ticketProducts.Put("/:id/in-preparation", h.InPreparation)
 	ticketProducts.Put("/:id/prepared", h.Prepared)
+	ticketProducts.Put("/:id/paid", h.Paid)
 }
 
 // @Router /api/ticket-products [GET]
@@ -70,6 +71,24 @@ func (h *TicketProductHandler) Prepared(c *fiber.Ctx) error {
 	user := c.Locals("session").(*domain.User)
 	id := c.Params("id")
 	ticket, err := h.service.Prepared(id, &user.Account)
+	if err != nil {
+		return fiber.NewError(err.Code, err.Message)
+	}
+	return c.JSON(ticket)
+}
+
+// @Router /api/ticket-products/{id}/paid [PUT]
+// @Security ApiKeyAuth
+// @Param id path string true "TicketProduct ID"
+// @Tags TicketProducts
+// @Accepts json
+// @Produce json
+// @Success 200 {object} domain.TicketProduct
+// @Failure default {object} domain.AppError
+func (h *TicketProductHandler) Paid(c *fiber.Ctx) error {
+	user := c.Locals("session").(*domain.User)
+	id := c.Params("id")
+	ticket, err := h.service.Paid(id, &user.Account)
 	if err != nil {
 		return fiber.NewError(err.Code, err.Message)
 	}

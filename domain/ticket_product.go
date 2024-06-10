@@ -9,6 +9,7 @@ const (
 	Ordered       TicketProductStatus = "Ordered"
 	InPreparation TicketProductStatus = "InPreparation"
 	Prepared      TicketProductStatus = "Prepared"
+	Paid          TicketProductStatus = "Paid"
 )
 
 type TicketProduct struct {

@@ -11,6 +11,7 @@ type ITicketProductService interface {
 	FindByAccountProductionCenters(*domain.Account) ([]domain.TicketProduct, *domain.AppError)
 	InPreparation(ticketProductId string, account *domain.Account) (*domain.TicketProduct, *domain.AppError)
 	Prepared(ticketProductId string, account *domain.Account) (*domain.TicketProduct, *domain.AppError)
+	Paid(ticketProductId string, account *domain.Account) (*domain.TicketProduct, *domain.AppError)
 }
 
 type TicketProductService struct {
@@ -66,6 +67,19 @@ func (s *TicketProductService) Prepared(ticketProductId string, account *domain.
 		return nil, err
 	}
 	ticketProduct.Status = domain.Prepared
+	return s.repository.Update(ticketProduct)
+}
+
+func (s *TicketProductService) Paid(ticketProductId string, account *domain.Account) (*domain.TicketProduct, *domain.AppError) {
+	if account.AccountType != domain.Cashier {
+		return nil, domain.NewUnauthorizedError("No estas autorizado para esta accion")
+	}
+	ticketProduct, err := s.repository.Find(ticketProductId, &domain_criteria.Criteria{})
+	if err != nil {
+		return nil, err
+	}
+	ticketProduct.Status = domain.Paid
+	// TODO: recalculate total ticket
 	return s.repository.Update(ticketProduct)
 }
 
