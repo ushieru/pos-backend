@@ -63,8 +63,8 @@ func (f *FiberApp) Init(services *FiberAppServices) {
 		authMiddleware,
 		f.App,
 	)
-	handler.NewNotFoundHandler(f.App)
 	f.App.Static("/", "public")
+	handler.NewNotFoundHandler(f.App)
 	f.App.Listen(fmt.Sprintf(":%d", f.Config.Port))
 }
 
